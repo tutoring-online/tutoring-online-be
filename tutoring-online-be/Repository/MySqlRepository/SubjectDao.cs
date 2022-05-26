@@ -24,13 +24,14 @@ public class SubjectDao : ISubjectDao
             {
                 subjects.Add(new Subject
                 {
-                    Id = reader.GetString("id"),
+                    Id = reader.GetString("Id"),
                     SubjectCode = reader.GetString("SubjectCode"),
                     Name = reader.GetString("Name"),
                     Description = reader.GetString("Description"),
                     Status = reader.GetString("Status"),
                     CreatedDate = reader.GetMySqlDateTime("CreatedDate").ToString(),
-                    UpdatedDate = reader.GetMySqlDateTime("UpdatedDate").ToString()
+                    UpdatedDate = reader.GetMySqlDateTime("UpdatedDate").ToString(),
+                    CategoryId = reader.GetString("CategoryId")
                 });
                 
             }
