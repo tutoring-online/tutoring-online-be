@@ -1,0 +1,50 @@
+﻿using MySql.Data.MySqlClient;
+using tutoring_online_be.Entities.Subject;
+using tutoring_online_be.Utils;
+
+namespace tutoring_online_be.Repository.MySqlRepository;
+
+public class SubjectDao : ISubjectDao
+{
+    public IEnumerable<Subject?> GetSubjects()
+    {
+        var subjects= new List<Subject?>();
+
+        try
+        {
+            using var connection = new MySqlConnection(DbUtils.GetDbConnection());
+            connection.Open();
+
+            using var command = connection.CreateCommand();
+            command.CommandText = "Select * From Subject";
+
+            var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                subjects.Add(new Subject
+                {
+                    Id = reader.GetString("id"),
+                    SubjectCode = reader.GetString("SubjectCode"),
+                    Name = reader.GetString("Name"),
+                    Description = reader.GetString("Description"),
+                    Status = reader.GetString("Status"),
+                    CreatedDate = reader.GetMySqlDateTime("CreatedDate").ToString(),
+                    UpdatedDate = reader.GetMySqlDateTime("UpdatedDate").ToString()
+                });
+                
+            }
+            Console.WriteLine("Open connection");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+        finally
+        {
+            Console.WriteLine("Closed connection");
+        }
+
+        return subjects;
+    }
+}
