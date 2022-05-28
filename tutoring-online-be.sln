@@ -1,6 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tutoring-online-be", "tutoring-online-be\tutoring-online-be.csproj", "{E250826E-E5BE-4E6F-8188-CF41874CE929}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bussiness", "Bussiness\Bussiness.csproj", "{E250826E-E5BE-4E6F-8188-CF41874CE929}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data Layer", "Data Layer", "{D9CF637D-4A1F-4E9B-BB87-03141E14BBAF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bussiness Layper", "Bussiness Layper", "{80BABA27-EF5C-4350-A261-0DA5E37EA92B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{FBB1E76C-C514-4F8D-9D0D-471D7D50AB25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +18,13 @@ Global
 		{E250826E-E5BE-4E6F-8188-CF41874CE929}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E250826E-E5BE-4E6F-8188-CF41874CE929}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E250826E-E5BE-4E6F-8188-CF41874CE929}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBB1E76C-C514-4F8D-9D0D-471D7D50AB25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBB1E76C-C514-4F8D-9D0D-471D7D50AB25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBB1E76C-C514-4F8D-9D0D-471D7D50AB25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBB1E76C-C514-4F8D-9D0D-471D7D50AB25}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E250826E-E5BE-4E6F-8188-CF41874CE929} = {80BABA27-EF5C-4350-A261-0DA5E37EA92B}
+		{FBB1E76C-C514-4F8D-9D0D-471D7D50AB25} = {D9CF637D-4A1F-4E9B-BB87-03141E14BBAF}
 	EndGlobalSection
 EndGlobal
