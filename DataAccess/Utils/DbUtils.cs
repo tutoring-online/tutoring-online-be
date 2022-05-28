@@ -33,8 +33,7 @@ public static class DbUtils
 
     public static MySqlCommand CreateMySqlCommand(string commandText ,ILogger logger, MySqlConnection connection)
     {
-        var command = connection.CreateCommand();
-        command.CommandText = commandText;
+        var command = new MySqlCommand(commandText, connection);
         
         logger.LogInformation(LogUtils.CreateLogMessage($"Query : {commandText}"));
 

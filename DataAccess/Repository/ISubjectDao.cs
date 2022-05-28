@@ -1,9 +1,11 @@
 ﻿
 using DataAccess.Entities.Subject;
+using DataAccess.Models.Subject;
 
 namespace DataAccess.Repository;
 
 public interface ISubjectDao
 {
-    public IEnumerable<Subject?> GetSubjects();
+    IEnumerable<Subject?> GetSubjects();
+    IEnumerable<Subject?> GetSubjectById(string id);
 }

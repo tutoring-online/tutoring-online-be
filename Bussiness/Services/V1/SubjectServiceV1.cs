@@ -18,4 +18,9 @@ public class SubjectServiceV1 : ISubjectService
     {
         return subjectDao.GetSubjects().Select(subject => subject.AsDto());
     }
+
+    public IEnumerable<SubjectDto> GetSubjectById(string id)
+    {
+        return subjectDao.GetSubjectById(id).Select(subject => subject.AsDto());
+    }
 }
