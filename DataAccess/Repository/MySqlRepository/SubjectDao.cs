@@ -23,7 +23,11 @@ public class SubjectDao : ISubjectDao
             using var connection = DbUtils.GetMySqlDbConnection(logger);
             connection.Open();
 
-            using var command = DbUtils.CreateMySqlCommand("Select * From Subject", logger, connection);
+            var selectStatement = "Select Id, SubjectCode, Name, Description, Status, CreatedDate, UpdatedDate, CategoryId";
+            var fromStatement = "From Subject";
+            var query = selectStatement + " " + fromStatement;
+                                  
+            using var command = DbUtils.CreateMySqlCommand(query, logger, connection);
 
             var reader = command.ExecuteReader();
 
