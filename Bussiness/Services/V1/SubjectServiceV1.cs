@@ -1,4 +1,5 @@
 ﻿
+using DataAccess.Entities.Subject;
 using DataAccess.Models.Subject;
 using DataAccess.Repository;
 using DataAccess.Utils;
@@ -22,5 +23,10 @@ public class SubjectServiceV1 : ISubjectService
     public IEnumerable<SubjectDto> GetSubjectById(string id)
     {
         return subjectDao.GetSubjectById(id).Select(subject => subject.AsDto());
+    }
+
+    public void CreateSubjects(IEnumerable<Subject> subjects)
+    {
+        subjectDao.CreateSubjects(subjects);
     }
 }

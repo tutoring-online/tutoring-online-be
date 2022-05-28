@@ -10,7 +10,7 @@ public class Subject
     
     public string? Description { get; init; }
     
-    public string? Status { get; init; }
+    public int? Status { get; init; }
     
     public string? CreatedDate { get; init; }
     

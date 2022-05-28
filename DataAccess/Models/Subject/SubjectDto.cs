@@ -2,7 +2,7 @@
 
 public class SubjectDto
 {
-    public string Id { get; init; }
+    public string? Id { get; init; }
 
     public string? SubjectCode { get; init; }
     
@@ -10,7 +10,7 @@ public class SubjectDto
     
     public string? Description { get; init; }
     
-    public string? Status { get; init; }
+    public int? Status { get; init; }
     
     public string? CreatedDate { get; init; }
     

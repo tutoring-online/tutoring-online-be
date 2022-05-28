@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using DataAccess.Entities.Subject;
 using DataAccess.Models.Subject;
+using DataAccess.Utils;
 using Microsoft.AspNetCore.Mvc;
 using tutoring_online_be.Services;
 
@@ -29,5 +31,14 @@ public class SubjectController
         
         return subjects;
     }
+    [HttpPost]
+    public void CreateSubjects(IEnumerable<SubjectDto> subjectDto)
+    {
+        IEnumerable<Subject> subjects = subjectDto.Select(subjectDto => subjectDto.AsEntity());
+        
+        subjectService.CreateSubjects(subjects);
+      
+    }
+    
 
 }
