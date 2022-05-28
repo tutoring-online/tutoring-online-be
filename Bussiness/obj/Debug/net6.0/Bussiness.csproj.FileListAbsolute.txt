@@ -51,3 +51,4 @@ E:\study\swd\tutoring-online-be\Bussiness\obj\Debug\net6.0\refint\Bussiness.dll
 E:\study\swd\tutoring-online-be\Bussiness\obj\Debug\net6.0\Bussiness.pdb
 E:\study\swd\tutoring-online-be\Bussiness\obj\Debug\net6.0\Bussiness.genruntimeconfig.cache
 E:\study\swd\tutoring-online-be\Bussiness\obj\Debug\net6.0\ref\Bussiness.dll
+E:\study\swd\tutoring-online-be\Bussiness\bin\Debug\net6.0\Microsoft.Extensions.Logging.Abstractions.dll

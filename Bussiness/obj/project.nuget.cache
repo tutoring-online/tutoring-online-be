@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "PyzKBAYgDvKtff3KqVUiuLtQ2Vs85/aGXpaeuEviOwRHoAOWkR3WmGIkGYdZqT8zMSre1VWeRyYXVe8pCcXuFQ==",
+  "dgSpecHash": "hbEY2z0wlMy8vvJOF1YBN3I9Emf2psOPKD6Y95ZrbLJ1/HeTO3Hg+cpfZntYMMCjMbcFIv65GOem3lpZeBgK/g==",
   "success": true,
   "projectFilePath": "E:\\study\\swd\\tutoring-online-be\\Bussiness\\Bussiness.csproj",
   "expectedPackageFiles": [
@@ -20,7 +20,7 @@
     "C:\\Users\\nguye\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\6.0.0\\microsoft.extensions.dependencyinjection.6.0.0.nupkg.sha512",
     "C:\\Users\\nguye\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\6.0.0\\microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512",
     "C:\\Users\\nguye\\.nuget\\packages\\microsoft.extensions.logging\\6.0.0\\microsoft.extensions.logging.6.0.0.nupkg.sha512",
-    "C:\\Users\\nguye\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\6.0.0\\microsoft.extensions.logging.abstractions.6.0.0.nupkg.sha512",
+    "C:\\Users\\nguye\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\7.0.0-preview.3.22175.4\\microsoft.extensions.logging.abstractions.7.0.0-preview.3.22175.4.nupkg.sha512",
     "C:\\Users\\nguye\\.nuget\\packages\\microsoft.extensions.options\\6.0.0\\microsoft.extensions.options.6.0.0.nupkg.sha512",
     "C:\\Users\\nguye\\.nuget\\packages\\microsoft.extensions.primitives\\6.0.0\\microsoft.extensions.primitives.6.0.0.nupkg.sha512",
     "C:\\Users\\nguye\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",

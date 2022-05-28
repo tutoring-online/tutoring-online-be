@@ -1,22 +1,29 @@
 ﻿using DataAccess.Entities.Subject;
 using DataAccess.Utils;
+using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
 
 namespace DataAccess.Repository.MySqlRepository;
 
 public class SubjectDao : ISubjectDao
 {
+    private readonly ILogger<SubjectDao> logger;
+
+    public SubjectDao(ILogger<SubjectDao> logger)
+    {
+        this.logger = logger;
+    }
+
     public IEnumerable<Subject?> GetSubjects()
     {
         var subjects= new List<Subject?>();
 
         try
         {
-            using var connection = new MySqlConnection(DbUtils.GetDbConnection());
+            using var connection = DbUtils.GetMySqlDbConnection(logger);
             connection.Open();
 
-            using var command = connection.CreateCommand();
-            command.CommandText = "Select * From Subject";
+            using var command = DbUtils.CreateMySqlCommand("Select * From Subject", logger, connection);
 
             var reader = command.ExecuteReader();
 
@@ -33,17 +40,20 @@ public class SubjectDao : ISubjectDao
                     UpdatedDate = reader.GetMySqlDateTime("UpdatedDate").ToString(),
                     CategoryId = reader.GetString("CategoryId")
                 });
-                
+
             }
-            Console.WriteLine("Open connection");
+        }
+        catch (MySqlException e)
+        {
+            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
         }
         finally
         {
-            Console.WriteLine("Closed connection");
+            DbUtils.CloseMySqlDbConnection(logger);
         }
 
         return subjects;

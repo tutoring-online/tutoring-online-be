@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v6.0": {
       "DataAccess/1.0.0": {
         "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "7.0.0-preview.3.22175.4",
           "MySql.Data": "8.0.29"
         },
         "runtime": {
@@ -61,6 +62,14 @@
           "lib/netstandard2.0/K4os.Hash.xxHash.dll": {
             "assemblyVersion": "1.0.6.0",
             "fileVersion": "1.0.6.0"
+          }
+        }
+      },
+      "Microsoft.Extensions.Logging.Abstractions/7.0.0-preview.3.22175.4": {
+        "runtime": {
+          "lib/net6.0/Microsoft.Extensions.Logging.Abstractions.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.0.22.17504"
           }
         }
       },
@@ -251,6 +260,13 @@
       "sha512": "sha512-jCfNP0inx1sGcP3KSbpiDEH3km2e1sVBjMfKo+V92jr1dL4ZYgA1uhRMl1wAtdGZcbObXIikKqtVlgx3j/CW6g==",
       "path": "k4os.hash.xxhash/1.0.6",
       "hashPath": "k4os.hash.xxhash.1.0.6.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.Abstractions/7.0.0-preview.3.22175.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-QQECLQmfeOhwKR7vZbTmCQW5+N5vz6126xGzVXISmzppzdUH9L0tqOi2Es2Tb7t6cfdXnaKxR5Fls91JBWApVw==",
+      "path": "microsoft.extensions.logging.abstractions/7.0.0-preview.3.22175.4",
+      "hashPath": "microsoft.extensions.logging.abstractions.7.0.0-preview.3.22175.4.nupkg.sha512"
     },
     "Microsoft.NETCore.Platforms/3.1.0": {
       "type": "package",

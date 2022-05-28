@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "R/UmUavXuTiX/VQrqSq2TBQic0ZfvfKm9QRzZbRioAaXswB7iSe2PwpdwVkS8CPZ6eoavXq3lv3n4OVyXZhBPw==",
+  "dgSpecHash": "qN74vXqRFjSdo0KYNDn6I/pMRXGjXkMjI9+yPuiG2Jugyb+++8rYojEQ+sciKPP1lPWUwPalc/wtLfLhObLkzw==",
   "success": true,
   "projectFilePath": "E:\\study\\swd\\tutoring-online-be\\DataAccess\\DataAccess.csproj",
   "expectedPackageFiles": [
@@ -9,6 +9,7 @@
     "C:\\Users\\nguye\\.nuget\\packages\\k4os.compression.lz4\\1.2.6\\k4os.compression.lz4.1.2.6.nupkg.sha512",
     "C:\\Users\\nguye\\.nuget\\packages\\k4os.compression.lz4.streams\\1.2.6\\k4os.compression.lz4.streams.1.2.6.nupkg.sha512",
     "C:\\Users\\nguye\\.nuget\\packages\\k4os.hash.xxhash\\1.0.6\\k4os.hash.xxhash.1.0.6.nupkg.sha512",
+    "C:\\Users\\nguye\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\7.0.0-preview.3.22175.4\\microsoft.extensions.logging.abstractions.7.0.0-preview.3.22175.4.nupkg.sha512",
     "C:\\Users\\nguye\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\nguye\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
     "C:\\Users\\nguye\\.nuget\\packages\\mysql.data\\8.0.29\\mysql.data.8.0.29.nupkg.sha512",
