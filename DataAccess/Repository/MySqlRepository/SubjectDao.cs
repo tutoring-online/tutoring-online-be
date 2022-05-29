@@ -37,16 +37,15 @@ public class SubjectDao : ISubjectDao
             {
                 subjects.Add(new Subject
                 {
-                    Id = reader.GetString("Id"),
-                    SubjectCode = reader.GetString("SubjectCode"),
-                    Name = reader.GetString("Name"),
-                    Description = reader.GetString("Description"),
-                    Status = reader.GetInt16("Status"),
-                    CreatedDate = reader.GetMySqlDateTime("CreatedDate").ToString(),
-                    UpdatedDate = reader.GetMySqlDateTime("UpdatedDate").ToString(),
-                    CategoryId = reader.GetString("CategoryId")
+                    Id = DbUtils.SafeGetString(reader, "Id"),
+                    SubjectCode = DbUtils.SafeGetString(reader, "SubjectCode"),
+                    Name = DbUtils.SafeGetString(reader, "Name"),
+                    Description = DbUtils.SafeGetString(reader, "Description"),
+                    Status = DbUtils.SafeGetInt16(reader, "Status"),
+                    CreatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "CreatedDate")),
+                    UpdatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "UpdatedDate")),
+                    CategoryId = DbUtils.SafeGetString(reader, "CategoryId")
                 });
-
             }
         }
         catch (MySqlException e)
@@ -97,14 +96,14 @@ public class SubjectDao : ISubjectDao
             {
                 subjects.Add(new Subject
                 {
-                    Id = reader.GetString("Id"),
-                    SubjectCode = reader.GetString("SubjectCode"),
-                    Name = reader.GetString("Name"),
-                    Description = reader.GetString("Description"),
-                    Status = reader.GetInt16("Status"),
-                    CreatedDate = reader.GetMySqlDateTime("CreatedDate").ToString(),
-                    UpdatedDate = reader.GetMySqlDateTime("UpdatedDate").ToString(),
-                    CategoryId = reader.GetString("CategoryId")
+                    Id = DbUtils.SafeGetString(reader, "Id"),
+                    SubjectCode = DbUtils.SafeGetString(reader, "SubjectCode"),
+                    Name = DbUtils.SafeGetString(reader, "Name"),
+                    Description = DbUtils.SafeGetString(reader, "Description"),
+                    Status = DbUtils.SafeGetInt16(reader, "Status"),
+                    CreatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "CreatedDate")),
+                    UpdatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "UpdatedDate")),
+                    CategoryId = DbUtils.SafeGetString(reader, "CategoryId")
                 });
 
             }

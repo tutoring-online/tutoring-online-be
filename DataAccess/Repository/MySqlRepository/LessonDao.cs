@@ -35,16 +35,15 @@ public class LessonDao:ILessonDao
             {
                 lessons.Add(new Lesson
                 {
-                    Id = reader.GetString("Id"),
-                    SyllabusId = reader.GetString("SyllabusId"),
-                    TutorId = reader.GetString("TutorId"),
-                    StudentId = reader.GetString("StudentId"),
-                    Status = reader.GetInt16("Status"),
-                    SlotNumer = reader.GetInt16("SlotNumer"),
-                    Date = reader.GetMySqlDateTime("Date").ToString(),
-                    CreatedDate = reader.GetMySqlDateTime("CreatedDate").ToString(),
-                    UpdatedDate = reader.GetMySqlDateTime("UpdatedDate").ToString()
-                    
+                    Id = DbUtils.SafeGetString(reader, "Id"),
+                    SyllabusId = DbUtils.SafeGetString(reader, "SyllabusId"),
+                    TutorId = DbUtils.SafeGetString(reader, "TutorId"),
+                    StudentId = DbUtils.SafeGetString(reader, "StudentId"),
+                    Status = DbUtils.SafeGetInt16(reader, "Status"),
+                    SlotNumer = DbUtils.SafeGetInt16(reader, "SlotNumer"),
+                    Date = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "Date")),
+                    CreatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "CreatedDate")),
+                    UpdatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "UpdatedDate"))
                 });
 
             }
@@ -96,15 +95,15 @@ public class LessonDao:ILessonDao
             {
                 lessons.Add(new Lesson
                 {
-                    Id = reader.GetString("Id"),
-                    SyllabusId = reader.GetString("SyllabusId"),
-                    TutorId = reader.GetString("TutorId"),
-                    StudentId = reader.GetString("StudentId"),
-                    Status = reader.GetInt16("Status"),
-                    SlotNumer = reader.GetInt16("SlotNumer"),
-                    Date = reader.GetMySqlDateTime("Date").ToString(),
-                    CreatedDate = reader.GetMySqlDateTime("CreatedDate").ToString(),
-                    UpdatedDate = reader.GetMySqlDateTime("UpdatedDate").ToString()
+                    Id = DbUtils.SafeGetString(reader, "Id"),
+                    SyllabusId = DbUtils.SafeGetString(reader, "SyllabusId"),
+                    TutorId = DbUtils.SafeGetString(reader, "TutorId"),
+                    StudentId = DbUtils.SafeGetString(reader, "StudentId"),
+                    Status = DbUtils.SafeGetInt16(reader, "Status"),
+                    SlotNumer = DbUtils.SafeGetInt16(reader, "SlotNumer"),
+                    Date = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "Date")),
+                    CreatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "CreatedDate")),
+                    UpdatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "UpdatedDate"))
                 });
 
             }
