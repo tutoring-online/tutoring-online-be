@@ -1,4 +1,6 @@
-﻿using DataAccess.Entities.Subject;
+﻿using DataAccess.Entities.Lesson;
+using DataAccess.Entities.Subject;
+using DataAccess.Models.Lesson;
 using DataAccess.Models.Subject;
 
 namespace DataAccess.Utils;
@@ -32,6 +34,37 @@ public static class Extensions
             SubjectCode = StringUtils.NullToEmpty(subjectDto.SubjectCode),
             UpdatedDate = StringUtils.NullToEmpty(subjectDto.UpdatedDate),
             CreatedDate = StringUtils.NullToEmpty(subjectDto.CreatedDate)
+        };
+    }
+
+    public static LessonDto AsDtoLesson(this Lesson lesson)
+    {
+        return new LessonDto()
+        {
+            Id = lesson.Id,
+            SyllabusId = StringUtils.NullToEmpty(lesson.SyllabusId),
+            TutorId = StringUtils.NullToEmpty(lesson.TutorId),
+            StudentId = StringUtils.NullToEmpty(lesson.StudentId),
+            Status = lesson.Status,
+            Date = StringUtils.NullToEmpty(lesson.Date),
+            UpdatedDate = StringUtils.NullToEmpty(lesson.UpdatedDate),
+            CreatedDate = StringUtils.NullToEmpty(lesson.CreatedDate),
+            SlotNumer = lesson.SlotNumer
+        };
+    }
+    public static Lesson AsEntity(this LessonDto lessonDto)
+    {
+        return new Lesson()
+        {
+            Id = lessonDto.Id,
+            SyllabusId = StringUtils.NullToEmpty(lessonDto.SyllabusId),
+            TutorId = StringUtils.NullToEmpty(lessonDto.TutorId),
+            StudentId = StringUtils.NullToEmpty(lessonDto.StudentId),
+            Status = lessonDto.Status,
+            Date = StringUtils.NullToEmpty(lessonDto.Date),
+            UpdatedDate = StringUtils.NullToEmpty(lessonDto.UpdatedDate),
+            CreatedDate = StringUtils.NullToEmpty(lessonDto.CreatedDate),
+            SlotNumer = lessonDto.SlotNumer
         };
     }
 }

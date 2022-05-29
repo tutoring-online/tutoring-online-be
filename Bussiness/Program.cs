@@ -16,6 +16,9 @@ builder.Services.AddSwaggerGen();
 //Subject
 builder.Services.AddSingleton<ISubjectService, SubjectServiceV1>();
 builder.Services.AddSingleton<ISubjectDao, SubjectDao>();
+//Lesson
+builder.Services.AddSingleton<ILessonService, LessonServiceV1>();
+builder.Services.AddSingleton<ILessonDao, LessonDao>();
 
 var app = builder.Build();
 
