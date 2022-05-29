@@ -7,7 +7,7 @@ using tutoring_online_be.Services;
 namespace tutoring_online_be.Controllers.V1;
 
 [ApiController]
-[Route("/api/v1/lessons/")]
+[Route("/api/v1/lessons")]
 public class LessonController 
 {
     private readonly ILessonService lessonService;
@@ -23,7 +23,8 @@ public class LessonController
         return lessonService.GetLessons();
     }
 
-    [HttpGet("{id}")]
+    [HttpGet]
+    [Route("{id:int}")]
     public IEnumerable<LessonDto> GetLesson(string id)
     {
         var lessons = lessonService.GetLessonById(id);

@@ -8,7 +8,7 @@ using tutoring_online_be.Services;
 namespace tutoring_online_be.Controllers.V1;
 
 [ApiController]
-[Route("/api/v1/subjects/")]
+[Route("/api/v1/subjects")]
 public class SubjectController
 {
     private readonly ISubjectService subjectService;
@@ -24,11 +24,14 @@ public class SubjectController
         return subjectService.GetSubjects();
     }
 
-    [HttpGet("{id}")]
+    [HttpGet]
+    [Route("{id:int}")]
     public IEnumerable<SubjectDto> GetSubject(string id)
     {
         var subjects= subjectService.GetSubjectById(id);
-        
+
+        SubjectDto o = null;
+
         return subjects;
     }
     [HttpPost]
