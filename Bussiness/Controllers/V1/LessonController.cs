@@ -24,7 +24,7 @@ public class LessonController
     }
 
     [HttpGet]
-    [Route("{id:int}")]
+    [Route("{id}")]
     public IEnumerable<LessonDto> GetLesson(string id)
     {
         var lessons = lessonService.GetLessonById(id);

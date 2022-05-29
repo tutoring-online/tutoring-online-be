@@ -25,7 +25,7 @@ public class SubjectController
     }
 
     [HttpGet]
-    [Route("{id:int}")]
+    [Route("{id}")]
     public IEnumerable<SubjectDto> GetSubject(string id)
     {
         var subjects= subjectService.GetSubjectById(id);
