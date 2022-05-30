@@ -145,7 +145,7 @@ public class SubjectDao : ISubjectDao
                 if (i == subjects.Count() - 1)
                     query = query + " " + $"({param1 + i},{param2 + i},{param3 + i},{param4 + i}, {param5 + i})";
                 else
-                    query = query + " " + $"({param1 + i},{param2 + i},{param3 + i},{param4 + i}, {param4 + i})" + ",";
+                    query = query + " " + $"({param1 + i},{param2 + i},{param3 + i},{param4 + i}, {param5 + i})" + ",";
             }
 
             using var command = DbUtils.CreateMySqlCommand(query, logger, connection);

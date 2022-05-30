@@ -1,30 +1,35 @@
-﻿using DataAccess.Entities.Lesson;
+﻿using DataAccess.Entities.Syllabus;
 using DataAccess.Utils;
 using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace DataAccess.Repository.MySqlRepository;
 
-public class LessonDao:ILessonDao
+public class SyllabusDao: ISyllabusDao
 {
-    private readonly ILogger<LessonDao> logger;
+    private readonly ILogger<SyllabusDao> logger;
 
-    public LessonDao(ILogger<LessonDao> logger)
+    public SyllabusDao(ILogger<SyllabusDao> logger)
     {
         this.logger = logger;
     }
 
-    public IEnumerable<Lesson?> GetLessons()
+    public IEnumerable<Syllabus?> GetSyllabuses()
     {
-        var lessons = new List<Lesson?>();
+        var syllabuses = new List<Syllabus?>();
 
         try
         {
             using var connection = DbUtils.GetMySqlDbConnection(logger);
             connection.Open();
 
-            var selectStatement = "Select Id, SyllabusId, TutorId, StudentId, SlotNumer, Date, CreatedDate, UpdatedDate, Status";
-            var fromStatement = "From Lesson";
+            var selectStatement = "Select Id, SubjectId, TotalLessons, Description, Price, Name, Status, CreatedDate, UpdatedDate";
+            var fromStatement = "From Syllabus";
             var query = selectStatement + " " + fromStatement;
 
             using var command = DbUtils.CreateMySqlCommand(query, logger, connection);
@@ -33,19 +38,18 @@ public class LessonDao:ILessonDao
 
             while (reader.Read())
             {
-                lessons.Add(new Lesson
+                syllabuses.Add(new Syllabus
                 {
                     Id = DbUtils.SafeGetString(reader, "Id"),
-                    SyllabusId = DbUtils.SafeGetString(reader, "SyllabusId"),
-                    TutorId = DbUtils.SafeGetString(reader, "TutorId"),
-                    StudentId = DbUtils.SafeGetString(reader, "StudentId"),
+                    SubjectId = DbUtils.SafeGetString(reader, "SubjectId"),
+                    Name = DbUtils.SafeGetString(reader, "Name"),
+                    Description = DbUtils.SafeGetString(reader, "Description"),
                     Status = DbUtils.SafeGetInt16(reader, "Status"),
-                    SlotNumer = DbUtils.SafeGetInt16(reader, "SlotNumer"),
-                    Date = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "Date")),
                     CreatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "CreatedDate")),
-                    UpdatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "UpdatedDate"))
+                    UpdatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "UpdatedDate")),
+                    TotalLessons = DbUtils.SafeGetInt16(reader, "TotalLessons"),
+                    Price = DbUtils.SafeGetDouble(reader, "Price")
                 });
-
             }
         }
         catch (MySqlException e)
@@ -61,11 +65,12 @@ public class LessonDao:ILessonDao
             DbUtils.CloseMySqlDbConnection(logger);
         }
 
-        return lessons;
+        return syllabuses;
     }
-    public IEnumerable<Lesson?> GetLessonById(string id)
+
+    public IEnumerable<Syllabus?> GetSyllabusById(string id)
     {
-        var lessons = new List<Lesson?>();
+        var syllabus = new List<Syllabus?>();
 
         try
         {
@@ -73,8 +78,8 @@ public class LessonDao:ILessonDao
             connection.Open();
             var param1 = "@id";
 
-            var selectStatement = "Select Id, SyllabusId, TutorId, StudentId, SlotNumer, Date, CreatedDate, UpdatedDate, Status";
-            var fromStatement = "From Lesson";
+            var selectStatement = "Select Id, SubjectId, TotalLessons, Description, Price, Name, Status, CreatedDate, UpdatedDate";
+            var fromStatement = "From Syllabus";
             var whereStatement = $"Where Id = {param1}";
             var query = selectStatement + " " + fromStatement + " " + whereStatement;
 
@@ -93,17 +98,17 @@ public class LessonDao:ILessonDao
 
             if (reader.Read())
             {
-                lessons.Add(new Lesson
+                syllabus.Add(new Syllabus
                 {
                     Id = DbUtils.SafeGetString(reader, "Id"),
-                    SyllabusId = DbUtils.SafeGetString(reader, "SyllabusId"),
-                    TutorId = DbUtils.SafeGetString(reader, "TutorId"),
-                    StudentId = DbUtils.SafeGetString(reader, "StudentId"),
+                    SubjectId = DbUtils.SafeGetString(reader, "SubjectId"),
+                    Name = DbUtils.SafeGetString(reader, "Name"),
+                    Description = DbUtils.SafeGetString(reader, "Description"),
                     Status = DbUtils.SafeGetInt16(reader, "Status"),
-                    SlotNumer = DbUtils.SafeGetInt16(reader, "SlotNumer"),
-                    Date = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "Date")),
                     CreatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "CreatedDate")),
-                    UpdatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "UpdatedDate"))
+                    UpdatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "UpdatedDate")),
+                    TotalLessons = DbUtils.SafeGetInt16(reader, "TotalLessons"),
+                    Price = DbUtils.SafeGetDouble(reader, "Price")
                 });
 
             }
@@ -121,44 +126,46 @@ public class LessonDao:ILessonDao
             DbUtils.CloseMySqlDbConnection(logger);
         }
 
-        return lessons;
+        return syllabus;
     }
 
-    public void CreateLessons(IEnumerable<Lesson> lessons)
+    public void CreateSyllabuses(IEnumerable<Syllabus> syllabuses)
     {
         try
         {
             using var connection = DbUtils.GetMySqlDbConnection(logger);
             connection.Open();
-            var param1 = "@SyllabusId";
-            var param2 = "@TutorId";
-            var param3 = "@StudentId";
-            var param4 = "@SlotNumer";
+            var param1 = "@SubjectId";
+            var param2 = "@Name";
+            var param3 = "@Description";
+            var param4 = "@TotalLessons";
             var param5 = "@Status";
+            var param6 = "@Price";
 
             var query = "";
-            var insertStatement = "Insert into Lesson(SyllabusId, TutorId, StudentId, SlotNumer, Status) values ";
+            var insertStatement = "Insert into Subject(SubjectId, Name, Description, TotalLessons, Status, Price) values ";
 
             query = insertStatement;
-            for (int i = 0; i < lessons.Count(); i++)
+            for (int i = 0; i < syllabuses.Count(); i++)
             {
-                if (i == lessons.Count() - 1)
-                    query = query + " " + $"({param1 + i},{param2 + i},{param3 + i},{param4 + i}, {param5 + i})";
+                if (i == syllabuses.Count() - 1)
+                    query = query + " " + $"({param1 + i},{param2 + i},{param3 + i},{param4 + i}, {param5 + i}, {param6 + i})";
                 else
-                    query = query + " " + $"({param1 + i},{param2 + i},{param3 + i},{param4 + i}, {param5 + i})" + ",";
+                    query = query + " " + $"({param1 + i},{param2 + i},{param3 + i},{param4 + i}, {param5 + i}, {param6 + i})" + ",";
             }
 
             using var command = DbUtils.CreateMySqlCommand(query, logger, connection);
             command.CommandText = query;
 
-            for (int i = 0; i < lessons.Count(); i++)
+            for (int i = 0; i < syllabuses.Count(); i++)
             {
-                Lesson lesson = lessons.ElementAt(i);
-                command.Parameters.Add(param1 + i, MySqlDbType.VarChar).Value = lesson.SyllabusId;
-                command.Parameters.Add(param2 + i, MySqlDbType.VarChar).Value = lesson.TutorId;
-                command.Parameters.Add(param3 + i, MySqlDbType.VarChar).Value = lesson.StudentId;
-                command.Parameters.Add(param4 + i, MySqlDbType.VarChar).Value = lesson.SlotNumer;
-                command.Parameters.Add(param5 + i, MySqlDbType.Int16).Value = lesson.Status;
+                Syllabus syllabus = syllabuses.ElementAt(i);
+                command.Parameters.Add(param1 + i, MySqlDbType.VarChar).Value = syllabus.SubjectId;
+                command.Parameters.Add(param2 + i, MySqlDbType.VarChar).Value = syllabus.Name;
+                command.Parameters.Add(param3 + i, MySqlDbType.VarChar).Value = syllabus.Description;
+                command.Parameters.Add(param4 + i, MySqlDbType.VarChar).Value = syllabus.TotalLessons;
+                command.Parameters.Add(param5 + i, MySqlDbType.Int16).Value = syllabus.Status;
+                command.Parameters.Add(param6 + i, MySqlDbType.Double).Value = syllabus.Price;
             }
 
             command.Prepare();
@@ -187,7 +194,4 @@ public class LessonDao:ILessonDao
         }
 
     }
-
-
-
 }

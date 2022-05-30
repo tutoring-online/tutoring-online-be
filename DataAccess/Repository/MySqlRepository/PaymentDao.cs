@@ -1,30 +1,35 @@
-﻿using DataAccess.Entities.Lesson;
+﻿using DataAccess.Entities.Payment;
 using DataAccess.Utils;
 using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace DataAccess.Repository.MySqlRepository;
 
-public class LessonDao:ILessonDao
+public class PaymentDao : IPaymentDao
 {
-    private readonly ILogger<LessonDao> logger;
+    private readonly ILogger<PaymentDao> logger;
 
-    public LessonDao(ILogger<LessonDao> logger)
+    public PaymentDao(ILogger<PaymentDao> logger)
     {
         this.logger = logger;
     }
 
-    public IEnumerable<Lesson?> GetLessons()
+    public IEnumerable<Payment?> GetPayments()
     {
-        var lessons = new List<Lesson?>();
+        var payments = new List<Payment?>();
 
         try
         {
             using var connection = DbUtils.GetMySqlDbConnection(logger);
             connection.Open();
 
-            var selectStatement = "Select Id, SyllabusId, TutorId, StudentId, SlotNumer, Date, CreatedDate, UpdatedDate, Status";
-            var fromStatement = "From Lesson";
+            var selectStatement = "Select Id, SyllabusId, StudentId,CreatedDate, UpdatedDate, Status";
+            var fromStatement = "From Payment";
             var query = selectStatement + " " + fromStatement;
 
             using var command = DbUtils.CreateMySqlCommand(query, logger, connection);
@@ -33,15 +38,12 @@ public class LessonDao:ILessonDao
 
             while (reader.Read())
             {
-                lessons.Add(new Lesson
+                payments.Add(new Payment
                 {
                     Id = DbUtils.SafeGetString(reader, "Id"),
-                    SyllabusId = DbUtils.SafeGetString(reader, "SyllabusId"),
-                    TutorId = DbUtils.SafeGetString(reader, "TutorId"),
+                    SyllabusId = DbUtils.SafeGetString(reader, "SyllabusId"),            
                     StudentId = DbUtils.SafeGetString(reader, "StudentId"),
-                    Status = DbUtils.SafeGetInt16(reader, "Status"),
-                    SlotNumer = DbUtils.SafeGetInt16(reader, "SlotNumer"),
-                    Date = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "Date")),
+                    Status = DbUtils.SafeGetInt16(reader, "Status"),              
                     CreatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "CreatedDate")),
                     UpdatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "UpdatedDate"))
                 });
@@ -61,11 +63,11 @@ public class LessonDao:ILessonDao
             DbUtils.CloseMySqlDbConnection(logger);
         }
 
-        return lessons;
+        return payments;
     }
-    public IEnumerable<Lesson?> GetLessonById(string id)
+    public IEnumerable<Payment?> GetPaymentById(string id)
     {
-        var lessons = new List<Lesson?>();
+        var payments = new List<Payment?>();
 
         try
         {
@@ -73,7 +75,7 @@ public class LessonDao:ILessonDao
             connection.Open();
             var param1 = "@id";
 
-            var selectStatement = "Select Id, SyllabusId, TutorId, StudentId, SlotNumer, Date, CreatedDate, UpdatedDate, Status";
+            var selectStatement = "Select Id, SyllabusId, StudentId,CreatedDate, UpdatedDate, Status";
             var fromStatement = "From Lesson";
             var whereStatement = $"Where Id = {param1}";
             var query = selectStatement + " " + fromStatement + " " + whereStatement;
@@ -93,15 +95,12 @@ public class LessonDao:ILessonDao
 
             if (reader.Read())
             {
-                lessons.Add(new Lesson
+                payments.Add(new Payment
                 {
                     Id = DbUtils.SafeGetString(reader, "Id"),
                     SyllabusId = DbUtils.SafeGetString(reader, "SyllabusId"),
-                    TutorId = DbUtils.SafeGetString(reader, "TutorId"),
                     StudentId = DbUtils.SafeGetString(reader, "StudentId"),
                     Status = DbUtils.SafeGetInt16(reader, "Status"),
-                    SlotNumer = DbUtils.SafeGetInt16(reader, "SlotNumer"),
-                    Date = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "Date")),
                     CreatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "CreatedDate")),
                     UpdatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "UpdatedDate"))
                 });
@@ -121,44 +120,41 @@ public class LessonDao:ILessonDao
             DbUtils.CloseMySqlDbConnection(logger);
         }
 
-        return lessons;
+        return payments;
     }
 
-    public void CreateLessons(IEnumerable<Lesson> lessons)
+    public void CreatePayments(IEnumerable<Payment> payments)
     {
         try
         {
             using var connection = DbUtils.GetMySqlDbConnection(logger);
             connection.Open();
             var param1 = "@SyllabusId";
-            var param2 = "@TutorId";
-            var param3 = "@StudentId";
-            var param4 = "@SlotNumer";
-            var param5 = "@Status";
+            var param2 = "@StudentId";
+            var param3 = "@Status";
 
             var query = "";
-            var insertStatement = "Insert into Lesson(SyllabusId, TutorId, StudentId, SlotNumer, Status) values ";
+            var insertStatement = "Insert into Lesson(SyllabusId, StudentId, Status) values ";
 
             query = insertStatement;
-            for (int i = 0; i < lessons.Count(); i++)
+            for (int i = 0; i < payments.Count(); i++)
             {
-                if (i == lessons.Count() - 1)
-                    query = query + " " + $"({param1 + i},{param2 + i},{param3 + i},{param4 + i}, {param5 + i})";
+                if (i == payments.Count() - 1)
+                    query = query + " " + $"({param1 + i},{param2 + i},{param3 + i})";
                 else
-                    query = query + " " + $"({param1 + i},{param2 + i},{param3 + i},{param4 + i}, {param5 + i})" + ",";
+                    query = query + " " + $"({param1 + i},{param2 + i},{param3 + i})" + ",";
             }
 
             using var command = DbUtils.CreateMySqlCommand(query, logger, connection);
             command.CommandText = query;
 
-            for (int i = 0; i < lessons.Count(); i++)
+            for (int i = 0; i < payments.Count(); i++)
             {
-                Lesson lesson = lessons.ElementAt(i);
-                command.Parameters.Add(param1 + i, MySqlDbType.VarChar).Value = lesson.SyllabusId;
-                command.Parameters.Add(param2 + i, MySqlDbType.VarChar).Value = lesson.TutorId;
-                command.Parameters.Add(param3 + i, MySqlDbType.VarChar).Value = lesson.StudentId;
-                command.Parameters.Add(param4 + i, MySqlDbType.VarChar).Value = lesson.SlotNumer;
-                command.Parameters.Add(param5 + i, MySqlDbType.Int16).Value = lesson.Status;
+                Payment payment = payments.ElementAt(i);
+                command.Parameters.Add(param1 + i, MySqlDbType.VarChar).Value = payment.SyllabusId;
+                command.Parameters.Add(param2 + i, MySqlDbType.VarChar).Value = payment.StudentId;
+                command.Parameters.Add(param3 + i, MySqlDbType.Int16).Value = payment.Status;
+               
             }
 
             command.Prepare();
@@ -187,7 +183,5 @@ public class LessonDao:ILessonDao
         }
 
     }
-
-
 
 }

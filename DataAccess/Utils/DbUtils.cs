@@ -69,7 +69,20 @@ public static class DbUtils
             return reader.GetInt16(colIndex);
         return 0;
     }
-    
+
+    public static double SafeGetDouble(this MySqlDataReader reader, string colName)
+    {
+        if (!reader.IsDBNull(colName))
+            return reader.GetDouble(colName);
+        return 0;
+    }
+
+    public static double SafeGetDouble(this MySqlDataReader reader, int colIndex)
+    {
+        if (!reader.IsDBNull(colIndex))
+            return reader.GetDouble(colIndex);
+        return 0;
+    }
     public static MySqlDateTime? SafeGetMySqlDateTime(this MySqlDataReader reader, string colName)
     {
         if(!reader.IsDBNull(colName))
