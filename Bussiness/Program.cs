@@ -19,7 +19,12 @@ builder.Services.AddSingleton<ISubjectDao, SubjectDao>();
 //Lesson
 builder.Services.AddSingleton<ILessonService, LessonServiceV1>();
 builder.Services.AddSingleton<ILessonDao, LessonDao>();
-
+//Syllabus
+builder.Services.AddSingleton<ISyllabusService, SyllabusServiceV1>();
+builder.Services.AddSingleton<ISyllabusDao, SyllabusDao>();
+//Payment
+builder.Services.AddSingleton<IPaymentService, PaymentServiceV1>();
+builder.Services.AddSingleton<IPaymentDao, PaymentDao>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

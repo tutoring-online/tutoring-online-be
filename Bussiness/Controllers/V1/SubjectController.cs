@@ -29,9 +29,6 @@ public class SubjectController
     public IEnumerable<SubjectDto> GetSubject(string id)
     {
         var subjects= subjectService.GetSubjectById(id);
-
-        SubjectDto o = null;
-
         return subjects;
     }
     [HttpPost]
