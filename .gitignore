@@ -4,10 +4,8 @@
 
 ### DotnetCore ###
 # .NET Core build folders
-Bussiness/**/bin/
-Bussiness/**/obj/
-DataAccess/**/bin/
-DataAccess/**/obj/
+**/bin/
+**/obj/
 .vs
 
 # Common node modules locations
@@ -29,7 +27,7 @@ DataAccess/**/obj/
 .idea/**/aws.xml
 
 # Generated files
-.idea/**/contentModel.xml
+.idea/**/contentModel.xmla
 
 # Sensitive or high-churn files
 .idea/**/dataSources/
