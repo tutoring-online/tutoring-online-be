@@ -42,7 +42,6 @@ public static class Extensions
             CreatedDate = subjectDto.CreatedDate
         };
     }
-
     
     //Lesson
     public static LessonDto AsDto(this Lesson lesson)
@@ -65,13 +64,13 @@ public static class Extensions
         return new Lesson()
         {
             Id = lessonDto.Id,
-            SyllabusId = StringUtils.NullToEmpty(lessonDto.SyllabusId),
-            TutorId = StringUtils.NullToEmpty(lessonDto.TutorId),
-            StudentId = StringUtils.NullToEmpty(lessonDto.StudentId),
+            SyllabusId = lessonDto.SyllabusId,
+            TutorId = lessonDto.TutorId,
+            StudentId = lessonDto.StudentId,
             Status = lessonDto.Status,
-            Date = StringUtils.NullToEmpty(lessonDto.Date),
-            UpdatedDate = StringUtils.NullToEmpty(lessonDto.UpdatedDate),
-            CreatedDate = StringUtils.NullToEmpty(lessonDto.CreatedDate),
+            Date = lessonDto.Date,
+            UpdatedDate = lessonDto.UpdatedDate,
+            CreatedDate = lessonDto.CreatedDate,
             SlotNumer = lessonDto.SlotNumer
         };
     }
@@ -97,13 +96,13 @@ public static class Extensions
         return new Syllabus()
         {
             Id = syllabusDto.Id,
-            SubjectId = StringUtils.NullToEmpty(syllabusDto.SubjectId),
+            SubjectId = syllabusDto.SubjectId,
             TotalLessons = syllabusDto.TotalLessons,
-            Description = StringUtils.NullToEmpty(syllabusDto.Description),
-            Name = StringUtils.NullToEmpty(syllabusDto.Name),
+            Description = syllabusDto.Description,
+            Name = syllabusDto.Name,
             Status = syllabusDto.Status,
-            UpdatedDate = StringUtils.NullToEmpty(syllabusDto.UpdatedDate),
-            CreatedDate = StringUtils.NullToEmpty(syllabusDto.CreatedDate),
+            UpdatedDate = syllabusDto.UpdatedDate,
+            CreatedDate = syllabusDto.CreatedDate,
             Price = syllabusDto.Price
         };
     }
@@ -127,11 +126,11 @@ public static class Extensions
         return new Payment()
         {
             Id = paymentDto.Id,
-            SyllabusId = StringUtils.NullToEmpty(paymentDto.SyllabusId),
-            StudentId = StringUtils.NullToEmpty(paymentDto.StudentId),
+            SyllabusId = paymentDto.SyllabusId,
+            StudentId = paymentDto.StudentId,
             Status = paymentDto.Status,
-            UpdatedDate = StringUtils.NullToEmpty(paymentDto.UpdatedDate),
-            CreatedDate = StringUtils.NullToEmpty(paymentDto.CreatedDate)
+            UpdatedDate = paymentDto.UpdatedDate,
+            CreatedDate = paymentDto.CreatedDate
         };
     }
 }

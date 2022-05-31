@@ -130,46 +130,40 @@ public class SubjectDao : ISubjectDao
         {
             using var connection = DbUtils.GetMySqlDbConnection(logger);
             connection.Open();
-            var param1 = "@SubjectCode";
-            var param2 = "@Name";
-            var param3 = "@Description";
-            var param4 = "@CategoryId";
-            var param5 = "@Status";
-            
-            var query = "";
-            var insertStatement = "Insert into Subject(SubjectCode, Name, Description, CategoryId, Status) values ";
+            // var param1 = "@SubjectCode";
+            // var param2 = "@Name";
+            // var param3 = "@Description";
+            // var param4 = "@CategoryId";
+            // var param5 = "@Status";
+            //
+            // var query = "";
+            // var insertStatement = "Insert into Subject(SubjectCode, Name, Description, CategoryId, Status) values ";
+            //
+            // query = insertStatement;
+            // for (int i = 0; i < subjects.Count(); i++)
+            // {
+            //     if (i == subjects.Count() - 1)
+            //         query = query + " " + $"({param1 + i},{param2 + i},{param3 + i},{param4 + i}, {param5 + i})";
+            //     else
+            //         query = query + " " + $"({param1 + i},{param2 + i},{param3 + i},{param4 + i}, {param5 + i})" + ",";
+            // }
+            //
+            // using var command = DbUtils.CreateMySqlCommand(query, logger, connection);
+            // command.CommandText = query;
+            //
+            // for (int i = 0; i < subjects.Count(); i++)
+            // {
+            //     Subject subject = subjects.ElementAt(i);
+            //     command.Parameters.Add(param1 + i, MySqlDbType.VarChar).Value = subject.SubjectCode;
+            //     command.Parameters.Add(param2 + i, MySqlDbType.VarChar).Value = subject.Name;
+            //     command.Parameters.Add(param3 + i, MySqlDbType.VarChar).Value = subject.Description;
+            //     command.Parameters.Add(param4 + i, MySqlDbType.VarChar).Value = subject.CategoryId;
+            //     command.Parameters.Add(param5 + i, MySqlDbType.Int16).Value = subject.Status;
+            // }
 
-            query = insertStatement;
-            for (int i = 0; i < subjects.Count(); i++)
-            {
-                if (i == subjects.Count() - 1)
-                    query = query + " " + $"({param1 + i},{param2 + i},{param3 + i},{param4 + i}, {param5 + i})";
-                else
-                    query = query + " " + $"({param1 + i},{param2 + i},{param3 + i},{param4 + i}, {param5 + i})" + ",";
-            }
-
-            using var command = DbUtils.CreateMySqlCommand(query, logger, connection);
-            command.CommandText = query;
-
-            for (int i = 0; i < subjects.Count(); i++)
-            {
-                Subject subject = subjects.ElementAt(i);
-                command.Parameters.Add(param1 + i, MySqlDbType.VarChar).Value = subject.SubjectCode;
-                command.Parameters.Add(param2 + i, MySqlDbType.VarChar).Value = subject.Name;
-                command.Parameters.Add(param3 + i, MySqlDbType.VarChar).Value = subject.Description;
-                command.Parameters.Add(param4 + i, MySqlDbType.VarChar).Value = subject.CategoryId;
-                command.Parameters.Add(param5 + i, MySqlDbType.Int16).Value = subject.Status;
-            }
-            
+            using var command = MySqlUtils.CreateInsertStatement(subjects, logger, connection);
             command.Prepare();
             
-            Console.WriteLine(command.CommandText);
-            
-            foreach (MySqlParameter commandParameter in command.Parameters)
-            {
-                logger.LogInformation(LogUtils.CreateLogMessage($"Param {commandParameter}: {commandParameter.Value}"));
-            }
-
             command.ExecuteNonQuery();
 
         }

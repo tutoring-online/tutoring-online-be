@@ -2,7 +2,7 @@
 
 public class Subject
 {
-    public string Id { get; init; }
+    public string? Id { get; init; }
 
     public string? SubjectCode { get; init; }
     
