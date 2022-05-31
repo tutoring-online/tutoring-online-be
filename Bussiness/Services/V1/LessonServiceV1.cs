@@ -16,12 +16,12 @@ public class LessonServiceV1: ILessonService
 
     public IEnumerable<LessonDto> GetLessons()
     {
-        return lessonDao.GetLessons().Select(lesson => lesson.AsDtoLesson());
+        return lessonDao.GetLessons().Select(lesson => lesson.AsDto());
     }
 
     public IEnumerable<LessonDto> GetLessonById(string id)
     {
-        return lessonDao.GetLessonById(id).Select(lesson => lesson.AsDtoLesson());
+        return lessonDao.GetLessonById(id).Select(lesson => lesson.AsDto());
     }
 
     public void CreateLessons(IEnumerable<Lesson> lessons)

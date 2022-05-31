@@ -4,12 +4,12 @@ namespace DataAccess.Utils;
 
 public static class LogUtils
 {
-    public static string CreateLogMessage(String message)
+    public static string CreateLogMessage(string? message)
     {
         if (message is null)
             message = "";
 
-        return DateTime.Now.ToString() + " ============= " + message;
+        return DateTime.Now + " ============= " + message;
     }
     
 }

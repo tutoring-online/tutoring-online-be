@@ -11,6 +11,8 @@ namespace DataAccess.Utils;
 
 public static class Extensions
 {
+    
+    //Subject
     public static SubjectDto AsDto(this Subject subject)
     {
         return new SubjectDto()
@@ -31,28 +33,30 @@ public static class Extensions
         return new Subject()
         {
             Id = subjectDto.Id,
-            Name = StringUtils.NullToEmpty(subjectDto.Name),
-            Description = StringUtils.NullToEmpty(subjectDto.Description),
+            Name = subjectDto.Name,
+            Description = subjectDto.Description,
             Status = subjectDto.Status,
-            CategoryId = StringUtils.NullToEmpty(subjectDto.CategoryId),
-            SubjectCode = StringUtils.NullToEmpty(subjectDto.SubjectCode),
-            UpdatedDate = StringUtils.NullToEmpty(subjectDto.UpdatedDate),
-            CreatedDate = StringUtils.NullToEmpty(subjectDto.CreatedDate)
+            CategoryId = subjectDto.CategoryId,
+            SubjectCode = subjectDto.SubjectCode,
+            UpdatedDate =subjectDto.UpdatedDate,
+            CreatedDate = subjectDto.CreatedDate
         };
     }
 
-    public static LessonDto AsDtoLesson(this Lesson lesson)
+    
+    //Lesson
+    public static LessonDto AsDto(this Lesson lesson)
     {
         return new LessonDto()
         {
             Id = lesson.Id,
-            SyllabusId = StringUtils.NullToEmpty(lesson.SyllabusId),
-            TutorId = StringUtils.NullToEmpty(lesson.TutorId),
-            StudentId = StringUtils.NullToEmpty(lesson.StudentId),
+            SyllabusId = lesson.SyllabusId,
+            TutorId = lesson.TutorId,
+            StudentId = lesson.StudentId,
             Status = lesson.Status,
-            Date = StringUtils.NullToEmpty(lesson.Date),
-            UpdatedDate = StringUtils.NullToEmpty(lesson.UpdatedDate),
-            CreatedDate = StringUtils.NullToEmpty(lesson.CreatedDate),
+            Date = lesson.Date,
+            UpdatedDate = lesson.UpdatedDate,
+            CreatedDate = lesson.CreatedDate,
             SlotNumer = lesson.SlotNumer
         };
     }
@@ -72,7 +76,8 @@ public static class Extensions
         };
     }
 
-    public static SyllabusDto AsDtoSyllabuses(this Syllabus syllabus)
+    //Syllabus
+    public static SyllabusDto AsDto(this Syllabus syllabus)
     {
         return new SyllabusDto()
         {
@@ -103,7 +108,8 @@ public static class Extensions
         };
     }
 
-    public static PaymentDto AsDtoPayments(this Payment payment)
+    //Payment
+    public static PaymentDto AsDto(this Payment payment)
     {
         return new PaymentDto()
         {

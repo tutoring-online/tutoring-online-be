@@ -16,12 +16,12 @@ public class SyllabusServiceV1 : ISyllabusService
 
     public IEnumerable<SyllabusDto> GetSyllabuses()
     {
-        return syllabusDao.GetSyllabuses().Select(syllabus => syllabus.AsDtoSyllabuses());
+        return syllabusDao.GetSyllabuses().Select(syllabus => syllabus.AsDto());
     }
 
     public IEnumerable<SyllabusDto> GetSyllabusById(string id)
     {
-        return syllabusDao.GetSyllabusById(id).Select(syllabus => syllabus.AsDtoSyllabuses());
+        return syllabusDao.GetSyllabusById(id).Select(syllabus => syllabus.AsDto());
     }
 
     public void CreateSyllabuses(IEnumerable<Syllabus> syllabuses)

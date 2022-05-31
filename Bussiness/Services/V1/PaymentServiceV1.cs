@@ -16,12 +16,12 @@ public class PaymentServiceV1 : IPaymentService
 
     public IEnumerable<PaymentDto> GetPayments()
     {
-        return paymentDao.GetPayments().Select(payment => payment.AsDtoPayments());
+        return paymentDao.GetPayments().Select(payment => payment.AsDto());
     }
 
     public IEnumerable<PaymentDto> GetPaymentById(string id)
     {
-        return paymentDao.GetPaymentById(id).Select(payment => payment.AsDtoPayments());
+        return paymentDao.GetPaymentById(id).Select(payment => payment.AsDto());
     }
 
     public void CreatePayments(IEnumerable<Payment> payments)
