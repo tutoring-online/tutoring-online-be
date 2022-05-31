@@ -19,6 +19,7 @@ public class CommonUtils
         if (dateTime is null)
             return string.Empty;
         
+        
         DateTime o = dateTime.Value;
         return o.ToString(DateTimeFormat);
     }
