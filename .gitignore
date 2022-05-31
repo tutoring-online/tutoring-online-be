@@ -4,10 +4,10 @@
 
 ### DotnetCore ###
 # .NET Core build folders
-Bussiness/bin/
-Bussiness/obj/
-DataAccess/bin/
-DataAccess/obj/
+Bussiness/**/bin/
+Bussiness/**/obj/
+DataAccess/**/bin/
+DataAccess/**/obj/
 .vs
 
 # Common node modules locations
