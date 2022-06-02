@@ -4,9 +4,9 @@ name: Build .NET Core application
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
+    branches: [ develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, develop ]
     types: [opened, reopened]
 
   # Allows you to run this workflow manually from the Actions tab
