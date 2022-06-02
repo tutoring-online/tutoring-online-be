@@ -35,12 +35,11 @@ var app = builder.Build();
 //Setup logger
 NLog.Common.InternalLogger.LogLevel = NLog.LogLevel.Trace;
 NLog.Common.InternalLogger.LogToConsole = true;
+NLog.Common.InternalLogger.LogFile = "nlog.txt"; 
 Logger logger = LogManager.GetLogger("Logger");
 logger.Info("Program started");
 
 // Configure the HTTP request pipeline.
-
-//Swagger config
 app.UseSwagger();
 app.UseSwaggerUI();
 
