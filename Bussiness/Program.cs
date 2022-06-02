@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-// builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen();
 
 //Dependency Injection
 //Subject
@@ -35,15 +35,13 @@ var app = builder.Build();
 //Setup logger
 NLog.Common.InternalLogger.LogLevel = NLog.LogLevel.Trace;
 NLog.Common.InternalLogger.LogToConsole = true;
+NLog.Common.InternalLogger.LogFile = "nlog.txt"; 
 Logger logger = LogManager.GetLogger("Logger");
 logger.Info("Program started");
 
 // Configure the HTTP request pipeline.
-
-//Swagger config
-// app.UseSwagger();
-// app.UseSwaggerUI();
-
+app.UseSwagger();
+app.UseSwaggerUI();
 
 
 app.UseHttpsRedirection();
