@@ -1,8 +1,8 @@
 name: Build and deploy .NET Core application to windows webapp tutoring-online with API Management Service tutoring-online-api
 on:
-  push:
-    branches:
-    - main
+  workflow_run:
+    workflows: ["CI Build"]
+    types: completed
 env:
   AZURE_WEBAPP_NAME: tutoring-online
   DOTNET_CORE_VERSION: 6.0.x
@@ -20,7 +20,7 @@ env:
   API_IMPORT_DLL: Bussiness/publish/Bussiness.dll
   API_IMPORT_VERSION: v1
 jobs:
-  build:
+  on-success:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
