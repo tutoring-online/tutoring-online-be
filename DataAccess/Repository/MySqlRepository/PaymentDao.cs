@@ -1,38 +1,27 @@
-﻿using DataAccess.Entities.Payment;
+﻿using Anotar.NLog;
+using DataAccess.Entities.Payment;
 using DataAccess.Utils;
 using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repository.MySqlRepository;
 
 public class PaymentDao : IPaymentDao
 {
-    private readonly ILogger<PaymentDao> logger;
-
-    public PaymentDao(ILogger<PaymentDao> logger)
-    {
-        this.logger = logger;
-    }
-
     public IEnumerable<Payment?> GetPayments()
     {
         var payments = new List<Payment?>();
 
         try
         {
-            using var connection = DbUtils.GetMySqlDbConnection(logger);
+            using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
             var selectStatement = "Select Id, SyllabusId, StudentId,CreatedDate, UpdatedDate, Status";
             var fromStatement = "From Payment";
             var query = selectStatement + " " + fromStatement;
 
-            using var command = DbUtils.CreateMySqlCommand(query, logger, connection);
+            using var command = DbUtils.CreateMySqlCommand(query, connection);
 
             var reader = command.ExecuteReader();
 
@@ -52,15 +41,15 @@ public class PaymentDao : IPaymentDao
         }
         catch (MySqlException e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Info(e.ToString);
         }
         catch (Exception e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Info(e.ToString);
         }
         finally
         {
-            DbUtils.CloseMySqlDbConnection(logger);
+            DbUtils.CloseMySqlDbConnection();
         }
 
         return payments;
@@ -71,7 +60,7 @@ public class PaymentDao : IPaymentDao
 
         try
         {
-            using var connection = DbUtils.GetMySqlDbConnection(logger);
+            using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
             var param1 = "@id";
 
@@ -80,7 +69,7 @@ public class PaymentDao : IPaymentDao
             var whereStatement = $"Where Id = {param1}";
             var query = selectStatement + " " + fromStatement + " " + whereStatement;
 
-            using var command = DbUtils.CreateMySqlCommand(query, logger, connection);
+            using var command = DbUtils.CreateMySqlCommand(query, connection);
             command.CommandText = query;
 
             command.Parameters.Add(param1, MySqlDbType.VarChar).Value = id;
@@ -88,7 +77,7 @@ public class PaymentDao : IPaymentDao
 
             foreach (MySqlParameter commandParameter in command.Parameters)
             {
-                logger.LogInformation(LogUtils.CreateLogMessage($"Param {commandParameter}: {commandParameter.Value}"));
+                LogTo.Info($"Param {commandParameter}: {commandParameter.Value}");
             }
 
             var reader = command.ExecuteReader();
@@ -108,16 +97,16 @@ public class PaymentDao : IPaymentDao
             }
         }
         catch (MySqlException e)
-        {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+        { 
+            LogTo.Info(e.ToString());
         }
         catch (Exception e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Info(e.ToString());
         }
         finally
         {
-            DbUtils.CloseMySqlDbConnection(logger);
+            DbUtils.CloseMySqlDbConnection();
         }
 
         return payments;
@@ -127,7 +116,7 @@ public class PaymentDao : IPaymentDao
     {
         try
         {
-            using var connection = DbUtils.GetMySqlDbConnection(logger);
+            using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
             var param1 = "@SyllabusId";
             var param2 = "@StudentId";
@@ -145,7 +134,7 @@ public class PaymentDao : IPaymentDao
                     query = query + " " + $"({param1 + i},{param2 + i},{param3 + i})" + ",";
             }
 
-            using var command = DbUtils.CreateMySqlCommand(query, logger, connection);
+            using var command = DbUtils.CreateMySqlCommand(query, connection);
             command.CommandText = query;
 
             for (int i = 0; i < payments.Count(); i++)
@@ -163,7 +152,7 @@ public class PaymentDao : IPaymentDao
 
             foreach (MySqlParameter commandParameter in command.Parameters)
             {
-                logger.LogInformation(LogUtils.CreateLogMessage($"Param {commandParameter}: {commandParameter.Value}"));
+                LogTo.Info($"Param {commandParameter}: {commandParameter.Value}");
             }
 
             command.ExecuteNonQuery();
@@ -171,15 +160,15 @@ public class PaymentDao : IPaymentDao
         }
         catch (MySqlException e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Info(e.ToString());
         }
         catch (Exception e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Info(e.ToString());
         }
         finally
         {
-            DbUtils.CloseMySqlDbConnection(logger);
+            DbUtils.CloseMySqlDbConnection();
         }
 
     }

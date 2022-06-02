@@ -7,32 +7,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Anotar.NLog;
 
 namespace DataAccess.Repository.MySqlRepository;
 
 public class SyllabusDao: ISyllabusDao
 {
-    private readonly ILogger<SyllabusDao> logger;
-
-    public SyllabusDao(ILogger<SyllabusDao> logger)
-    {
-        this.logger = logger;
-    }
-
     public IEnumerable<Syllabus?> GetSyllabuses()
     {
         var syllabuses = new List<Syllabus?>();
 
         try
         {
-            using var connection = DbUtils.GetMySqlDbConnection(logger);
+            using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
             var selectStatement = "Select Id, SubjectId, TotalLessons, Description, Price, Name, Status, CreatedDate, UpdatedDate";
             var fromStatement = "From Syllabus";
             var query = selectStatement + " " + fromStatement;
 
-            using var command = DbUtils.CreateMySqlCommand(query, logger, connection);
+            using var command = DbUtils.CreateMySqlCommand(query, connection);
 
             var reader = command.ExecuteReader();
 
@@ -54,15 +48,15 @@ public class SyllabusDao: ISyllabusDao
         }
         catch (MySqlException e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Error(e.ToString());
         }
         catch (Exception e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Error(e.ToString());
         }
         finally
         {
-            DbUtils.CloseMySqlDbConnection(logger);
+            DbUtils.CloseMySqlDbConnection();
         }
 
         return syllabuses;
@@ -74,7 +68,7 @@ public class SyllabusDao: ISyllabusDao
 
         try
         {
-            using var connection = DbUtils.GetMySqlDbConnection(logger);
+            using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
             var param1 = "@id";
 
@@ -83,7 +77,7 @@ public class SyllabusDao: ISyllabusDao
             var whereStatement = $"Where Id = {param1}";
             var query = selectStatement + " " + fromStatement + " " + whereStatement;
 
-            using var command = DbUtils.CreateMySqlCommand(query, logger, connection);
+            using var command = DbUtils.CreateMySqlCommand(query, connection);
             command.CommandText = query;
 
             command.Parameters.Add(param1, MySqlDbType.VarChar).Value = id;
@@ -91,7 +85,7 @@ public class SyllabusDao: ISyllabusDao
 
             foreach (MySqlParameter commandParameter in command.Parameters)
             {
-                logger.LogInformation(LogUtils.CreateLogMessage($"Param {commandParameter}: {commandParameter.Value}"));
+                LogTo.Info($"Param {commandParameter}: {commandParameter.Value}");
             }
 
             var reader = command.ExecuteReader();
@@ -115,15 +109,15 @@ public class SyllabusDao: ISyllabusDao
         }
         catch (MySqlException e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Error(e.ToString());
         }
         catch (Exception e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Error(e.ToString());
         }
         finally
         {
-            DbUtils.CloseMySqlDbConnection(logger);
+            DbUtils.CloseMySqlDbConnection();
         }
 
         return syllabus;
@@ -133,7 +127,7 @@ public class SyllabusDao: ISyllabusDao
     {
         try
         {
-            using var connection = DbUtils.GetMySqlDbConnection(logger);
+            using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
             var param1 = "@SubjectId";
             var param2 = "@Name";
@@ -154,7 +148,7 @@ public class SyllabusDao: ISyllabusDao
                     query = query + " " + $"({param1 + i},{param2 + i},{param3 + i},{param4 + i}, {param5 + i}, {param6 + i})" + ",";
             }
 
-            using var command = DbUtils.CreateMySqlCommand(query, logger, connection);
+            using var command = DbUtils.CreateMySqlCommand(query, connection);
             command.CommandText = query;
 
             for (int i = 0; i < syllabuses.Count(); i++)
@@ -174,7 +168,7 @@ public class SyllabusDao: ISyllabusDao
 
             foreach (MySqlParameter commandParameter in command.Parameters)
             {
-                logger.LogInformation(LogUtils.CreateLogMessage($"Param {commandParameter}: {commandParameter.Value}"));
+                LogTo.Info($"Param {commandParameter}: {commandParameter.Value}");
             }
 
             command.ExecuteNonQuery();
@@ -182,15 +176,15 @@ public class SyllabusDao: ISyllabusDao
         }
         catch (MySqlException e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Error(e.ToString());
         }
         catch (Exception e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Error(e.ToString());
         }
         finally
         {
-            DbUtils.CloseMySqlDbConnection(logger);
+            DbUtils.CloseMySqlDbConnection();
         }
 
     }

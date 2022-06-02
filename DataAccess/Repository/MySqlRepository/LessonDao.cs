@@ -1,4 +1,5 @@
-﻿using DataAccess.Entities.Lesson;
+﻿using Anotar.NLog;
+using DataAccess.Entities.Lesson;
 using DataAccess.Utils;
 using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
@@ -7,11 +8,8 @@ namespace DataAccess.Repository.MySqlRepository;
 
 public class LessonDao:ILessonDao
 {
-    private readonly ILogger<LessonDao> logger;
-
-    public LessonDao(ILogger<LessonDao> logger)
+    public LessonDao()
     {
-        this.logger = logger;
     }
 
     public IEnumerable<Lesson?> GetLessons()
@@ -20,14 +18,14 @@ public class LessonDao:ILessonDao
 
         try
         {
-            using var connection = DbUtils.GetMySqlDbConnection(logger);
+            using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
             var selectStatement = "Select Id, SyllabusId, TutorId, StudentId, SlotNumer, Date, CreatedDate, UpdatedDate, Status";
             var fromStatement = "From Lesson";
             var query = selectStatement + " " + fromStatement;
 
-            using var command = DbUtils.CreateMySqlCommand(query, logger, connection);
+            using var command = DbUtils.CreateMySqlCommand(query, connection);
 
             var reader = command.ExecuteReader();
 
@@ -50,15 +48,15 @@ public class LessonDao:ILessonDao
         }
         catch (MySqlException e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Info(e.ToString);
         }
         catch (Exception e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Info(e.ToString);
         }
         finally
         {
-            DbUtils.CloseMySqlDbConnection(logger);
+            DbUtils.CloseMySqlDbConnection();
         }
 
         return lessons;
@@ -69,7 +67,7 @@ public class LessonDao:ILessonDao
 
         try
         {
-            using var connection = DbUtils.GetMySqlDbConnection(logger);
+            using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
             var param1 = "@id";
 
@@ -78,7 +76,7 @@ public class LessonDao:ILessonDao
             var whereStatement = $"Where Id = {param1}";
             var query = selectStatement + " " + fromStatement + " " + whereStatement;
 
-            using var command = DbUtils.CreateMySqlCommand(query, logger, connection);
+            using var command = DbUtils.CreateMySqlCommand(query, connection);
             command.CommandText = query;
 
             command.Parameters.Add(param1, MySqlDbType.VarChar).Value = id;
@@ -86,7 +84,7 @@ public class LessonDao:ILessonDao
 
             foreach (MySqlParameter commandParameter in command.Parameters)
             {
-                logger.LogInformation(LogUtils.CreateLogMessage($"Param {commandParameter}: {commandParameter.Value}"));
+                LogTo.Info($"Param {commandParameter}: {commandParameter.Value}");
             }
 
             var reader = command.ExecuteReader();
@@ -110,15 +108,15 @@ public class LessonDao:ILessonDao
         }
         catch (MySqlException e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Info(e.ToString);
         }
         catch (Exception e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Info(e.ToString);
         }
         finally
         {
-            DbUtils.CloseMySqlDbConnection(logger);
+            DbUtils.CloseMySqlDbConnection();
         }
 
         return lessons;
@@ -128,7 +126,7 @@ public class LessonDao:ILessonDao
     {
         try
         {
-            using var connection = DbUtils.GetMySqlDbConnection(logger);
+            using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
             var param1 = "@SyllabusId";
             var param2 = "@TutorId";
@@ -148,7 +146,7 @@ public class LessonDao:ILessonDao
                     query = query + " " + $"({param1 + i},{param2 + i},{param3 + i},{param4 + i}, {param5 + i})" + ",";
             }
 
-            using var command = DbUtils.CreateMySqlCommand(query, logger, connection);
+            using var command = DbUtils.CreateMySqlCommand(query, connection);
             command.CommandText = query;
 
             for (int i = 0; i < lessons.Count(); i++)
@@ -167,7 +165,7 @@ public class LessonDao:ILessonDao
 
             foreach (MySqlParameter commandParameter in command.Parameters)
             {
-                logger.LogInformation(LogUtils.CreateLogMessage($"Param {commandParameter}: {commandParameter.Value}"));
+                LogTo.Info($"Param {commandParameter}: {commandParameter.Value}");
             }
 
             command.ExecuteNonQuery();
@@ -175,15 +173,17 @@ public class LessonDao:ILessonDao
         }
         catch (MySqlException e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Info(e.ToString);
+
         }
         catch (Exception e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Info(e.ToString);
+
         }
         finally
         {
-            DbUtils.CloseMySqlDbConnection(logger);
+            DbUtils.CloseMySqlDbConnection();
         }
 
     }

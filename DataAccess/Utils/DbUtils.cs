@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Runtime.CompilerServices;
+using Anotar.NLog;
 using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
 using MySql.Data.Types;
@@ -14,7 +15,7 @@ public static class DbUtils
     private const string MysqlPassword = "tutor@1369";
     private const string Database = "OTA";
 
-    public static MySqlConnection GetMySqlDbConnection(ILogger logger)
+    public static MySqlConnection GetMySqlDbConnection()
     {
         var MySqlStringBuilder = new MySqlConnectionStringBuilder();
         MySqlStringBuilder["Server"] = MysqlServer;
@@ -23,21 +24,21 @@ public static class DbUtils
         MySqlStringBuilder["Password"] = MysqlPassword;
 
         var mysqlConnectionString = MySqlStringBuilder.ToString();
-        logger.LogInformation(LogUtils.CreateLogMessage($"Got DB connection for {Database} at {MysqlServer}"));
+        LogTo.Info($"Got DB connection for {Database} at {MysqlServer}");
 
         return new MySqlConnection(mysqlConnectionString);
     }
 
-    public static void CloseMySqlDbConnection(ILogger logger)
+    public static void CloseMySqlDbConnection()
     {
-        logger.LogInformation(LogUtils.CreateLogMessage($"Closed connection for {Database} at {MysqlServer}"));
+        LogTo.Info($"Closed connection for {Database} at {MysqlServer}");
     }
 
-    public static MySqlCommand CreateMySqlCommand(string commandText ,ILogger logger, MySqlConnection connection)
+    public static MySqlCommand CreateMySqlCommand(string commandText , MySqlConnection connection)
     {
         var command = new MySqlCommand(commandText, connection);
         
-        logger.LogInformation(LogUtils.CreateLogMessage($"Query : {commandText}"));
+        LogTo.Info($"Query : {commandText}");
 
         return command;
     }

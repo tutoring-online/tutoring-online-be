@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Anotar.NLog;
 using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
 
@@ -6,7 +7,7 @@ namespace DataAccess.Utils;
 
 public class MySqlUtils
 {
-    public static MySqlCommand CreateInsertStatement(IEnumerable<object> entities, ILogger logger, MySqlConnection connection)
+    public static MySqlCommand CreateInsertStatement(IEnumerable<object> entities, MySqlConnection connection)
     {
         
         var insertStatement = "";
@@ -73,7 +74,7 @@ public class MySqlUtils
         insertStatement = $"Insert into {tableName} ({insertParameter}) values {valueParameter}";
 
         //construct command
-        var command = DbUtils.CreateMySqlCommand(insertStatement, logger, connection);
+        var command = DbUtils.CreateMySqlCommand(insertStatement, connection);
         command.CommandText = insertStatement;
         
         for (int i = 0; i < entities.Count(); i++)
@@ -84,6 +85,8 @@ public class MySqlUtils
                 command.Parameters.AddWithValue("@" + parameters[z].Name + i, propertyInfo.GetValue(entities.ElementAt(i), null));
             }
         }
+        LogTo.Info($"Sql string: {command.CommandText}");
+        command.Prepare();
 
         return command;
     }
