@@ -22,7 +22,7 @@ public static class Extensions
             Description = StringUtils.NullToEmpty(subject.Description),
             Status = subject.Status,
             CategoryId = StringUtils.NullToEmpty(subject.CategoryId),
-            SubjectCode = StringUtils.NullToEmpty(subject.SubjectCode),
+            Code = StringUtils.NullToEmpty(subject.Code),
             UpdatedDate = StringUtils.NullToEmpty(subject.UpdatedDate),
             CreatedDate = StringUtils.NullToEmpty(subject.CreatedDate)
         };
@@ -37,7 +37,7 @@ public static class Extensions
             Description = subjectDto.Description,
             Status = subjectDto.Status,
             CategoryId = subjectDto.CategoryId,
-            SubjectCode = subjectDto.SubjectCode,
+            Code = subjectDto.Code,
             UpdatedDate =subjectDto.UpdatedDate,
             CreatedDate = subjectDto.CreatedDate
         };

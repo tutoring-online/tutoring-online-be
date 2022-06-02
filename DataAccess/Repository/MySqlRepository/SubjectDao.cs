@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Anotar.NLog;
 using DataAccess.Entities.Subject;
 using DataAccess.Models.Subject;
 using DataAccess.Utils;
@@ -22,14 +23,14 @@ public class SubjectDao : ISubjectDao
 
         try
         {
-            using var connection = DbUtils.GetMySqlDbConnection(logger);
+            using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
-            var selectStatement = "Select Id, SubjectCode, Name, Description, Status, CreatedDate, UpdatedDate, CategoryId";
+            var selectStatement = "Select Id, Code, Name, Description, Status, CreatedDate, UpdatedDate, CategoryId";
             var fromStatement = "From Subject";
             var query = selectStatement + " " + fromStatement;
                                   
-            using var command = DbUtils.CreateMySqlCommand(query, logger, connection);
+            using var command = DbUtils.CreateMySqlCommand(query, connection);
 
             var reader = command.ExecuteReader();
 
@@ -38,7 +39,7 @@ public class SubjectDao : ISubjectDao
                 subjects.Add(new Subject
                 {
                     Id = DbUtils.SafeGetString(reader, "Id"),
-                    SubjectCode = DbUtils.SafeGetString(reader, "SubjectCode"),
+                    Code = DbUtils.SafeGetString(reader, "Code"),
                     Name = DbUtils.SafeGetString(reader, "Name"),
                     Description = DbUtils.SafeGetString(reader, "Description"),
                     Status = DbUtils.SafeGetInt16(reader, "Status"),
@@ -50,15 +51,15 @@ public class SubjectDao : ISubjectDao
         }
         catch (MySqlException e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Error(e.ToString());
         }
         catch (Exception e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Error(e.ToString());
         }
         finally
         {
-            DbUtils.CloseMySqlDbConnection(logger);
+            DbUtils.CloseMySqlDbConnection();
         }
 
         return subjects;
@@ -70,16 +71,16 @@ public class SubjectDao : ISubjectDao
 
         try
         {
-            using var connection = DbUtils.GetMySqlDbConnection(logger);
+            using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
             var param1 = "@id";
 
-            var selectStatement = "Select Id, SubjectCode, Name, Description, Status, CreatedDate, UpdatedDate, CategoryId";
+            var selectStatement = "Select Id, Code, Name, Description, Status, CreatedDate, UpdatedDate, CategoryId";
             var fromStatement = "From Subject";
             var whereStatement = $"Where Id = {param1}";
             var query = selectStatement + " " + fromStatement + " " + whereStatement; 
                                   
-            using var command = DbUtils.CreateMySqlCommand(query, logger, connection);
+            using var command = DbUtils.CreateMySqlCommand(query, connection);
             command.CommandText = query;
 
             command.Parameters.Add(param1, MySqlDbType.VarChar).Value = id;
@@ -87,7 +88,7 @@ public class SubjectDao : ISubjectDao
             
             foreach (MySqlParameter commandParameter in command.Parameters)
             {
-                logger.LogInformation(LogUtils.CreateLogMessage($"Param {commandParameter}: {commandParameter.Value}"));
+                LogTo.Error($"Param {commandParameter}: {commandParameter.Value}");
             }
 
             var reader = command.ExecuteReader();
@@ -97,7 +98,7 @@ public class SubjectDao : ISubjectDao
                 subjects.Add(new Subject
                 {
                     Id = DbUtils.SafeGetString(reader, "Id"),
-                    SubjectCode = DbUtils.SafeGetString(reader, "SubjectCode"),
+                    Code = DbUtils.SafeGetString(reader, "Code"),
                     Name = DbUtils.SafeGetString(reader, "Name"),
                     Description = DbUtils.SafeGetString(reader, "Description"),
                     Status = DbUtils.SafeGetInt16(reader, "Status"),
@@ -110,15 +111,15 @@ public class SubjectDao : ISubjectDao
         }
         catch (MySqlException e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Error(e.ToString());
         }
         catch (Exception e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Error(e.ToString());
         }
         finally
         {
-            DbUtils.CloseMySqlDbConnection(logger);
+            DbUtils.CloseMySqlDbConnection();
         }
 
         return subjects;
@@ -128,56 +129,25 @@ public class SubjectDao : ISubjectDao
     {
         try
         {
-            using var connection = DbUtils.GetMySqlDbConnection(logger);
+            using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
-            // var param1 = "@SubjectCode";
-            // var param2 = "@Name";
-            // var param3 = "@Description";
-            // var param4 = "@CategoryId";
-            // var param5 = "@Status";
-            //
-            // var query = "";
-            // var insertStatement = "Insert into Subject(SubjectCode, Name, Description, CategoryId, Status) values ";
-            //
-            // query = insertStatement;
-            // for (int i = 0; i < subjects.Count(); i++)
-            // {
-            //     if (i == subjects.Count() - 1)
-            //         query = query + " " + $"({param1 + i},{param2 + i},{param3 + i},{param4 + i}, {param5 + i})";
-            //     else
-            //         query = query + " " + $"({param1 + i},{param2 + i},{param3 + i},{param4 + i}, {param5 + i})" + ",";
-            // }
-            //
-            // using var command = DbUtils.CreateMySqlCommand(query, logger, connection);
-            // command.CommandText = query;
-            //
-            // for (int i = 0; i < subjects.Count(); i++)
-            // {
-            //     Subject subject = subjects.ElementAt(i);
-            //     command.Parameters.Add(param1 + i, MySqlDbType.VarChar).Value = subject.SubjectCode;
-            //     command.Parameters.Add(param2 + i, MySqlDbType.VarChar).Value = subject.Name;
-            //     command.Parameters.Add(param3 + i, MySqlDbType.VarChar).Value = subject.Description;
-            //     command.Parameters.Add(param4 + i, MySqlDbType.VarChar).Value = subject.CategoryId;
-            //     command.Parameters.Add(param5 + i, MySqlDbType.Int16).Value = subject.Status;
-            // }
 
-            using var command = MySqlUtils.CreateInsertStatement(subjects, logger, connection);
-            command.Prepare();
+            using var command = MySqlUtils.CreateInsertStatement(subjects, connection);
             
             command.ExecuteNonQuery();
-
+            
         }
         catch (MySqlException e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Error(e.ToString());
         }
         catch (Exception e)
         {
-            logger.LogInformation(LogUtils.CreateLogMessage(e.ToString()));
+            LogTo.Error(e.ToString());
         }
         finally
         {
-            DbUtils.CloseMySqlDbConnection(logger);
+            DbUtils.CloseMySqlDbConnection();
         }
 
     }

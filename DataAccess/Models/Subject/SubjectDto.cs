@@ -4,7 +4,7 @@ public class SubjectDto
 {
     public string? Id { get; init; }
 
-    public string? SubjectCode { get; init; }
+    public string? Code { get; init; }
     
     public string? Name { get; init; }
     
