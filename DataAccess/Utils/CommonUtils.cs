@@ -1,4 +1,5 @@
-﻿using MySql.Data.Types;
+﻿using System.Globalization;
+using MySql.Data.Types;
 
 namespace DataAccess.Utils;
 
@@ -22,5 +23,11 @@ public class CommonUtils
         
         DateTime o = dateTime.Value;
         return o.ToString(DateTimeFormat);
+    }
+
+    public static DateTime ConvertStringToDateTime(string stringDateTime)
+    {
+            return DateTime.ParseExact(stringDateTime, DateTimeFormat, CultureInfo.InvariantCulture);
+
     }
 }

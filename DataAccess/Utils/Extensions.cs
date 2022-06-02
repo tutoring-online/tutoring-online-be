@@ -23,8 +23,8 @@ public static class Extensions
             Status = subject.Status,
             CategoryId = StringUtils.NullToEmpty(subject.CategoryId),
             Code = StringUtils.NullToEmpty(subject.Code),
-            UpdatedDate = StringUtils.NullToEmpty(subject.UpdatedDate),
-            CreatedDate = StringUtils.NullToEmpty(subject.CreatedDate)
+            UpdatedDate = CommonUtils.ConvertDateTimeToString(subject.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertDateTimeToString(subject.CreatedDate)
         };
     }
     
@@ -38,8 +38,20 @@ public static class Extensions
             Status = subjectDto.Status,
             CategoryId = subjectDto.CategoryId,
             Code = subjectDto.Code,
-            UpdatedDate =subjectDto.UpdatedDate,
-            CreatedDate = subjectDto.CreatedDate
+            UpdatedDate = CommonUtils.ConvertStringToDateTime(subjectDto.UpdatedDate),
+            CreatedDate =  CommonUtils.ConvertStringToDateTime(subjectDto.CreatedDate)
+        };
+    }
+    
+    public static Subject AsEntity(this CreateSubjectDto subjectDto)
+    {
+        return new Subject()
+        {
+            Name = subjectDto.Name,
+            Description = subjectDto.Description,
+            Status = subjectDto.Status,
+            CategoryId = subjectDto.CategoryId,
+            Code = subjectDto.Code,
         };
     }
     

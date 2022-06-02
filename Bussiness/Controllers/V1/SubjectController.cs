@@ -33,7 +33,7 @@ public class SubjectController
         return subjects;
     }
     [HttpPost]
-    public void CreateSubjects(IEnumerable<SubjectDto> subjectDto)
+    public void CreateSubjects(IEnumerable<CreateSubjectDto> subjectDto)
     {
         IEnumerable<Subject> subjects = subjectDto.Select(subjectDto => subjectDto.AsEntity());
         

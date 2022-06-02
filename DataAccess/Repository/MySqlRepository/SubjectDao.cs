@@ -43,8 +43,8 @@ public class SubjectDao : ISubjectDao
                     Name = DbUtils.SafeGetString(reader, "Name"),
                     Description = DbUtils.SafeGetString(reader, "Description"),
                     Status = DbUtils.SafeGetInt16(reader, "Status"),
-                    CreatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "CreatedDate")),
-                    UpdatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "UpdatedDate")),
+                    CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
+                    UpdatedDate =DbUtils.SafeGetDateTime(reader, "UpdatedDate"),
                     CategoryId = DbUtils.SafeGetString(reader, "CategoryId")
                 });
             }
@@ -102,8 +102,8 @@ public class SubjectDao : ISubjectDao
                     Name = DbUtils.SafeGetString(reader, "Name"),
                     Description = DbUtils.SafeGetString(reader, "Description"),
                     Status = DbUtils.SafeGetInt16(reader, "Status"),
-                    CreatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "CreatedDate")),
-                    UpdatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "UpdatedDate")),
+                    CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
+                    UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate"),
                     CategoryId = DbUtils.SafeGetString(reader, "CategoryId")
                 });
 
@@ -131,6 +131,11 @@ public class SubjectDao : ISubjectDao
         {
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
+            
+            DateTime currentTime = DateTime.Now;
+
+            //Todo update later for CreateInsertStatement
+            subjects.Select(s => s.CreatedDate = currentTime);
 
             using var command = MySqlUtils.CreateInsertStatement(subjects, connection);
             

@@ -12,9 +12,9 @@ public class Subject
     
     public int? Status { get; init; }
     
-    public string? CreatedDate { get; init; }
+    public DateTime? CreatedDate { get; set; }
     
-    public string? UpdatedDate { get; init; }
+    public DateTime? UpdatedDate { get; init; }
     
     public string? CategoryId { get; init; }
 }
