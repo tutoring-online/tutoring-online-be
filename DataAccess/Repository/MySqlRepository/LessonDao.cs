@@ -132,15 +132,6 @@ public class LessonDao:ILessonDao
             using var command = MySqlUtils.CreateInsertStatement(lessons, connection);
             command.ExecuteNonQuery();
 
-            Console.WriteLine(command.CommandText);
-
-            foreach (MySqlParameter commandParameter in command.Parameters)
-            {
-                LogTo.Info($"Param {commandParameter}: {commandParameter.Value}");
-            }
-
-            command.ExecuteNonQuery();
-
         }
         catch (MySqlException e)
         {

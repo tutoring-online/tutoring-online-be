@@ -7,6 +7,7 @@ namespace DataAccess.Utils;
 
 public class MySqlUtils
 {
+    //TODO Refactor for ignore install CreatedDate
     public static MySqlCommand CreateInsertStatement(IEnumerable<object> entities, MySqlConnection connection)
     {
         

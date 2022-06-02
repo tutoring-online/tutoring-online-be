@@ -142,8 +142,8 @@ public static class Extensions
             SyllabusId = StringUtils.NullToEmpty(payment.SyllabusId),
             StudentId = StringUtils.NullToEmpty(payment.StudentId),
             Status = payment.Status,
-            UpdatedDate = StringUtils.NullToEmpty(payment.UpdatedDate),
-            CreatedDate = StringUtils.NullToEmpty(payment.CreatedDate)
+            UpdatedDate = CommonUtils.ConvertDateTimeToString(payment.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertDateTimeToString(payment.CreatedDate)
         };
     }
 
@@ -155,8 +155,19 @@ public static class Extensions
             SyllabusId = paymentDto.SyllabusId,
             StudentId = paymentDto.StudentId,
             Status = paymentDto.Status,
-            UpdatedDate = paymentDto.UpdatedDate,
-            CreatedDate = paymentDto.CreatedDate
+            UpdatedDate = CommonUtils.ConvertStringToDateTime(paymentDto.CreatedDate),
+            CreatedDate = CommonUtils.ConvertStringToDateTime(paymentDto.UpdatedDate)
+        };
+    }
+    
+    public static Payment AsEntity(this CreatePaymentDto paymentDto)
+    {
+        return new Payment()
+        {
+            SyllabusId = paymentDto.SyllabusId,
+            StudentId = paymentDto.StudentId,
+            Status = paymentDto.Status,
+            CreatedDate = DateTime.Now
         };
     }
 }

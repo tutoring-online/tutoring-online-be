@@ -32,7 +32,7 @@ public class PaymentController
         return payments;
     }
     [HttpPost]
-    public void CreatePayments(IEnumerable<PaymentDto> paymentDto)
+    public void CreatePayments(IEnumerable<CreatePaymentDto> paymentDto)
     {
         IEnumerable<Payment> payments = paymentDto.Select(paymentDto => paymentDto.AsEntity());
 

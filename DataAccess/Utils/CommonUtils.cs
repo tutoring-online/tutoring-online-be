@@ -18,12 +18,8 @@ public class CommonUtils
     
     public static string ConvertDateTimeToString(DateTime? dateTime)
     {
-        String result = String.Empty;
-        if (dateTime is null)
-        {
-            
-        }
-        else
+        string result = String.Empty;
+        if (dateTime is not null)
         {
             try
             {
