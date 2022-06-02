@@ -1,10 +1,8 @@
 name: Build and deploy .NET Core application to windows webapp tutoring-online with API Management Service tutoring-online-api
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+    - main
 env:
   AZURE_WEBAPP_NAME: tutoring-online
   DOTNET_CORE_VERSION: 6.0.x
@@ -45,6 +43,7 @@ jobs:
     - name: Install Swashbuckle CLI .NET Global Tool
       run: dotnet tool install --global Swashbuckle.AspNetCore.Cli --version ${{ env.SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION }}
       working-directory: ${{ env.WORKING_DIRECTORY }}
+
     - name: Publish Artifacts
       uses: actions/upload-artifact@v1.0.0
       with:
@@ -64,7 +63,7 @@ jobs:
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-        publish-profile: ${{ secrets.TUTORING_ONLINE_1291 }}
+        publish-profile: ${{ secrets.tutoring_online_9736 }}
     - name: Azure Login
       uses: azure/login@v1
       with:
