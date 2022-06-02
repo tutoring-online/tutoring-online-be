@@ -112,8 +112,8 @@ public static class Extensions
             Description = StringUtils.NullToEmpty(syllabus.Description),
             Name = StringUtils.NullToEmpty(syllabus.Name),
             Status = syllabus.Status,
-            UpdatedDate = StringUtils.NullToEmpty(syllabus.UpdatedDate),
-            CreatedDate = StringUtils.NullToEmpty(syllabus.CreatedDate),
+            UpdatedDate = CommonUtils.ConvertDateTimeToString(syllabus.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertDateTimeToString(syllabus.CreatedDate),
             Price = syllabus.Price
         };
     }
@@ -127,8 +127,22 @@ public static class Extensions
             Description = syllabusDto.Description,
             Name = syllabusDto.Name,
             Status = syllabusDto.Status,
-            UpdatedDate = syllabusDto.UpdatedDate,
-            CreatedDate = syllabusDto.CreatedDate,
+            UpdatedDate = CommonUtils.ConvertStringToDateTime(syllabusDto.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertStringToDateTime(syllabusDto.CreatedDate),
+            Price = syllabusDto.Price
+        };
+    }
+    
+    public static Syllabus AsEntity(this CreateSyllabusDto syllabusDto)
+    {
+        return new Syllabus()
+        {
+            SubjectId = syllabusDto.SubjectId,
+            TotalLessons = syllabusDto.TotalLessons,
+            Description = syllabusDto.Description,
+            Name = syllabusDto.Name,
+            Status = syllabusDto.Status,
+            CreatedDate = DateTime.Now,
             Price = syllabusDto.Price
         };
     }

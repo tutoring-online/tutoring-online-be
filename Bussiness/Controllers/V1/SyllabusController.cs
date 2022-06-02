@@ -32,7 +32,7 @@ public class SyllabusController
         return syllabuses;
     }
     [HttpPost]
-    public void CreateSyllabuses(IEnumerable<SyllabusDto> syllabusDto)
+    public void CreateSyllabuses(IEnumerable<CreateSyllabusDto> syllabusDto)
     {
         IEnumerable<Syllabus> syllabuses = syllabusDto.Select(syllabusDto => syllabusDto.AsEntity());
 
