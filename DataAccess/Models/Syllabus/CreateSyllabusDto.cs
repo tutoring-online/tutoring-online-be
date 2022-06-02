@@ -7,5 +7,6 @@ public class CreateSyllabusDto
     public string? Description { get; init; }
     public double? Price { get; init; }
     public int? Status { get; init; }
+    
     public string? Name { get; init; }
 }
