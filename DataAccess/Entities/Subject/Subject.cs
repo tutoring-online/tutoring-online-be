@@ -4,7 +4,7 @@ public class Subject
 {
     public string? Id { get; init; }
 
-    public string? Code { get; init; }
+    public string? Code { get; set; }
     
     public string? Name { get; init; }
     
@@ -17,4 +17,6 @@ public class Subject
     public DateTime? UpdatedDate { get; init; }
     
     public string? CategoryId { get; init; }
+    
+    
 }

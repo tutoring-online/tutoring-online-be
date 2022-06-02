@@ -7,9 +7,9 @@
         public string? TutorId { get; init; }
         public string? StudentId { get; init; }
         public int? SlotNumer { get; init; }
-        public string? Date { get; init; }
-        public string? CreatedDate { get; init; }
-        public string? UpdatedDate { get; init; }
+        public DateTime? Date { get; init; }
+        public DateTime? CreatedDate { get; init; }
+        public DateTime? UpdatedDate { get; init; }
         public int? Status { get; init; }
     }
 }

@@ -39,9 +39,9 @@ public class LessonDao:ILessonDao
                     StudentId = DbUtils.SafeGetString(reader, "StudentId"),
                     Status = DbUtils.SafeGetInt16(reader, "Status"),
                     SlotNumer = DbUtils.SafeGetInt16(reader, "SlotNumer"),
-                    Date = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "Date")),
-                    CreatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "CreatedDate")),
-                    UpdatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "UpdatedDate"))
+                    Date = DbUtils.SafeGetDateTime(reader, "Date"),
+                    CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
+                    UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate")
                 });
 
             }
@@ -99,9 +99,9 @@ public class LessonDao:ILessonDao
                     StudentId = DbUtils.SafeGetString(reader, "StudentId"),
                     Status = DbUtils.SafeGetInt16(reader, "Status"),
                     SlotNumer = DbUtils.SafeGetInt16(reader, "SlotNumer"),
-                    Date = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "Date")),
-                    CreatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "CreatedDate")),
-                    UpdatedDate = CommonUtils.ConvertDateTimeToString(DbUtils.SafeGetDateTime(reader, "UpdatedDate"))
+                    Date = DbUtils.SafeGetDateTime(reader, "Date"),
+                    CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
+                    UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate")
                 });
 
             }
@@ -128,38 +128,9 @@ public class LessonDao:ILessonDao
         {
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
-            var param1 = "@SyllabusId";
-            var param2 = "@TutorId";
-            var param3 = "@StudentId";
-            var param4 = "@SlotNumer";
-            var param5 = "@Status";
 
-            var query = "";
-            var insertStatement = "Insert into Lesson(SyllabusId, TutorId, StudentId, SlotNumer, Status) values ";
-
-            query = insertStatement;
-            for (int i = 0; i < lessons.Count(); i++)
-            {
-                if (i == lessons.Count() - 1)
-                    query = query + " " + $"({param1 + i},{param2 + i},{param3 + i},{param4 + i}, {param5 + i})";
-                else
-                    query = query + " " + $"({param1 + i},{param2 + i},{param3 + i},{param4 + i}, {param5 + i})" + ",";
-            }
-
-            using var command = DbUtils.CreateMySqlCommand(query, connection);
-            command.CommandText = query;
-
-            for (int i = 0; i < lessons.Count(); i++)
-            {
-                Lesson lesson = lessons.ElementAt(i);
-                command.Parameters.Add(param1 + i, MySqlDbType.VarChar).Value = lesson.SyllabusId;
-                command.Parameters.Add(param2 + i, MySqlDbType.VarChar).Value = lesson.TutorId;
-                command.Parameters.Add(param3 + i, MySqlDbType.VarChar).Value = lesson.StudentId;
-                command.Parameters.Add(param4 + i, MySqlDbType.VarChar).Value = lesson.SlotNumer;
-                command.Parameters.Add(param5 + i, MySqlDbType.Int16).Value = lesson.Status;
-            }
-
-            command.Prepare();
+            using var command = MySqlUtils.CreateInsertStatement(lessons, connection);
+            command.ExecuteNonQuery();
 
             Console.WriteLine(command.CommandText);
 

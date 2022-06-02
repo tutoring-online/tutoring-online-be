@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Anotar.NLog;
 using MySql.Data.Types;
 
 namespace DataAccess.Utils;
@@ -17,17 +18,42 @@ public class CommonUtils
     
     public static string ConvertDateTimeToString(DateTime? dateTime)
     {
+        String result = String.Empty;
         if (dateTime is null)
-            return string.Empty;
-        
-        
-        DateTime o = dateTime.Value;
-        return o.ToString(DateTimeFormat);
+        {
+            
+        }
+        else
+        {
+            try
+            {
+                DateTime o = dateTime.Value;
+                result = o.ToString(DateTimeFormat);
+            }
+            catch (Exception e)
+            {
+                LogTo.Info("Can not convert DateTime to String");
+                LogTo.Error(e.ToString);
+            }
+        }
+            
+        return result;
     }
 
-    public static DateTime ConvertStringToDateTime(string stringDateTime)
+    public static DateTime? ConvertStringToDateTime(string stringDateTime)
     {
-            return DateTime.ParseExact(stringDateTime, DateTimeFormat, CultureInfo.InvariantCulture);
+        DateTime? result = null;
+        try
+        {
+            result = DateTime.ParseExact(stringDateTime, DateTimeFormat, CultureInfo.InvariantCulture);
+        }
+        catch(Exception e)
+        {
+            LogTo.Info("Can not convert String to DateTime");
+            LogTo.Error(e.ToString);
+        }
+
+        return result;
 
     }
 }

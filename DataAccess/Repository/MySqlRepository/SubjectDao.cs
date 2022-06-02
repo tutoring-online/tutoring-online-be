@@ -132,11 +132,6 @@ public class SubjectDao : ISubjectDao
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
             
-            DateTime currentTime = DateTime.Now;
-
-            //Todo update later for CreateInsertStatement
-            subjects.Select(s => s.CreatedDate = currentTime);
-
             using var command = MySqlUtils.CreateInsertStatement(subjects, connection);
             
             command.ExecuteNonQuery();

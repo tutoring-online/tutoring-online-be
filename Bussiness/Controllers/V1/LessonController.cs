@@ -32,7 +32,7 @@ public class LessonController
         return lessons;
     }
     [HttpPost]
-    public void CreateLessons(IEnumerable<LessonDto> lessonDto)
+    public void CreateLessons(IEnumerable<CreateLessonDto> lessonDto)
     {
         IEnumerable<Lesson> lessons = lessonDto.Select(lessonDto => lessonDto.AsEntity());
 

@@ -52,6 +52,7 @@ public static class Extensions
             Status = subjectDto.Status,
             CategoryId = subjectDto.CategoryId,
             Code = subjectDto.Code,
+            CreatedDate = DateTime.Now
         };
     }
     
@@ -65,9 +66,9 @@ public static class Extensions
             TutorId = lesson.TutorId,
             StudentId = lesson.StudentId,
             Status = lesson.Status,
-            Date = lesson.Date,
-            UpdatedDate = lesson.UpdatedDate,
-            CreatedDate = lesson.CreatedDate,
+            Date = CommonUtils.ConvertDateTimeToString(lesson.Date),
+            UpdatedDate = CommonUtils.ConvertDateTimeToString(lesson.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertDateTimeToString(lesson.CreatedDate),
             SlotNumer = lesson.SlotNumer
         };
     }
@@ -80,10 +81,23 @@ public static class Extensions
             TutorId = lessonDto.TutorId,
             StudentId = lessonDto.StudentId,
             Status = lessonDto.Status,
-            Date = lessonDto.Date,
-            UpdatedDate = lessonDto.UpdatedDate,
-            CreatedDate = lessonDto.CreatedDate,
+            Date = CommonUtils.ConvertStringToDateTime(lessonDto.Date),
+            UpdatedDate = CommonUtils.ConvertStringToDateTime(lessonDto.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertStringToDateTime(lessonDto.CreatedDate),
             SlotNumer = lessonDto.SlotNumer
+        };
+    }
+    
+    public static Lesson AsEntity(this CreateLessonDto lessonDto)
+    {
+        return new Lesson()
+        {
+            SyllabusId = lessonDto.SyllabusId,
+            TutorId = lessonDto.TutorId,
+            StudentId = lessonDto.StudentId,
+            Status = lessonDto.Status,
+            Date = CommonUtils.ConvertStringToDateTime(lessonDto.Date),
+            CreatedDate = DateTime.Now
         };
     }
 
