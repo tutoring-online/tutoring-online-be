@@ -9,10 +9,13 @@
 
     <ItemGroup>
         <PackageReference Include="Anotar.NLog.Fody" Version="6.0.0" />
+        <PackageReference Include="FirebaseAdmin" Version="2.3.0" />
         <PackageReference Include="Fody" Version="6.6.2">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+        <PackageReference Include="JSON" Version="1.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5" />
         <PackageReference Include="MySql.EntityFrameworkCore" Version="6.0.1" />
         <PackageReference Include="MySQLConnection" Version="1.0.1" />
         <PackageReference Include="NLog.WindowsEventLog" Version="5.0.0" />
@@ -21,6 +24,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Security" />
     </ItemGroup>
 
 </Project>

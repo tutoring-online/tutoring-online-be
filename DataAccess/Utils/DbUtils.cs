@@ -111,4 +111,18 @@ public static class DbUtils
             return reader.GetDateTime(colIndex);
         return null;
     }
+    
+    public static Boolean? SafeGetBoolean(this MySqlDataReader reader, int colIndex)
+    {
+        if(!reader.IsDBNull(colIndex))
+            return reader.GetBoolean(colIndex);
+        return null;
+    }
+    
+    public static Boolean? SafeGetBoolean(this MySqlDataReader reader, string colName)
+    {
+        if(!reader.IsDBNull(colName))
+            return reader.GetBoolean(colName);
+        return null;
+    }
 }

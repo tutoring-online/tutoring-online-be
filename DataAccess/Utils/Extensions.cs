@@ -2,10 +2,12 @@
 using DataAccess.Entities.Payment;
 using DataAccess.Entities.Subject;
 using DataAccess.Entities.Syllabus;
+using DataAccess.Entities.Token;
 using DataAccess.Models.Lesson;
 using DataAccess.Models.Payment;
 using DataAccess.Models.Subject;
 using DataAccess.Models.Syllabus;
+using DataAccess.Models.Token;
 
 namespace DataAccess.Utils;
 
@@ -182,6 +184,39 @@ public static class Extensions
             StudentId = paymentDto.StudentId,
             Status = paymentDto.Status,
             CreatedDate = DateTime.Now
+        };
+    }
+    
+    //RefreshToken
+    public static RefreshTokenDto AsDto(this RefreshToken token)
+    {
+        return new RefreshTokenDto()
+        {
+            Id = token.Id,
+            Token = token.Token,
+            JwtId = token.JwtId,
+            UserId = token.UserId,
+            UserRole = token.UserRole,
+            IsUsed = token.IsUsed,
+            IsRevoked = token.IsRevoked,
+            IssuedAt = token.IssuedAt,
+            ExpiredAt = token.ExpiredAt
+        };
+    }
+    
+    public static RefreshToken AsEntity(this RefreshTokenDto token)
+    {
+        return new RefreshToken()
+        {
+            Id = token.Id,
+            Token = token.Token,
+            JwtId = token.JwtId,
+            UserId = token.UserId,
+            UserRole = token.UserRole,
+            IsUsed = token.IsUsed,
+            IsRevoked = token.IsRevoked,
+            IssuedAt = token.IssuedAt,
+            ExpiredAt = token.ExpiredAt
         };
     }
 }

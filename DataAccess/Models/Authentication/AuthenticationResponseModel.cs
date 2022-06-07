@@ -1,6 +1,6 @@
 ﻿namespace DataAccess.Models.Authentication;
 
-public class AuthenticationResponseModel
+public class AuthenticationResponseModel : ApiResponse
 {
     
 }

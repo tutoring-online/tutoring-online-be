@@ -1,6 +1,8 @@
 ﻿namespace tutoring_online_be.Controllers.Utils;
 
-public class AppSetting
+public enum Role
 {
-    
+    Admin,
+    Tutor,
+    Student
 }
