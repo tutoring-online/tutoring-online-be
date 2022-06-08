@@ -10,4 +10,6 @@ public interface IAuthenticationService
     RefreshTokenDto? FindByToken(string token);
 
     void UpdateToken(RefreshToken token);
+
+    void FindUserByFirebaseUid(string uid);
 }

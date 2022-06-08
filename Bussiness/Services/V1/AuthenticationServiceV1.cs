@@ -28,4 +28,9 @@ public class AuthenticationServiceV1 : IAuthenticationService
     {
         refreshTokenDao.UpdateToken(token);
     }
+
+    public void FindUserByFirebaseUid(string uid)
+    {
+        
+    }
 }
