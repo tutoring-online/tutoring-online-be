@@ -38,6 +38,11 @@ builder.Services.AddSingleton<ITutorDao, TutorDao>();
 //Student
 builder.Services.AddSingleton<IStudentService, StudentServiceV1>();
 builder.Services.AddSingleton<IStudentDao, StudentDao>();
+
+//Admin
+builder.Services.AddSingleton<IAdminService, AdminServiceV1>();
+builder.Services.AddSingleton<IAdminDao, AdminDao>();
+
 var app = builder.Build();
 
 //Setup logger

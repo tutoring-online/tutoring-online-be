@@ -1,9 +1,11 @@
-﻿using DataAccess.Entities.Lesson;
+﻿using DataAccess.Entities.Admin;
+using DataAccess.Entities.Lesson;
 using DataAccess.Entities.Payment;
 using DataAccess.Entities.Student;
 using DataAccess.Entities.Subject;
 using DataAccess.Entities.Syllabus;
 using DataAccess.Entities.Tutor;
+using DataAccess.Models.Admin;
 using DataAccess.Models.Lesson;
 using DataAccess.Models.Payment;
 using DataAccess.Models.Student;
@@ -199,7 +201,7 @@ public static class Extensions
             Email = StringUtils.NullToEmpty(tutor.Email),
             Status = tutor.Status,
             MeetingUrl = StringUtils.NullToEmpty(tutor.MeetingUrl),
-            Phone = tutor.Phone,
+            Phone = StringUtils.NullToEmpty(tutor.Phone),
             Gender = tutor.Gender,
             AvatarURL = StringUtils.NullToEmpty(tutor.AvatarURL),
             Address = StringUtils.NullToEmpty(tutor.Address),
@@ -219,7 +221,7 @@ public static class Extensions
             Email = StringUtils.NullToEmpty(tutorDto.Email),
             Status = tutorDto.Status,
             MeetingUrl = StringUtils.NullToEmpty(tutorDto.MeetingUrl),
-            Phone = tutorDto.Phone,
+            Phone = StringUtils.NullToEmpty(tutorDto.Phone),
             Gender = tutorDto.Gender,
             AvatarURL = StringUtils.NullToEmpty(tutorDto.AvatarURL),
             Address = StringUtils.NullToEmpty(tutorDto.Address),
@@ -265,6 +267,43 @@ public static class Extensions
             Birthday = CommonUtils.ConvertStringToDateTime(studentDto.Birthday),
             UpdatedDate = CommonUtils.ConvertStringToDateTime(studentDto.UpdatedDate),
             CreatedDate = CommonUtils.ConvertStringToDateTime(studentDto.CreatedDate)
+        };
+    }
+
+    //Admin
+    public static AdminDto AsDto(this Admin admin)
+    {
+        return new AdminDto()
+        {
+            Id = admin.Id,
+            Name = StringUtils.NullToEmpty(admin.Name),
+            Email = StringUtils.NullToEmpty(admin.Email),
+            Status = admin.Status,
+            Phone = StringUtils.NullToEmpty(admin.Phone),
+            Gender = admin.Gender,
+            AvatarURL = StringUtils.NullToEmpty(admin.AvatarURL),
+            Address = StringUtils.NullToEmpty(admin.Address),
+            Birthday = CommonUtils.ConvertDateTimeToString(admin.Birthday),
+            UpdatedDate = CommonUtils.ConvertDateTimeToString(admin.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertDateTimeToString(admin.CreatedDate)
+        };
+    }
+
+    public static Admin AsEntity(this AdminDto adminDto)
+    {
+        return new Admin()
+        {
+            Id = adminDto.Id,
+            Name = StringUtils.NullToEmpty(adminDto.Name),
+            Email = StringUtils.NullToEmpty(adminDto.Email),
+            Status = adminDto.Status,
+            Phone = StringUtils.NullToEmpty(adminDto.Phone),
+            Gender = adminDto.Gender,
+            AvatarURL = StringUtils.NullToEmpty(adminDto.AvatarURL),
+            Address = StringUtils.NullToEmpty(adminDto.Address),
+            Birthday = CommonUtils.ConvertStringToDateTime(adminDto.Birthday),
+            UpdatedDate = CommonUtils.ConvertStringToDateTime(adminDto.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertStringToDateTime(adminDto.CreatedDate)
         };
     }
 }
