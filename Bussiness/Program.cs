@@ -1,6 +1,14 @@
+using System.Configuration;
+using System.Text;
 using DataAccess.Repository;
 using DataAccess.Repository.MySqlRepository;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using NLog;
+using tutoring_online_be.Controllers.Utils;
 using tutoring_online_be.Services;
 using tutoring_online_be.Services.V1;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
@@ -31,18 +39,46 @@ builder.Services.AddSingleton<ISyllabusDao, SyllabusDao>();
 builder.Services.AddSingleton<IPaymentService, PaymentServiceV1>();
 builder.Services.AddSingleton<IPaymentDao, PaymentDao>();
 
-//Tutor
-builder.Services.AddSingleton<ITutorService, TutorServiceV1>();
-builder.Services.AddSingleton<ITutorDao, TutorDao>();
+//Authentication
+builder.Services.AddSingleton<IAuthenticationService, AuthenticationServiceV1>();
 
-//Student
-builder.Services.AddSingleton<IStudentService, StudentServiceV1>();
-builder.Services.AddSingleton<IStudentDao, StudentDao>();
+//RefreshToken
+builder.Services.AddSingleton<IRefreshTokenDao, RefreshTokenDao>();
 
-//Admin
-builder.Services.AddSingleton<IAdminService, AdminServiceV1>();
-builder.Services.AddSingleton<IAdminDao, AdminDao>();
 
+// Configure app setting
+builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSettings"));
+
+// Security Configuration
+
+//Firebase configuration
+FirebaseApp.Create(new AppOptions()
+{
+    Credential = GoogleCredential.GetApplicationDefault(),
+});
+
+// Jwt Configuration
+var secretKey = builder.Configuration["AppSettings:SecretKey"];
+var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(opt =>
+    {
+        opt.TokenValidationParameters = new TokenValidationParameters
+        {
+            //Self generate token
+            ValidateIssuer = false,
+            ValidateAudience = false,
+
+            //Sign token
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
+
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
+// Build app
 var app = builder.Build();
 
 //Setup logger
@@ -57,6 +93,9 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 
+
+    
+    
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
