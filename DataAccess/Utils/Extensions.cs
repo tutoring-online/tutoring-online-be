@@ -1,10 +1,12 @@
 ﻿using DataAccess.Entities.Lesson;
 using DataAccess.Entities.Payment;
+using DataAccess.Entities.Student;
 using DataAccess.Entities.Subject;
 using DataAccess.Entities.Syllabus;
 using DataAccess.Entities.Tutor;
 using DataAccess.Models.Lesson;
 using DataAccess.Models.Payment;
+using DataAccess.Models.Student;
 using DataAccess.Models.Subject;
 using DataAccess.Models.Syllabus;
 using DataAccess.Models.Tutor;
@@ -224,6 +226,45 @@ public static class Extensions
             Birthday = CommonUtils.ConvertStringToDateTime(tutorDto.Birthday),
             UpdatedDate = CommonUtils.ConvertStringToDateTime(tutorDto.UpdatedDate),
             CreatedDate = CommonUtils.ConvertStringToDateTime(tutorDto.CreatedDate)
+        };
+    }
+
+    //Student
+    public static StudentDto AsDto(this Student student)
+    {
+        return new StudentDto()
+        {
+            Id = student.Id,
+            Name = StringUtils.NullToEmpty(student.Name),         
+            Email = StringUtils.NullToEmpty(student.Email),
+            Status = student.Status,
+            Grade = student.Grade,
+            Phone = StringUtils.NullToEmpty(student.Phone),
+            Gender = student.Gender,
+            AvatarURL = StringUtils.NullToEmpty(student.AvatarURL),
+            Address = StringUtils.NullToEmpty(student.Address),
+            Birthday = CommonUtils.ConvertDateTimeToString(student.Birthday),
+            UpdatedDate = CommonUtils.ConvertDateTimeToString(student.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertDateTimeToString(student.CreatedDate)
+        };
+    }
+
+    public static Student AsEntity(this StudentDto studentDto)
+    {
+        return new Student()
+        {
+            Id = studentDto.Id,
+            Name = StringUtils.NullToEmpty(studentDto.Name),         
+            Email = StringUtils.NullToEmpty(studentDto.Email),
+            Status = studentDto.Status,
+            Grade = studentDto.Grade,
+            Phone = StringUtils.NullToEmpty(studentDto.Phone),
+            Gender = studentDto.Gender,
+            AvatarURL = StringUtils.NullToEmpty(studentDto.AvatarURL),
+            Address = StringUtils.NullToEmpty(studentDto.Address),
+            Birthday = CommonUtils.ConvertStringToDateTime(studentDto.Birthday),
+            UpdatedDate = CommonUtils.ConvertStringToDateTime(studentDto.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertStringToDateTime(studentDto.CreatedDate)
         };
     }
 }

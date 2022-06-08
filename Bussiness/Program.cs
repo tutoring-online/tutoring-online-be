@@ -31,9 +31,13 @@ builder.Services.AddSingleton<ISyllabusDao, SyllabusDao>();
 builder.Services.AddSingleton<IPaymentService, PaymentServiceV1>();
 builder.Services.AddSingleton<IPaymentDao, PaymentDao>();
 
-//Syllabus
+//Tutor
 builder.Services.AddSingleton<ITutorService, TutorServiceV1>();
 builder.Services.AddSingleton<ITutorDao, TutorDao>();
+
+//Student
+builder.Services.AddSingleton<IStudentService, StudentServiceV1>();
+builder.Services.AddSingleton<IStudentDao, StudentDao>();
 var app = builder.Build();
 
 //Setup logger
