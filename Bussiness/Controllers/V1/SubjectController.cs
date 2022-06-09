@@ -3,6 +3,7 @@ using Anotar.NLog;
 using DataAccess.Entities.Subject;
 using DataAccess.Models.Subject;
 using DataAccess.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using tutoring_online_be.Services;
 
@@ -32,6 +33,7 @@ public class SubjectController
         var subjects= subjectService.GetSubjectById(id);
         return subjects;
     }
+    
     [HttpPost]
     public void CreateSubjects(IEnumerable<CreateSubjectDto> subjectDto)
     {
