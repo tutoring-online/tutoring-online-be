@@ -82,10 +82,10 @@ builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSett
 //     }
 // }
 
-FirebaseApp.Create(new AppOptions()
-{
-    Credential = GoogleCredential.FromJson(json),
-});
+// FirebaseApp.Create(new AppOptions()
+// {
+//     Credential = GoogleCredential.FromJson(json),
+// });
 
 // // Jwt Configuration
 // var secretKey = builder.Configuration["AppSettings:SecretKey"];
