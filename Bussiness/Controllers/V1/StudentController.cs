@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models.Student;
+using DataAccess.Utils;
 using Microsoft.AspNetCore.Mvc;
 using tutoring_online_be.Services;
 
@@ -27,5 +28,17 @@ public class StudentController
         var students = studentService.GetStudentById(id);
 
         return students;
+    }
+    
+    [HttpPatch]
+    [Route("{id}")]
+    public void UpdateStudent(string id, UpdateStudentDto updateStudentDto)
+    {
+        var students = studentService.GetStudentById(id);
+
+        if (students.Any())
+        {
+            studentService.UpdateStudent(updateStudentDto.AsEntity(), id);
+        }
     }
 }

@@ -307,17 +307,34 @@ public static class Extensions
         return new Student()
         {
             Id = studentDto.Id,
-            Name = StringUtils.NullToEmpty(studentDto.Name),         
-            Email = StringUtils.NullToEmpty(studentDto.Email),
+            Name = studentDto.Name,         
+            Email = studentDto.Email,
             Status = studentDto.Status,
             Grade = studentDto.Grade,
-            Phone = StringUtils.NullToEmpty(studentDto.Phone),
+            Phone = studentDto.Phone,
             Gender = studentDto.Gender,
-            AvatarURL = StringUtils.NullToEmpty(studentDto.AvatarURL),
-            Address = StringUtils.NullToEmpty(studentDto.Address),
+            AvatarURL = studentDto.AvatarURL,
+            Address = studentDto.Address,
             Birthday = CommonUtils.ConvertStringToDateTime(studentDto.Birthday),
             UpdatedDate = CommonUtils.ConvertStringToDateTime(studentDto.UpdatedDate),
             CreatedDate = CommonUtils.ConvertStringToDateTime(studentDto.CreatedDate)
+        };
+    }
+    
+    public static Student AsEntity(this UpdateStudentDto studentDto)
+    {
+        return new Student()
+        {
+            Name = studentDto.Name,         
+            Email = studentDto.Email,
+            Status = studentDto.Status,
+            Grade = studentDto.Grade,
+            Phone = studentDto.Phone,
+            Gender = studentDto.Gender,
+            AvatarURL = studentDto.AvatarURL,
+            Address = studentDto.Address,
+            Birthday = CommonUtils.ConvertStringToDateTime(studentDto.Birthday),
+            UpdatedDate = DateTime.Now,
         };
     }
 

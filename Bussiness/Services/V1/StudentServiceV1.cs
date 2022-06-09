@@ -47,4 +47,9 @@ public class StudentServiceV1:IStudentService
 
         return studentDao.CreateStudent(student);
     }
+
+    public void UpdateStudent(Student asEntity, string id)
+    {
+        studentDao.UpdateStudent(asEntity, id);
+    }
 }
