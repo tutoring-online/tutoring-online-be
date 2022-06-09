@@ -47,4 +47,9 @@ public class AdminServiceV1:IAdminService
 
         return adminDao.CreateAdmin(admin);
     }
+
+    public void updateAdmin(Admin admin, string id)
+    {
+        adminDao.updateAdmin(admin, id);
+    }
 }

@@ -21,7 +21,7 @@ public class LessonDao:ILessonDao
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
-            var selectStatement = "Select Id, SyllabusId, TutorId, StudentId, SlotNumer, Date, CreatedDate, UpdatedDate, Status";
+            var selectStatement = "Select Id, SyllabusId, TutorId, StudentId, SlotNumber, Date, CreatedDate, UpdatedDate, Status";
             var fromStatement = "From Lesson";
             var query = selectStatement + " " + fromStatement;
 
@@ -38,7 +38,7 @@ public class LessonDao:ILessonDao
                     TutorId = DbUtils.SafeGetString(reader, "TutorId"),
                     StudentId = DbUtils.SafeGetString(reader, "StudentId"),
                     Status = DbUtils.SafeGetInt16(reader, "Status"),
-                    SlotNumer = DbUtils.SafeGetInt16(reader, "SlotNumer"),
+                    SlotNumber = DbUtils.SafeGetInt16(reader, "SlotNumber"),
                     Date = DbUtils.SafeGetDateTime(reader, "Date"),
                     CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
                     UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate")
@@ -71,7 +71,7 @@ public class LessonDao:ILessonDao
             connection.Open();
             var param1 = "@id";
 
-            var selectStatement = "Select Id, SyllabusId, TutorId, StudentId, SlotNumer, Date, CreatedDate, UpdatedDate, Status";
+            var selectStatement = "Select Id, SyllabusId, TutorId, StudentId, SlotNumber, Date, CreatedDate, UpdatedDate, Status";
             var fromStatement = "From Lesson";
             var whereStatement = $"Where Id = {param1}";
             var query = selectStatement + " " + fromStatement + " " + whereStatement;
@@ -98,7 +98,7 @@ public class LessonDao:ILessonDao
                     TutorId = DbUtils.SafeGetString(reader, "TutorId"),
                     StudentId = DbUtils.SafeGetString(reader, "StudentId"),
                     Status = DbUtils.SafeGetInt16(reader, "Status"),
-                    SlotNumer = DbUtils.SafeGetInt16(reader, "SlotNumer"),
+                    SlotNumber = DbUtils.SafeGetInt16(reader, "SlotNumber"),
                     Date = DbUtils.SafeGetDateTime(reader, "Date"),
                     CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
                     UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate")
@@ -150,6 +150,30 @@ public class LessonDao:ILessonDao
 
     }
 
+    public void UpdateLessons(Lesson lesson, string id)
+    {
+        try
+        {
+            using var connection = DbUtils.GetMySqlDbConnection();
+            connection.Open();
 
+            using var command = MySqlUtils.CreateUpdateStatement(lesson, connection, $"id = {id}");
+            command.ExecuteNonQuery();
 
+        }
+        catch (MySqlException e)
+        {
+            LogTo.Info(e.ToString);
+
+        }
+        catch (Exception e)
+        {
+            LogTo.Info(e.ToString);
+
+        }
+        finally
+        {
+            DbUtils.CloseMySqlDbConnection();
+        }
+    }
 }

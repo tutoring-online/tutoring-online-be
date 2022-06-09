@@ -91,4 +91,49 @@ public class MySqlUtils
 
         return command;
     }
+
+    public static MySqlCommand CreateUpdateStatement(object entity, MySqlConnection connection, string condition)
+    {
+        var updateStatement = "";
+        var updateParameter = "";
+        var tableName = "";
+        var valueParameter = "";
+        
+        var properties = entity.GetType().GetProperties();
+        
+        //Construct update Parameter
+        var updateParameters = new List<string>();
+        var updateDic = new Dictionary<string, PropertyInfo>();
+ 
+        for (int z = 0; z < properties.Length; z++)
+        {
+            PropertyInfo propertyInfo = entity.GetType().GetProperty(properties[z].Name);
+            if (propertyInfo.GetValue(entity, null) is not null)
+            {
+                updateParameters.Add(properties[z].Name + "=" + "@" + properties[z].Name);
+                updateDic.Add("@" + properties[z].Name, propertyInfo);
+            }
+
+        }
+
+        updateParameter = string.Join(",", updateParameters);
+
+        updateStatement = $"Update {entity.GetType().Name} " +
+                          $"Set {updateParameter} " +
+                          $"Where {condition} ";
+
+        //construct command
+        var command = DbUtils.CreateMySqlCommand(updateStatement, connection);
+        command.CommandText = updateStatement;
+
+        foreach (var x in updateDic)
+        {
+            command.Parameters.AddWithValue(x.Key, x.Value.GetValue(entity, null));
+        }
+        
+        LogTo.Info($"Sql string: {command.CommandText}");
+        command.Prepare();
+        
+        return command;
+    }
 }

@@ -39,5 +39,17 @@ public class LessonController
         lessonService.CreateLessons(lessons);
 
     }
+    
+    [HttpPatch]
+    [Route("{id}")]
+    public void UpdateLesson(string id, UpdateLessonDto lessonDto)
+    {
+        var lessons = lessonService.GetLessonById(id);
+        if (lessons.Any())
+        {
+            lessonService.UpdateLessons(lessonDto.AsEntity(), id);
+        }
+
+    }
 }
 

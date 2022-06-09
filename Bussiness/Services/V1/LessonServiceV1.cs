@@ -28,5 +28,10 @@ public class LessonServiceV1: ILessonService
     {
         lessonDao.CreateLessons(lessons);
     }
+
+    public void UpdateLessons(Lesson lesson, string id)
+    {
+        lessonDao.UpdateLessons(lesson, id);
+    }
 }
 

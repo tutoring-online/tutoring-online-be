@@ -1,4 +1,5 @@
-﻿using DataAccess.Models.Admin;
+﻿using DataAccess.Entities.Admin;
+using DataAccess.Models.Admin;
 using FirebaseAdmin.Auth;
 
 namespace tutoring_online_be.Services;
@@ -12,4 +13,5 @@ public interface IAdminService
     IEnumerable<AdminDto> GetAdminByFirebaseUid(string uid);
 
     int CreateAdminByFirebaseToken(FirebaseToken token);
+    void updateAdmin(Admin asEntity, string id);
 }

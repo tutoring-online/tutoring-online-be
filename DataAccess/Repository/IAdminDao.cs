@@ -16,4 +16,5 @@ public interface IAdminDao
     IEnumerable<Admin?> GetAdminByFirebaseUid(string uid);
 
     int CreateAdmin(Admin admin);
+    void updateAdmin(Admin admin, string id);
 }

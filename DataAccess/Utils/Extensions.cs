@@ -77,7 +77,7 @@ public static class Extensions
             Date = CommonUtils.ConvertDateTimeToString(lesson.Date),
             UpdatedDate = CommonUtils.ConvertDateTimeToString(lesson.UpdatedDate),
             CreatedDate = CommonUtils.ConvertDateTimeToString(lesson.CreatedDate),
-            SlotNumer = lesson.SlotNumer
+            SlotNumber = lesson.SlotNumber
         };
     }
     public static Lesson AsEntity(this LessonDto lessonDto)
@@ -92,7 +92,7 @@ public static class Extensions
             Date = CommonUtils.ConvertStringToDateTime(lessonDto.Date),
             UpdatedDate = CommonUtils.ConvertStringToDateTime(lessonDto.UpdatedDate),
             CreatedDate = CommonUtils.ConvertStringToDateTime(lessonDto.CreatedDate),
-            SlotNumer = lessonDto.SlotNumer
+            SlotNumber = lessonDto.SlotNumber
         };
     }
     
@@ -104,8 +104,23 @@ public static class Extensions
             TutorId = lessonDto.TutorId,
             StudentId = lessonDto.StudentId,
             Status = lessonDto.Status,
+            SlotNumber = lessonDto.SlotNumber,
             Date = CommonUtils.ConvertStringToDateTime(lessonDto.Date),
             CreatedDate = DateTime.Now
+        };
+    }
+    
+    public static Lesson AsEntity(this UpdateLessonDto lessonDto)
+    {
+        return new Lesson()
+        {
+            SyllabusId = lessonDto.SyllabusId,
+            TutorId = lessonDto.TutorId,
+            StudentId = lessonDto.StudentId,
+            Status = lessonDto.Status,
+            SlotNumber = lessonDto.SlotNumber,
+            Date = CommonUtils.ConvertStringToDateTime(lessonDto.Date),
+            UpdatedDate = DateTime.Now
         };
     }
 
@@ -330,6 +345,23 @@ public static class Extensions
         return new Admin()
         {
             Id = adminDto.Id,
+            Name = adminDto.Name,
+            Email = adminDto.Email,
+            Status = adminDto.Status,
+            Phone = adminDto.Phone,
+            Gender = adminDto.Gender,
+            AvatarURL = adminDto.AvatarURL,
+            Address = adminDto.Address,
+            Birthday = CommonUtils.ConvertStringToDateTime(adminDto.Birthday),
+            UpdatedDate = CommonUtils.ConvertStringToDateTime(adminDto.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertStringToDateTime(adminDto.CreatedDate)
+        };
+    }
+    
+    public static Admin AsEntity(this UpdateAdminDto adminDto)
+    {
+        return new Admin()
+        {
             Name = StringUtils.NullToEmpty(adminDto.Name),
             Email = StringUtils.NullToEmpty(adminDto.Email),
             Status = adminDto.Status,
@@ -338,8 +370,7 @@ public static class Extensions
             AvatarURL = StringUtils.NullToEmpty(adminDto.AvatarURL),
             Address = StringUtils.NullToEmpty(adminDto.Address),
             Birthday = CommonUtils.ConvertStringToDateTime(adminDto.Birthday),
-            UpdatedDate = CommonUtils.ConvertStringToDateTime(adminDto.UpdatedDate),
-            CreatedDate = CommonUtils.ConvertStringToDateTime(adminDto.CreatedDate)
+            UpdatedDate = DateTime.Now,
         };
     }
 }
