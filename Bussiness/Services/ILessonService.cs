@@ -10,5 +10,8 @@ public interface ILessonService
         IEnumerable<LessonDto> GetLessonById(string id);
 
         void CreateLessons(IEnumerable<Lesson> lessons);
+        
+        void UpdateLessons(Lesson lesson, string id);
+        int DeleteLesson(string id);
 }
 

@@ -14,4 +14,6 @@ public interface IPaymentDao
     IEnumerable<Payment?> GetPaymentById(string id);
 
     void CreatePayments(IEnumerable<Payment> payment);
+    void UpdatePayment(Payment asEntity, string id);
+    int DeletePayment(string id);
 }

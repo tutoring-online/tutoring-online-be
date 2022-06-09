@@ -17,4 +17,6 @@ public interface IStudentDao
 
     public int CreateStudent(Student student);
 
+    void UpdateStudent(Student asEntity, string id);
+    int DeleteStudent(string id);
 }

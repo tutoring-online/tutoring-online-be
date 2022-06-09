@@ -28,4 +28,14 @@ public class PaymentServiceV1 : IPaymentService
     {
         paymentDao.CreatePayments(payments);
     }
+
+    public void UpdatePayment(Payment asEntity, string id)
+    {
+        paymentDao.UpdatePayment(asEntity, id);
+    }
+
+    public int DeletePayment(string id)
+    {
+        return paymentDao.DeletePayment(id);
+    }
 }

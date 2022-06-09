@@ -148,4 +148,28 @@ public class SyllabusDao: ISyllabusDao
         }
 
     }
+
+    public void UpdateSyllabus(Syllabus asEntity, string id)
+    {
+        try
+        {
+            using var connection = DbUtils.GetMySqlDbConnection();
+            connection.Open();
+            
+            using var command = MySqlUtils.CreateUpdateStatement(asEntity, connection, $"id = {id}");
+            command.ExecuteNonQuery();
+        }
+        catch (MySqlException e)
+        {
+            LogTo.Error(e.ToString());
+        }
+        catch (Exception e)
+        {
+            LogTo.Error(e.ToString());
+        }
+        finally
+        {
+            DbUtils.CloseMySqlDbConnection();
+        }
+    }
 }

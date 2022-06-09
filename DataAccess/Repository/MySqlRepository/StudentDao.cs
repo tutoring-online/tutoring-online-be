@@ -229,4 +229,54 @@ public class StudentDao:IStudentDao
 
         return 0;
     }
+
+    public void UpdateStudent(Student asEntity, string id)
+    {
+        try
+        {
+            using var connection = DbUtils.GetMySqlDbConnection();
+            connection.Open();
+
+            using var command = MySqlUtils.CreateUpdateStatement(asEntity, connection, $"id = {id}");
+            command.ExecuteNonQuery();
+        }
+        catch (MySqlException e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        catch (Exception e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        finally
+        {
+            DbUtils.CloseMySqlDbConnection();
+        }
+    }
+
+    public int DeleteStudent(string id)
+    {
+        try
+        {
+            using var connection = DbUtils.GetMySqlDbConnection();
+            connection.Open();
+
+            using var command = MySqlUtils.CreateUpdateStatusForDelete(typeof(Student).Name, connection, id);
+            return command.ExecuteNonQuery();
+        }
+        catch (MySqlException e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        catch (Exception e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        finally
+        {
+            DbUtils.CloseMySqlDbConnection();
+        }
+
+        return 0;
+    }
 }

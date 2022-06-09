@@ -31,12 +31,30 @@ public class PaymentController
 
         return payments;
     }
+    
     [HttpPost]
     public void CreatePayments(IEnumerable<CreatePaymentDto> paymentDto)
     {
         IEnumerable<Payment> payments = paymentDto.Select(paymentDto => paymentDto.AsEntity());
 
         paymentService.CreatePayments(payments);
-
+    }
+    
+    [HttpPatch]
+    [Route("{id}")]
+    public void UpdatePayment(string id, UpdatePaymentDto updatePaymentDto)
+    {
+        var payments = paymentService.GetPaymentById(id);
+        if (payments.Any())
+        {
+            paymentService.UpdatePayment(updatePaymentDto.AsEntity(), id);
+        }
+    }
+    
+    [HttpDelete]
+    [Route("{id}")]
+    public void DeletePayment(string id)
+    {
+        paymentService.DeletePayment(id);
     }
 }

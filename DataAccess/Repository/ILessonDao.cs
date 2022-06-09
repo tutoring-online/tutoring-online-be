@@ -5,12 +5,12 @@ namespace DataAccess.Repository;
 
 public interface ILessonDao
 {
-        IEnumerable<Lesson?> GetLessons();
+    IEnumerable<Lesson?> GetLessons();
 
-        IEnumerable<Lesson?> GetLessonById(string id);
-
-        void CreateLessons(IEnumerable<Lesson> lessons);
-
-   //     void UpdateLessons(Lesson lesson);
+    IEnumerable<Lesson?> GetLessonById(string id);
+        
+    void CreateLessons(IEnumerable<Lesson> lessons);
+    void UpdateLessons(Lesson lesson, string id);
+    int DeleteLesson(string id);
 }
 

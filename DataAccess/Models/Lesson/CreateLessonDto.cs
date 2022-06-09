@@ -6,7 +6,7 @@ public class CreateLessonDto
     public string? TutorId { get; init; }
     public string? StudentId { get; init; }
     
-    public string? SlotNumer { get; init; }
+    public int? SlotNumber { get; init; }
     public string? Date { get; init; }
     public int? Status { get; init; }
 }

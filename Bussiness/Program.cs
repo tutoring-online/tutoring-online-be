@@ -62,6 +62,9 @@ builder.Services.AddSingleton<IStudentDao, StudentDao>();
 // Configure app setting
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSettings"));
 
+// Clear cache timezone
+System.Globalization.CultureInfo.CurrentCulture.ClearCachedData();
+
 // Security Configuration
 
 // //Firebase configuration

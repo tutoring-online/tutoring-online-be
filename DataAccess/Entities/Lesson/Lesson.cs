@@ -6,7 +6,7 @@
         public string? SyllabusId { get; init; }
         public string? TutorId { get; init; }
         public string? StudentId { get; init; }
-        public int? SlotNumer { get; init; }
+        public int? SlotNumber { get; init; }
         public DateTime? Date { get; init; }
         public DateTime? CreatedDate { get; init; }
         public DateTime? UpdatedDate { get; init; }

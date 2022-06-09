@@ -1,6 +1,6 @@
 ﻿namespace DataAccess.Repository;
 
-public class ICategoryDao
+public interface ICategoryDao
 {
     
 }

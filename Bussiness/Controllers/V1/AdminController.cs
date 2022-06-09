@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models.Admin;
+using DataAccess.Utils;
 using Microsoft.AspNetCore.Mvc;
 using tutoring_online_be.Services;
 
@@ -28,5 +29,23 @@ public class AdminController
         var admins = adminService.GetAdminById(id);
 
         return admins;
+    }
+    
+    [HttpPatch]
+    [Route("{id}")]
+    public void UpdateAdmin(string id, UpdateAdminDto updateAdminDto)
+    {
+        var admins = adminService.GetAdminById(id);
+        if (admins.Any())
+        {
+            adminService.UpdateAdmin(updateAdminDto.AsEntity(), id);
+        }
+    }
+    
+    [HttpDelete]
+    [Route("{id}")]
+    public void DeleteAdmin(string id)
+    {
+            adminService.DeleteAdmin(id);
     }
 }

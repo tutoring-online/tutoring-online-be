@@ -31,6 +31,7 @@ public class SyllabusController
         var syllabuses = syllabusService.GetSyllabusById(id);
         return syllabuses;
     }
+    
     [HttpPost]
     public void CreateSyllabuses(IEnumerable<CreateSyllabusDto> syllabusDto)
     {
@@ -38,6 +39,17 @@ public class SyllabusController
 
         syllabusService.CreateSyllabuses(syllabuses);
 
+    }
+    
+    [HttpPatch]
+    [Route("{id}")]
+    public void UpdateSyllabus(string id, UpdateSyllabusDto updateSyllabusDto)
+    {
+        var syllabuses = syllabusService.GetSyllabusById(id);
+        if (syllabuses.Any())
+        {
+            syllabusService.UpdateSyllabus(updateSyllabusDto.AsEntity(), id);
+        }
     }
 
 }
