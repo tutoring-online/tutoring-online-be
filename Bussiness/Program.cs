@@ -64,49 +64,49 @@ builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSett
 
 // Security Configuration
 
-//Firebase configuration
-string? json;
-var filename = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS");
-
-if (filename != null)
-{
-    json = System.IO.File.ReadAllText(filename);
-}
-else
-{
-    json = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_STRING");
-    if (json == null)
-    {
-        throw new Exception(
-            "GOOGLE_APPLICATION_CREDENTIALS_STRING environment variable with JSON is not set");
-    }
-}
+// //Firebase configuration
+// string? json;
+// var filename = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS");
+//
+// if (filename != null)
+// {
+//     json = System.IO.File.ReadAllText(filename);
+// }
+// else
+// {
+//     json = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_STRING");
+//     if (json == null)
+//     {
+//         throw new Exception(
+//             "GOOGLE_APPLICATION_CREDENTIALS_STRING environment variable with JSON is not set");
+//     }
+// }
 
 FirebaseApp.Create(new AppOptions()
 {
     Credential = GoogleCredential.FromJson(json),
 });
 
-// Jwt Configuration
-var secretKey = builder.Configuration["AppSettings:SecretKey"];
-var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(opt =>
-    {
-        opt.TokenValidationParameters = new TokenValidationParameters
-        {
-            //Self generate token
-            ValidateIssuer = false,
-            ValidateAudience = false,
-
-            //Sign token
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
-
-            ClockSkew = TimeSpan.Zero
-        };
-    });
+// // Jwt Configuration
+// var secretKey = builder.Configuration["AppSettings:SecretKey"];
+// var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
+//
+// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//     .AddJwtBearer(opt =>
+//     {
+//         opt.TokenValidationParameters = new TokenValidationParameters
+//         {
+//             //Self generate token
+//             ValidateIssuer = false,
+//             ValidateAudience = false,
+//
+//             //Sign token
+//             ValidateIssuerSigningKey = true,
+//             IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
+//
+//             ClockSkew = TimeSpan.Zero
+//         };
+//     });
 
 // Build app
 var app = builder.Build();
