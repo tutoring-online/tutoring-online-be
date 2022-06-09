@@ -18,4 +18,5 @@ public interface ITutorDao
     int CreateTutor(Tutor tutor);
 
     void UpdateTutor(Tutor asEntity, string id);
+    int DeleteTutor(string id);
 }

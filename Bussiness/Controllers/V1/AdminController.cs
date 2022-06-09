@@ -38,8 +38,14 @@ public class AdminController
         var admins = adminService.GetAdminById(id);
         if (admins.Any())
         {
-            adminService.updateAdmin(updateAdminDto.AsEntity(), id);
+            adminService.UpdateAdmin(updateAdminDto.AsEntity(), id);
         }
-        
+    }
+    
+    [HttpDelete]
+    [Route("{id}")]
+    public void DeleteAdmin(string id)
+    {
+            adminService.DeleteAdmin(id);
     }
 }

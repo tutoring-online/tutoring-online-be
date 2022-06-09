@@ -13,5 +13,6 @@ public interface IAdminService
     IEnumerable<AdminDto> GetAdminByFirebaseUid(string uid);
 
     int CreateAdminByFirebaseToken(FirebaseToken token);
-    void updateAdmin(Admin asEntity, string id);
+    void UpdateAdmin(Admin asEntity, string id);
+    int DeleteAdmin(string id);
 }

@@ -52,4 +52,9 @@ public class StudentServiceV1:IStudentService
     {
         studentDao.UpdateStudent(asEntity, id);
     }
+
+    public int DeleteStudent(string id)
+    {
+        return studentDao.DeleteStudent(id);
+    }
 }

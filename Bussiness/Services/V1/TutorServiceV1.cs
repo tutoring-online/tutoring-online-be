@@ -52,4 +52,9 @@ public class TutorServiceV1 : ITutorService
     {
         tutorDao.UpdateTutor(asEntity, id);
     }
+
+    public int DeleteTutor(string id)
+    {
+        return tutorDao.DeleteTutor(id);
+    }
 }

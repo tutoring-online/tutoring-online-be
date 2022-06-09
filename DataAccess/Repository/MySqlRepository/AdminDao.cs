@@ -82,7 +82,7 @@ public class AdminDao: IAdminDao
             var param1 = "@id";
 
             var selectStatement = "Select Id, Email, Name, Phone, Status, Gender, Birthday, Address, AvatarURL, CreatedDate, UpdatedDate";
-            var fromStatement = "From Tutor";
+            var fromStatement = "From Admin";
             var whereStatement = $"Where Id = {param1}";
             var query = selectStatement + " " + fromStatement + " " + whereStatement;
 
@@ -228,7 +228,7 @@ public class AdminDao: IAdminDao
         return 0;
     }
 
-    public void updateAdmin(Admin admin, string id)
+    public void UpdateAdmin(Admin admin, string id)
     {
         try
         {
@@ -250,5 +250,30 @@ public class AdminDao: IAdminDao
             DbUtils.CloseMySqlDbConnection();
         }
 
+    }
+
+    public int DeleteAdmin(string id)
+    {
+        try
+        {
+            using var connection = DbUtils.GetMySqlDbConnection();
+            connection.Open();
+
+            using var command = MySqlUtils.CreateUpdateStatusForDelete(typeof(Admin).Name, connection, id);
+            return command.ExecuteNonQuery();
+        }catch (MySqlException e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        catch (Exception e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        finally
+        {
+            DbUtils.CloseMySqlDbConnection();
+        }
+
+        return 0;
     }
 }

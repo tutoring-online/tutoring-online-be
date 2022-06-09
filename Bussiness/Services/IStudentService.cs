@@ -11,4 +11,5 @@ public interface IStudentService
     IEnumerable<StudentDto> GetStudentByFirebaseUid(string uid);
     int CreateStudentByFirebaseToken(FirebaseToken token);
     void UpdateStudent(Student asEntity, string id);
+    int DeleteStudent(string id);
 }

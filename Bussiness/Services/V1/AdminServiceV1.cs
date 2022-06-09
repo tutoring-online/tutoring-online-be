@@ -48,8 +48,13 @@ public class AdminServiceV1:IAdminService
         return adminDao.CreateAdmin(admin);
     }
 
-    public void updateAdmin(Admin admin, string id)
+    public void UpdateAdmin(Admin admin, string id)
     {
-        adminDao.updateAdmin(admin, id);
+        adminDao.UpdateAdmin(admin, id);
+    }
+
+    public int DeleteAdmin(string id)
+    {
+        return adminDao.DeleteAdmin(id);
     }
 }

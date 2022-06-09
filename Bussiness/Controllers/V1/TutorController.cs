@@ -31,15 +31,10 @@ public class TutorController
         return tutors;
     }
     
-    [HttpPatch]
+    [HttpDelete]
     [Route("{id}")]
-    public void UpdateTutor(string id, UpdateTutorDto updateTutorDto)
+    public void DeleteTutor(string id)
     {
-        var tutors = tutorService.GetTutorById(id);
-        if (tutors.Any())
-        {
-            tutorService.UpdateTutor(updateTutorDto.AsEntity(), id);
-        }
-
+            tutorService.DeleteTutor(id);
     }
 }

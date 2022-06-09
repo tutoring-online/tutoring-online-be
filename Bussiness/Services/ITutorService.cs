@@ -13,4 +13,5 @@ public interface ITutorService
     int CreateTutorByFirebaseToken(FirebaseToken token);
 
     void UpdateTutor(Tutor asEntity, string id);
+    int DeleteTutor(string id);
 }

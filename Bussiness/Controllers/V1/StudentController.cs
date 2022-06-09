@@ -41,4 +41,11 @@ public class StudentController
             studentService.UpdateStudent(updateStudentDto.AsEntity(), id);
         }
     }
+    
+    [HttpDelete]
+    [Route("{id}")]
+    public void DeleteStudent(string id)
+    {
+            studentService.DeleteStudent(id);
+    }
 }

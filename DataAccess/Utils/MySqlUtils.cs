@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using Anotar.NLog;
 using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
@@ -130,6 +131,19 @@ public class MySqlUtils
         {
             command.Parameters.AddWithValue(x.Key, x.Value.GetValue(entity, null));
         }
+        
+        LogTo.Info($"Sql string: {command.CommandText}");
+        command.Prepare();
+        
+        return command;
+    }
+
+    public static MySqlCommand CreateUpdateStatusForDelete(string tableName, MySqlConnection connection, string id)
+    {
+        var updateStatement = $"Update {tableName} Set Status = 0 where Id = {id}";
+        
+        var command = DbUtils.CreateMySqlCommand(updateStatement, connection);
+        command.CommandText = updateStatement;
         
         LogTo.Info($"Sql string: {command.CommandText}");
         command.Prepare();
