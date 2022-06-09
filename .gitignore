@@ -95,4 +95,7 @@ fabric.properties
 .vscode/launch.json
 .vscode/tasks.json
 
+# Log file
+**/nlog.txt
+
 # End of https://www.toptal.com/developers/gitignore/api/dotnetcore,rider
