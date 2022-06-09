@@ -1,4 +1,5 @@
-﻿using DataAccess.Models.Tutor;
+﻿using DataAccess.Entities.Tutor;
+using DataAccess.Models.Tutor;
 using FirebaseAdmin.Auth;
 
 namespace tutoring_online_be.Services;
@@ -11,4 +12,5 @@ public interface ITutorService
     IEnumerable<TutorDto> GetTutorByFirebaseUid(string uid);
     int CreateTutorByFirebaseToken(FirebaseToken token);
 
+    void UpdateTutor(Tutor asEntity, string id);
 }

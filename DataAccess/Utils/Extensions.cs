@@ -197,6 +197,17 @@ public static class Extensions
         };
     }
     
+    public static Payment AsEntity(this UpdatePaymentDto paymentDto)
+    {
+        return new Payment()
+        {
+            SyllabusId = paymentDto.SyllabusId,
+            StudentId = paymentDto.StudentId,
+            Status = paymentDto.Status,
+            UpdatedDate = DateTime.Now
+        };
+    }
+    
     public static Payment AsEntity(this CreatePaymentDto paymentDto)
     {
         return new Payment()
@@ -267,18 +278,36 @@ public static class Extensions
         return new Tutor()
         {
             Id = tutorDto.Id,
-            Name = StringUtils.NullToEmpty(tutorDto.Name),
-            Description = StringUtils.NullToEmpty(tutorDto.Description),
-            Email = StringUtils.NullToEmpty(tutorDto.Email),
+            Name = tutorDto.Name,
+            Description = tutorDto.Description,
+            Email = tutorDto.Email,
             Status = tutorDto.Status,
-            MeetingUrl = StringUtils.NullToEmpty(tutorDto.MeetingUrl),
-            Phone = StringUtils.NullToEmpty(tutorDto.Phone),
+            MeetingUrl = tutorDto.MeetingUrl,
+            Phone = tutorDto.Phone,
             Gender = tutorDto.Gender,
-            AvatarURL = StringUtils.NullToEmpty(tutorDto.AvatarURL),
-            Address = StringUtils.NullToEmpty(tutorDto.Address),
+            AvatarURL = tutorDto.AvatarURL,
+            Address = tutorDto.Address,
             Birthday = CommonUtils.ConvertStringToDateTime(tutorDto.Birthday),
             UpdatedDate = CommonUtils.ConvertStringToDateTime(tutorDto.UpdatedDate),
             CreatedDate = CommonUtils.ConvertStringToDateTime(tutorDto.CreatedDate)
+        };
+    }
+    
+    public static Tutor AsEntity(this UpdateTutorDto tutorDto)
+    {
+        return new Tutor()
+        {
+            Name = tutorDto.Name,
+            Description = tutorDto.Description,
+            Email = tutorDto.Email,
+            Status = tutorDto.Status,
+            MeetingUrl = tutorDto.MeetingUrl,
+            Phone = tutorDto.Phone,
+            Gender = tutorDto.Gender,
+            AvatarURL = tutorDto.AvatarURL,
+            Address = tutorDto.Address,
+            Birthday = CommonUtils.ConvertStringToDateTime(tutorDto.Birthday),
+            UpdatedDate = DateTime.Now
         };
     }
 

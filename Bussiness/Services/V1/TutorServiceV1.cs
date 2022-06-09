@@ -47,4 +47,9 @@ public class TutorServiceV1 : ITutorService
 
         return tutorDao.CreateTutor(tutor);
     }
+
+    public void UpdateTutor(Tutor asEntity, string id)
+    {
+        tutorDao.UpdateTutor(asEntity, id);
+    }
 }

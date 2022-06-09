@@ -232,4 +232,28 @@ public class TutorDao : ITutorDao
 
         return 0;
     }
+
+    public void UpdateTutor(Tutor asEntity, string id)
+    {
+        try
+        {
+            using var connection = DbUtils.GetMySqlDbConnection();
+            connection.Open();
+
+            using var command = MySqlUtils.CreateUpdateStatement(asEntity, connection, $"id = {id}");
+            command.ExecuteNonQuery();
+        }
+        catch (MySqlException e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        catch (Exception e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        finally
+        {
+            DbUtils.CloseMySqlDbConnection();
+        }
+    }
 }
