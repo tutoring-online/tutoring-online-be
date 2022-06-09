@@ -65,9 +65,26 @@ builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSett
 // Security Configuration
 
 //Firebase configuration
+string? json;
+var filename = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS");
+
+if (filename != null)
+{
+    json = System.IO.File.ReadAllText(filename);
+}
+else
+{
+    json = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_STRING");
+    if (json == null)
+    {
+        throw new Exception(
+            "GOOGLE_APPLICATION_CREDENTIALS_STRING environment variable with JSON is not set");
+    }
+}
+
 FirebaseApp.Create(new AppOptions()
 {
-    Credential = GoogleCredential.GetApplicationDefault(),
+    Credential = GoogleCredential.FromJson(json),
 });
 
 // Jwt Configuration
