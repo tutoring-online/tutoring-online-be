@@ -1,5 +1,6 @@
 using System.Configuration;
 using System.Text;
+using DataAccess.Entities.Student;
 using DataAccess.Repository;
 using DataAccess.Repository.MySqlRepository;
 using FirebaseAdmin;
@@ -44,6 +45,18 @@ builder.Services.AddSingleton<IAuthenticationService, AuthenticationServiceV1>()
 
 //RefreshToken
 builder.Services.AddSingleton<IRefreshTokenDao, RefreshTokenDao>();
+
+//Admin
+builder.Services.AddSingleton<IAdminService, AdminServiceV1>();
+builder.Services.AddSingleton<IAdminDao, AdminDao>();
+
+//Tutor
+builder.Services.AddSingleton<ITutorService, TutorServiceV1>();
+builder.Services.AddSingleton<ITutorDao, TutorDao>();
+
+//Student
+builder.Services.AddSingleton<IStudentService, StudentServiceV1>();
+builder.Services.AddSingleton<IStudentDao, StudentDao>();
 
 
 // Configure app setting

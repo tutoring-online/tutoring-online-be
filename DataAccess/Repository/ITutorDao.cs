@@ -13,4 +13,8 @@ public interface ITutorDao
 
     IEnumerable<Tutor?> GetTutorById(string id);
 
+    IEnumerable<Tutor?> GetTutorByFirebaseUid(string uid);
+
+    int CreateTutor(Tutor tutor);
+
 }

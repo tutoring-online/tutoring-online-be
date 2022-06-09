@@ -1,4 +1,6 @@
-﻿namespace DataAccess.Models;
+﻿using System.Text.Json.Nodes;
+
+namespace DataAccess.Models;
 
 public class ApiResponse
 {

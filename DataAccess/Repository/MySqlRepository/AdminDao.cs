@@ -133,5 +133,98 @@ public class AdminDao: IAdminDao
 
         return admins;
     }
+    
+    
+    public IEnumerable<Admin?> GetAdminByFirebaseUid(string uid)
+    {
+        var admins = new List<Admin?>();
 
+        try
+        {
+            using var connection = DbUtils.GetMySqlDbConnection();
+            connection.Open();
+            var param1 = "@uid";
+
+            var selectStatement = "Select Id, Email, Name, Phone, Status, Gender, Birthday, Address, AvatarURL, CreatedDate, UpdatedDate";
+            var fromStatement = "From Admin";
+            var whereStatement = $"Where Uid = {param1}";
+            var query = selectStatement + " " + fromStatement + " " + whereStatement;
+
+            using var command = DbUtils.CreateMySqlCommand(query, connection);
+            command.CommandText = query;
+
+            command.Parameters.Add(param1, MySqlDbType.VarChar).Value = uid;
+            command.Prepare();
+
+            foreach (MySqlParameter commandParameter in command.Parameters)
+            {
+                LogTo.Info($"Param {commandParameter}: {commandParameter.Value}");
+            }
+
+            var reader = command.ExecuteReader();
+
+            if (reader.Read())
+            {
+                admins.Add(new Admin
+                {
+                    Id = DbUtils.SafeGetString(reader, "Id"),
+                    Email = DbUtils.SafeGetString(reader, "Email"),
+                    Name = DbUtils.SafeGetString(reader, "Name"),
+                    Status = DbUtils.SafeGetInt16(reader, "Status"),
+                    Phone = DbUtils.SafeGetString(reader, "Phone"),
+                    Gender = DbUtils.SafeGetInt16(reader, "Gender"),
+                    Address = DbUtils.SafeGetString(reader, "Address"),
+                    AvatarURL = DbUtils.SafeGetString(reader, "AvatarURL"),
+                    Birthday = DbUtils.SafeGetDateTime(reader, "Birthday"),
+                    CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
+                    UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate")
+                });
+
+            }
+        }
+        catch (MySqlException e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        catch (Exception e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        finally
+        {
+            DbUtils.CloseMySqlDbConnection();
+        }
+
+        return admins;
+    }
+
+    public int CreateAdmin(Admin admin)
+    {
+        try
+        {
+            using var connection = DbUtils.GetMySqlDbConnection();
+            connection.Open();
+
+            IEnumerable<Admin> admins = new[]
+            {
+                admin
+            };
+
+            using var command = MySqlUtils.CreateInsertStatement(admins, connection);
+            return command.ExecuteNonQuery();
+        }catch (MySqlException e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        catch (Exception e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        finally
+        {
+            DbUtils.CloseMySqlDbConnection();
+        }
+
+        return 0;
+    }
 }

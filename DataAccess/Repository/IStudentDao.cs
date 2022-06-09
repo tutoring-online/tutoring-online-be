@@ -13,4 +13,8 @@ public interface IStudentDao
 
     IEnumerable<Student?> GetStudentById(string id);
 
+    public IEnumerable<Student?> GetStudentByFirebaseUid(string uid);
+
+    public int CreateStudent(Student student);
+
 }

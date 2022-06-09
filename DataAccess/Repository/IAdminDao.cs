@@ -12,4 +12,8 @@ public interface IAdminDao
     IEnumerable<Admin?> GetAdmins();
 
     IEnumerable<Admin?> GetAdminById(string id);
+
+    IEnumerable<Admin?> GetAdminByFirebaseUid(string uid);
+
+    int CreateAdmin(Admin admin);
 }

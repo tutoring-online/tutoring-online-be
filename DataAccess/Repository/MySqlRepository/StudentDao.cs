@@ -136,4 +136,97 @@ public class StudentDao:IStudentDao
         return students;
     }
 
+    public IEnumerable<Student?> GetStudentByFirebaseUid(string uid)
+    {
+        var students = new List<Student?>();
+
+        try
+        {
+            using var connection = DbUtils.GetMySqlDbConnection();
+            connection.Open();
+            var param1 = "@uid";
+
+            var selectStatement = "Select Id, Email, Name, Grade, Phone, Status, Gender, Birthday, Address, AvatarURL, CreatedDate, UpdatedDate";
+            var fromStatement = "From Student";
+            var whereStatement = $"Where Uid = {param1}";
+            var query = selectStatement + " " + fromStatement + " " + whereStatement;
+
+            using var command = DbUtils.CreateMySqlCommand(query, connection);
+            command.CommandText = query;
+
+            command.Parameters.Add(param1, MySqlDbType.VarChar).Value = uid;
+            command.Prepare();
+
+            foreach (MySqlParameter commandParameter in command.Parameters)
+            {
+                LogTo.Info($"Param {commandParameter}: {commandParameter.Value}");
+            }
+
+            var reader = command.ExecuteReader();
+
+            if (reader.Read())
+            {
+                students.Add(new Student
+                {
+                    Id = DbUtils.SafeGetString(reader, "Id"),
+                    Email = DbUtils.SafeGetString(reader, "Email"),
+                    Name = DbUtils.SafeGetString(reader, "Name"),
+                    Grade = DbUtils.SafeGetInt16(reader, "Grade"),
+                    Status = DbUtils.SafeGetInt16(reader, "Status"),
+                    Phone = DbUtils.SafeGetString(reader, "Phone"),
+                    Gender = DbUtils.SafeGetInt16(reader, "Gender"),
+                    Address = DbUtils.SafeGetString(reader, "Address"),
+                    AvatarURL = DbUtils.SafeGetString(reader, "AvatarURL"),                 
+                    Birthday = DbUtils.SafeGetDateTime(reader, "Birthday"),
+                    CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
+                    UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate")
+                });
+
+            }
+        }
+        catch (MySqlException e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        catch (Exception e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        finally
+        {
+            DbUtils.CloseMySqlDbConnection();
+        }
+
+        return students;
+    }
+
+    public int CreateStudent(Student student)
+    {
+        try
+        {
+            using var connection = DbUtils.GetMySqlDbConnection();
+            connection.Open();
+            IEnumerable<Student> students = new[]
+            {
+                student
+            };
+
+            using var command = MySqlUtils.CreateInsertStatement(students, connection);
+            return command.ExecuteNonQuery();
+        }
+        catch (MySqlException e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        catch (Exception e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        finally
+        {
+            DbUtils.CloseMySqlDbConnection();
+        }
+
+        return 0;
+    }
 }

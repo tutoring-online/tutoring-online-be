@@ -7,8 +7,8 @@ public enum ResultCode
     TokenNotMatch = 93,
     RefreshTokenHasBeenRevoked = 94,
     RefreshTokenHasBeenUsed = 95,
-    RefreshTokenNotExist = 96,
-    AccessTokenNotExpired = 97,
+    UserRoleNotFound = 96,
+    AccessTokenExpired = 97,
     InvalidToken = 98,
     SystemError = 99,
     InvalidUser = 100
