@@ -10,4 +10,5 @@ public interface ISyllabusService
     IEnumerable<SyllabusDto> GetSyllabusById(string id);
 
     void CreateSyllabuses(IEnumerable<Syllabus> syllabuses);
+    void UpdateSyllabus(Syllabus asEntity, string id);
 }

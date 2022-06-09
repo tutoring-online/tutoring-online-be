@@ -156,6 +156,20 @@ public static class Extensions
         };
     }
     
+    public static Syllabus AsEntity(this UpdateSyllabusDto syllabusDto)
+    {
+        return new Syllabus()
+        {
+            SubjectId = syllabusDto.SubjectId,
+            TotalLessons = syllabusDto.TotalLessons,
+            Description = syllabusDto.Description,
+            Name = syllabusDto.Name,
+            Status = syllabusDto.Status,
+            UpdatedDate = DateTime.Now,
+            Price = syllabusDto.Price
+        };
+    }
+    
     public static Syllabus AsEntity(this CreateSyllabusDto syllabusDto)
     {
         return new Syllabus()

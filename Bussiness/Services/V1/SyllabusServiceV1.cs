@@ -28,4 +28,9 @@ public class SyllabusServiceV1 : ISyllabusService
     {
         syllabusDao.CreateSyllabuses(syllabuses);
     }
+
+    public void UpdateSyllabus(Syllabus asEntity, string id)
+    {
+        syllabusDao.UpdateSyllabus(asEntity, id);
+    }
 }
