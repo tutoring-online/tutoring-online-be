@@ -31,6 +31,18 @@ public class TutorController
         return tutors;
     }
     
+    [HttpPatch]
+    [Route("{id}")]
+    public void GetTutor(string id, UpdateTutorDto updateTutorDto)
+    {
+        var tutors = tutorService.GetTutorById(id);
+        if (tutors.Any())
+        {
+            tutorService.UpdateTutor(updateTutorDto.AsEntity(), id);
+        }
+
+    }
+    
     [HttpDelete]
     [Route("{id}")]
     public void DeleteTutor(string id)

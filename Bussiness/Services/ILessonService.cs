@@ -12,5 +12,6 @@ public interface ILessonService
         void CreateLessons(IEnumerable<Lesson> lessons);
         
         void UpdateLessons(Lesson lesson, string id);
+        int DeleteLesson(string id);
 }
 

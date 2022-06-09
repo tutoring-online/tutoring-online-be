@@ -33,5 +33,10 @@ public class LessonServiceV1: ILessonService
     {
         lessonDao.UpdateLessons(lesson, id);
     }
+
+    public int DeleteLesson(string id)
+    {
+        return lessonDao.DeleteLesson(id);
+    }
 }
 

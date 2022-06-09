@@ -11,5 +11,6 @@ public interface IPaymentService
 
     void CreatePayments(IEnumerable<Payment> payments);
     void UpdatePayment(Payment asEntity, string id);
-    
+
+    int DeletePayment(string id);
 }

@@ -49,6 +49,12 @@ public class PaymentController
         {
             paymentService.UpdatePayment(updatePaymentDto.AsEntity(), id);
         }
-        
+    }
+    
+    [HttpDelete]
+    [Route("{id}")]
+    public void DeletePayment(string id)
+    {
+        paymentService.DeletePayment(id);
     }
 }

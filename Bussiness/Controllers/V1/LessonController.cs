@@ -51,5 +51,12 @@ public class LessonController
         }
 
     }
+    
+    [HttpDelete]
+    [Route("{id}")]
+    public void DeleteLesson(string id)
+    {
+        lessonService.DeleteLesson(id);
+    }
 }
 
