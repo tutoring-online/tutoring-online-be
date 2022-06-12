@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using NLog;
 using tutoring_online_be.Controllers.Utils;
+using tutoring_online_be.Security.Filter;
 using tutoring_online_be.Services;
 using tutoring_online_be.Services.V1;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
@@ -66,6 +67,8 @@ builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSett
 System.Globalization.CultureInfo.CurrentCulture.ClearCachedData();
 
 // Security Configuration
+// Middleware 
+builder.Services.AddTransient<RequestResponseHandlerMiddleware>();
 
 //Firebase configuration
 string? json;
@@ -121,13 +124,12 @@ NLog.Common.InternalLogger.LogFile = "nlog.txt";
 Logger logger = LogManager.GetLogger("Logger");
 logger.Info("Program started");
 
-// Configure the HTTP request pipeline.
+//Config swagger
 app.UseSwagger();
 app.UseSwaggerUI();
-
-
-
     
+// Configure the HTTP request pipeline.    
+app.UseMiddleware<RequestResponseHandlerMiddleware>();
     
 app.UseHttpsRedirection();
 
