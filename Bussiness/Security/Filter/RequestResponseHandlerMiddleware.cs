@@ -51,5 +51,12 @@ public class RequestResponseHandlerMiddleware : IMiddleware
             
         newBody.Seek(0, SeekOrigin.Begin);
         await newBody.CopyToAsync(originalBody);
+        
+        Console.WriteLine("Save log to db");
+        
+        
+        Console.WriteLine("Save log to db");
+        
+        
     }
 }
