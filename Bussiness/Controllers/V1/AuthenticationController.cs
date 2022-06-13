@@ -20,14 +20,14 @@ namespace tutoring_online_be.Controllers.V1;
 
 [ApiController]
 [Route("/api/v1/authentication")]
-public class UserController : ControllerBase
+public class AuthenticationController : ControllerBase
 {
     private readonly AppSetting appSetting;
     private IAuthenticationService authenticationService;
     private IAdminService adminService;
     private IStudentService studentService;
     private ITutorService tutorService;
-    public UserController(
+    public AuthenticationController(
         IOptionsMonitor<AppSetting> optionsMonitor,
         IAuthenticationService authenticationService,
         IAdminService adminService,
@@ -45,6 +45,7 @@ public class UserController : ControllerBase
     [HttpPost]
     public IActionResult GetAuthentication(AuthenticationRequestModel model)
     {
+        //TODO Handle expired token case 
         try
         {
             LogTo.Info($"\nReceived request with token : {model.Token}");
@@ -334,7 +335,6 @@ public class UserController : ControllerBase
     //         
     //         authenticationService.UpdateToken(storedToken.AsEntity());
     //         
-    //         //TODO find user in DB
     //         var user = new AuthenticationModel()
     //         {
     //             Id = "1",

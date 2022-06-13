@@ -69,6 +69,7 @@ System.Globalization.CultureInfo.CurrentCulture.ClearCachedData();
 // Security Configuration
 // Middleware 
 builder.Services.AddTransient<RequestResponseHandlerMiddleware>();
+builder.Services.AddTransient<OptionsMiddleware>();
 
 //Firebase configuration
 string? json;
@@ -130,6 +131,8 @@ app.UseSwaggerUI();
     
 // Configure the HTTP request pipeline.    
 app.UseMiddleware<RequestResponseHandlerMiddleware>();
+app.UseMiddleware<OptionsMiddleware>();
+
     
 app.UseHttpsRedirection();
 
