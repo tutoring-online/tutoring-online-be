@@ -60,7 +60,7 @@ public class AuthorizeAttribute : System.Attribute, IAuthorizationFilter
         }
 
         
-        if (!roles.Any(t => t.ToString().Equals(role)))
+        if (!roles.Any(t => t.ToString().ToLower().Equals(role)))
         {
             // not logged in or role not authorized
             context.Result = new JsonResult(new

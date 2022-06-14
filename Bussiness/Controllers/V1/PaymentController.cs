@@ -19,7 +19,6 @@ public class PaymentController
         this.paymentService = paymentService;
     }
 
-    [Authorize(Role.Admin)]
     [HttpGet]
     public IEnumerable<PaymentDto> GetPayments()
     {
