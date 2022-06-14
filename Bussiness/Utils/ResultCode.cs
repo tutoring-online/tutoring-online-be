@@ -11,6 +11,7 @@ public enum ResultCode
     AccessTokenExpired = 97,
     InvalidToken = 98,
     SystemError = 99,
-    InvalidUser = 100
-    
+    InvalidUser = 100,
+    Unauthorized = 401
+
 }
