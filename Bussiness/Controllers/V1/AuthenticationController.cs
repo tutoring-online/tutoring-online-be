@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using tutoring_online_be.Controllers.Utils;
+using tutoring_online_be.Security.Attribute;
 using tutoring_online_be.Services;
 using Claim = System.Security.Claims.Claim;
 
@@ -43,6 +44,7 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost]
+    [AllowAnonymous]
     public IActionResult GetAuthentication(AuthenticationRequestModel model)
     {
         //TODO Handle expired token case 

@@ -33,7 +33,7 @@ public class AdminServiceV1:IAdminService
     public int CreateAdminByFirebaseToken(FirebaseToken token)
     {
         var userRecord = FirebaseAuth.DefaultInstance.GetUserAsync(token.Uid).Result;
-
+        
         var admin = new Admin()
         {
             uid = userRecord.Uid,

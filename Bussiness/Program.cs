@@ -24,6 +24,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Add cors
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 //Dependency Injection
 //Subject
 builder.Services.AddSingleton<ISubjectService, SubjectServiceV1>();
@@ -133,6 +145,7 @@ app.UseSwaggerUI();
 app.UseMiddleware<RequestResponseHandlerMiddleware>();
 app.UseMiddleware<OptionsMiddleware>();
 
+app.UseCors();
     
 app.UseHttpsRedirection();
 
