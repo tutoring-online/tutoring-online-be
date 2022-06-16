@@ -9,4 +9,5 @@ public class ApiResponse
     public string? ResultMessage { get; set; }
     
     public object? Data { get; set; }
+    
 }

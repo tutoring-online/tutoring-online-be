@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Text;
 using DataAccess.Entities.Student;
@@ -10,9 +11,11 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using NLog;
 using tutoring_online_be.Controllers.Utils;
+using tutoring_online_be.Security;
 using tutoring_online_be.Security.Filter;
 using tutoring_online_be.Services;
 using tutoring_online_be.Services.V1;
+using tutoring_online_be.Services.V2;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -50,7 +53,20 @@ builder.Services.AddSingleton<ISyllabusService, SyllabusServiceV1>();
 builder.Services.AddSingleton<ISyllabusDao, SyllabusDao>();
 
 //Payment
-builder.Services.AddSingleton<IPaymentService, PaymentServiceV1>();
+builder.Services.AddTransient<PaymentServiceV1>();
+builder.Services.AddTransient<PaymentServiceV1>();
+builder.Services.AddTransient<IPaymentService.ServiceResolver>(serviceProvider => key =>
+{
+    switch (key)
+    {
+        case "payment-v1":
+            return serviceProvider.GetService<PaymentServiceV1>();
+        case "payment-v2":
+            return serviceProvider.GetService<PaymentServiceV2>();
+        default:
+            throw new KeyNotFoundException(); 
+    }
+});
 builder.Services.AddSingleton<IPaymentDao, PaymentDao>();
 
 //Authentication
@@ -82,6 +98,12 @@ System.Globalization.CultureInfo.CurrentCulture.ClearCachedData();
 // Middleware 
 builder.Services.AddTransient<RequestResponseHandlerMiddleware>();
 builder.Services.AddTransient<OptionsMiddleware>();
+
+//Add filter
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<ValidateModelAttribute>();
+});
 
 //Firebase configuration
 string? json;

@@ -58,6 +58,8 @@ public class AuthorizeAttribute : System.Attribute, IAuthorizationFilter
                 }) { StatusCode = StatusCodes.Status401Unauthorized };
             }
         }
+        
+        //TODO call db to verify user is active 
 
         
         if (!roles.Any(t => t.ToString().ToLower().Equals(role)))
