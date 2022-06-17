@@ -42,6 +42,23 @@ public class SubjectController
         subjectService.CreateSubjects(subjects);
       
     }
-    
+    [HttpPatch]
+    [Route("{id}")]
+    public void UpdateSubject(string id, UpdateSubjectDto updateSubjectDto)
+    {
+        var subjects = subjectService.GetSubjectById(id);
+        if (subjects.Any())
+        {
+            subjectService.UpdateSubjects(updateSubjectDto.AsEntity(), id);
+        }
+    }
+
+    [HttpDelete]
+    [Route("{id}")]
+    public void DeleteSubject(string id)
+    {
+        subjectService.DeleteSubject(id);
+    }
+
 
 }

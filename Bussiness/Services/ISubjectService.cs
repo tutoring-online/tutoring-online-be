@@ -11,5 +11,7 @@ public interface ISubjectService
     IEnumerable<SubjectDto> GetSubjectById(string id);
 
     void CreateSubjects(IEnumerable<Subject> subjects);
-    
+    void UpdateSubjects(Subject subject, string id);
+    int DeleteSubject(string id);
+
 }

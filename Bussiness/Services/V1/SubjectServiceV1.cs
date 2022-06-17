@@ -29,4 +29,14 @@ public class SubjectServiceV1 : ISubjectService
     {
         subjectDao.CreateSubjects(subjects);
     }
+
+    public void UpdateSubjects(Subject subject, string id)
+    {
+        subjectDao.UpdateSubjects(subject, id);
+    }
+
+    public int DeleteSubject(string id)
+    {
+        return subjectDao.DeleteSubject(id);
+    }
 }
