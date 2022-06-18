@@ -87,6 +87,10 @@ builder.Services.AddSingleton<ITutorDao, TutorDao>();
 builder.Services.AddSingleton<IStudentService, StudentServiceV1>();
 builder.Services.AddSingleton<IStudentDao, StudentDao>();
 
+//Category
+builder.Services.AddSingleton<ICategoryService, CategoryServiceV1>();
+builder.Services.AddSingleton<ICategoryDao, CategoryDao>();
+
 
 // Configure app setting
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSettings"));
