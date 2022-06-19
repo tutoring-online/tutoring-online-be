@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Net;
+using Anotar.NLog;
 
 namespace DataAccess.Models;
 
@@ -13,20 +15,15 @@ public class PageRequestModel : IValidatableObject
         List<ValidationResult> validationResults = new List<ValidationResult>();
         if (Page is not null)
         {
-            if (Page <= 0)
-                validationResults.Add(new ValidationResult($"{nameof(Page)} is equal or below zero"));
+            if (Page < 0)
+                validationResults.Add(new ValidationResult($"{nameof(Page)} is below zero"));
 
         }
 
         if (Size is not null)
         {
             if (Size < 0)
-                validationResults.Add(new ValidationResult($"{nameof(Size)} is equal or below zero"));
-        }
-
-        if (Sort is not null)
-        {
-            
+                validationResults.Add(new ValidationResult($"{nameof(Size)} is below zero"));
         }
 
         return validationResults;

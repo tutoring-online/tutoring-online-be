@@ -25,17 +25,16 @@ public class PaymentController : Controller
     }
     
     [HttpGet]
-    public IEnumerable<PaymentDto> GetPayments()
+    public IActionResult GetPayments([FromQuery]PageRequestModel model)
     {
-        return paymentService.GetPayments();
+        if (CommonUtils.HaveQueryString(model))
+        {
+            return Ok();
+        }
+
+        return Ok(paymentService.GetPayments());
     }
     
-    [HttpGet]
-    [Route("filter")]
-    public IActionResult getPayments([FromQuery]PageRequestModel model)
-    {
-        return Ok();
-    }
 
     [HttpGet]
     [Route("{id}")]

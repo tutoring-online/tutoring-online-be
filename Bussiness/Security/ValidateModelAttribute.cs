@@ -12,15 +12,14 @@ public class ValidateModelAttribute : ActionFilterAttribute
     {
         if (!context.ModelState.IsValid)
         {
+            var errors = context.ModelState.Root.Errors;
+            var exception = new AppException.ValidationFailException();
+            int i = 0;
             
-            context.Result = new JsonResult(
-                new ApiResponse()
-                {
-                    ResultCode = (int)ResultCode.InvalidParams,
-                    ResultMessage = ResultCode.InvalidParams.ToString(),
-                    Data = context.ModelState.Root.Errors
-                }
-            ) { StatusCode = StatusCodes.Status400BadRequest };
+            foreach (var modelError in errors)
+                exception.Data.Add(i++, modelError.ErrorMessage);
+
+            throw exception;
         }
     }
 
