@@ -4,26 +4,29 @@ namespace DataAccess.Models;
 
 public class PageRequestModel : IValidatableObject
 {
-    public int? PageNumber { get; set; }
-    public int? PageSize { get; set; }
-    public int? MaxItems { get; set; }
-    public string? SortBy { get; set; }
-    public string? Order { get; set; }
+    public int? Page { get; set; }
+    public int? Size { get; set; }
+    public string? Sort { get; set; }
     
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         List<ValidationResult> validationResults = new List<ValidationResult>();
-        if (PageNumber is not null)
+        if (Page is not null)
         {
-            if (PageNumber <= 0)
-                validationResults.Add(new ValidationResult($"{nameof(PageNumber)} is equal or below zero"));
+            if (Page <= 0)
+                validationResults.Add(new ValidationResult($"{nameof(Page)} is equal or below zero"));
 
         }
 
-        if (PageSize is not null)
+        if (Size is not null)
         {
-            if (PageSize <= 0)
-                validationResults.Add(new ValidationResult($"{nameof(PageSize)} is equal or below zero"));
+            if (Size < 0)
+                validationResults.Add(new ValidationResult($"{nameof(Size)} is equal or below zero"));
+        }
+
+        if (Sort is not null)
+        {
+            
         }
 
         return validationResults;

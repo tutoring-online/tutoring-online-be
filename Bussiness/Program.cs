@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Text;
+using System.Text.Json.Serialization;
 using DataAccess.Entities.Student;
 using DataAccess.Repository;
 using DataAccess.Repository.MySqlRepository;
@@ -38,6 +39,12 @@ builder.Services.AddCors(options =>
                 .AllowAnyMethod();
         });
 });
+
+//Null handler in response
+// builder.Services.AddControllers().AddJsonOptions(options =>
+// {
+//     options.JsonSerializerOptions.IgnoreNullValues = true;
+// });
 
 //Dependency Injection
 //Subject
@@ -101,7 +108,9 @@ System.Globalization.CultureInfo.CurrentCulture.ClearCachedData();
 // Security Configuration
 // Middleware 
 builder.Services.AddTransient<RequestResponseHandlerMiddleware>();
+builder.Services.AddTransient<ExceptionMiddleware>();
 builder.Services.AddTransient<OptionsMiddleware>();
+
 
 //Add filter
 builder.Services.AddControllersWithViews(options =>
@@ -169,6 +178,7 @@ app.UseSwaggerUI();
     
 // Configure the HTTP request pipeline.    
 app.UseMiddleware<RequestResponseHandlerMiddleware>();
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<OptionsMiddleware>();
 
 app.UseCors();

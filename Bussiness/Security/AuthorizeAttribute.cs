@@ -1,4 +1,5 @@
 ﻿using Anotar.NLog;
+using DataAccess.Models;
 using DataAccess.Models.Authentication;
 using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Authorization;
@@ -51,10 +52,11 @@ public class AuthorizeAttribute : System.Attribute, IAuthorizationFilter
             catch (AggregateException e)
             {
                 LogTo.Info(e.ToString);
-                context.Result = new JsonResult(new
+                context.Result = new JsonResult(new ApiResponse()
                 {
                     ResultMessage = ResultCode.InvalidToken.ToString(),
-                    ResultCode = (int) ResultCode.InvalidToken
+                    ResultCode = (int) ResultCode.InvalidToken,
+                    Data = new List<object>()
                 }) { StatusCode = StatusCodes.Status401Unauthorized };
             }
         }
@@ -65,10 +67,11 @@ public class AuthorizeAttribute : System.Attribute, IAuthorizationFilter
         if (!roles.Any(t => t.ToString().ToLower().Equals(role)))
         {
             // not logged in or role not authorized
-            context.Result = new JsonResult(new
+            context.Result = new JsonResult(new ApiResponse()
             {
                 ResultMessage = ResultCode.Unauthorized.ToString(),
-                ResultCode = (int) ResultCode.Unauthorized
+                ResultCode = (int) ResultCode.Unauthorized,
+                Data = new List<object>()
             }) { StatusCode = StatusCodes.Status401Unauthorized };
         }
         

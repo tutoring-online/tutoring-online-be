@@ -13,7 +13,7 @@ public class OptionsMiddleware : IMiddleware
             context.Response.StatusCode = 200;
             return context.Response.CompleteAsync();
         }
-
+        
         return next.Invoke(context);
     }
 }
