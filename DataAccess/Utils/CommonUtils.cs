@@ -1,5 +1,8 @@
-﻿using System.Globalization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using Anotar.NLog;
+using Google.Protobuf.Collections;
 using MySql.Data.Types;
 
 namespace DataAccess.Utils;
@@ -52,10 +55,4 @@ public class CommonUtils
         return result;
     }
     
-    public static Boolean HaveQueryString(object o)
-    {
-        var properties = o.GetType().GetProperties();
-
-        return properties.Any(propertyInfo => propertyInfo.GetValue(o, null) is not null);
-    }
 }

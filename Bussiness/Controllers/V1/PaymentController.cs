@@ -9,6 +9,7 @@ using NLog.Fluent;
 using tutoring_online_be.Controllers.Utils;
 using tutoring_online_be.Security;
 using tutoring_online_be.Services;
+using tutoring_online_be.Utils;
 using static tutoring_online_be.Services.IPaymentService;
 
 namespace tutoring_online_be.Controllers.V1;
@@ -27,8 +28,9 @@ public class PaymentController : Controller
     [HttpGet]
     public IActionResult GetPayments([FromQuery]PageRequestModel model)
     {
-        if (CommonUtils.HaveQueryString(model))
+        if (AppUtils.HaveQueryString(model))
         {
+            var orderByParams = AppUtils.SortFieldParsing(model.Sort, typeof(Payment));
             return Ok();
         }
 
