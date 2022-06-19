@@ -1,4 +1,5 @@
 ﻿using DataAccess.Entities.Admin;
+using DataAccess.Entities.Category;
 using DataAccess.Entities.Lesson;
 using DataAccess.Entities.Payment;
 using DataAccess.Entities.Student;
@@ -7,6 +8,7 @@ using DataAccess.Entities.Syllabus;
 using DataAccess.Entities.Token;
 using DataAccess.Entities.Tutor;
 using DataAccess.Models.Admin;
+using DataAccess.Models.Category;
 using DataAccess.Models.Lesson;
 using DataAccess.Models.Payment;
 using DataAccess.Models.Student;
@@ -63,7 +65,20 @@ public static class Extensions
             CreatedDate = DateTime.Now
         };
     }
-    
+
+    public static Subject AsEntity(this UpdateSubjectDto subjectDto)
+    {
+        return new Subject()
+        {
+            Name = subjectDto.Name,
+            Description = subjectDto.Description,
+            Status = subjectDto.Status,
+            CategoryId = subjectDto.CategoryId,
+            Code = subjectDto.Code,
+            CreatedDate = DateTime.Now
+        };
+    }
+
     //Lesson
     public static LessonDto AsDto(this Lesson lesson)
     {
@@ -433,4 +448,58 @@ public static class Extensions
             UpdatedDate = DateTime.Now,
         };
     }
+    //Category
+    public static CategoryDto AsDto(this Category category)
+    {
+        return new CategoryDto()
+        {
+            Id = category.Id,
+            Description = StringUtils.NullToEmpty(category.Description),
+            Name = StringUtils.NullToEmpty(category.Name),
+            Type = category.Type,
+            Status = category.Status,
+            UpdatedDate = CommonUtils.ConvertDateTimeToString(category.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertDateTimeToString(category.CreatedDate)
+           
+        };
+    }
+    public static Category AsEntity(this CategoryDto categoryDto)
+    {
+        return new Category()
+        {
+            Id = categoryDto.Id,
+            Description = StringUtils.NullToEmpty(categoryDto.Description),
+            Name = StringUtils.NullToEmpty(categoryDto.Name),
+            Type = categoryDto.Type,
+            Status = categoryDto.Status,
+            UpdatedDate = CommonUtils.ConvertStringToDateTime(categoryDto.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertStringToDateTime(categoryDto.CreatedDate)
+
+        };
+    }
+
+    public static Category AsEntity(this UpdateCategoryDto categoryDto)
+    {
+        return new Category()
+        {
+            Description = StringUtils.NullToEmpty(categoryDto.Description),
+            Name = StringUtils.NullToEmpty(categoryDto.Name),
+            Type = categoryDto.Type,
+            Status = categoryDto.Status,
+            UpdatedDate = DateTime.Now
+        };
+    }
+
+    public static Category AsEntity(this CreateCategoryDto categoryDto)
+    {
+        return new Category()
+        {
+            Description = StringUtils.NullToEmpty(categoryDto.Description),
+            Name = StringUtils.NullToEmpty(categoryDto.Name),
+            Type = categoryDto.Type,
+            Status = categoryDto.Status,
+            CreatedDate = DateTime.Now
+        };
+    }
+
 }

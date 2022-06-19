@@ -7,10 +7,14 @@ public interface IPaymentService
 {
     IEnumerable<PaymentDto> GetPayments();
 
+    
+    
     IEnumerable<PaymentDto> GetPaymentById(string id);
 
     void CreatePayments(IEnumerable<Payment> payments);
     void UpdatePayment(Payment asEntity, string id);
 
     int DeletePayment(string id);
+    
+    public delegate IPaymentService ServiceResolver(string key);
 }

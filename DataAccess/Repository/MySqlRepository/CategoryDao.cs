@@ -1,73 +1,75 @@
-﻿using System.Data;
-using Anotar.NLog;
-using DataAccess.Entities.Subject;
-using DataAccess.Models.Subject;
+﻿using Anotar.NLog;
+using DataAccess.Entities.Category;
 using DataAccess.Utils;
 using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace DataAccess.Repository.MySqlRepository;
 
-public class SubjectDao : ISubjectDao
+public class CategoryDao:ICategoryDao
 {
-    private readonly ILogger<SubjectDao> logger;
+    private readonly ILogger<CategoryDao> logger;
 
-    public SubjectDao(ILogger<SubjectDao> logger)
+    public CategoryDao(ILogger<CategoryDao> logger)
     {
         this.logger = logger;
     }
 
-    public IEnumerable<Subject?> GetSubjects()
+    public IEnumerable<Category?> GetCategories()
     {
-        var subjects= new List<Subject?>();
+        var category = new List<Category?>();
 
         try
         {
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
-            var selectStatement = "Select Id, Code, Name, Description, Status, CreatedDate, UpdatedDate, CategoryId";
-            var fromStatement = "From Subject";
+            var selectStatement = "Select Id, Name, Description, CreatedDate, UpdatedDate, Type, Status";
+            var fromStatement = "From Category";
             var query = selectStatement + " " + fromStatement;
-                                  
+
             using var command = DbUtils.CreateMySqlCommand(query, connection);
 
             var reader = command.ExecuteReader();
 
             while (reader.Read())
             {
-                subjects.Add(new Subject
+                category.Add(new Category
                 {
-                    Id = DbUtils.SafeGetString(reader, "Id"),
-                    Code = DbUtils.SafeGetString(reader, "Code"),
+                    Id = DbUtils.SafeGetString(reader, "Id"),                
                     Name = DbUtils.SafeGetString(reader, "Name"),
-                    Description = DbUtils.SafeGetString(reader, "Description"),
-                    Status = DbUtils.SafeGetInt16(reader, "Status"),
+                    Description = DbUtils.SafeGetString(reader, "Description"),                  
                     CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
-                    UpdatedDate =DbUtils.SafeGetDateTime(reader, "UpdatedDate"),
-                    CategoryId = DbUtils.SafeGetString(reader, "CategoryId")
+                    UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate"),
+                    Type = DbUtils.SafeGetInt16(reader, "Type"),
+                    Status = DbUtils.SafeGetInt16(reader, "Status")
                 });
+
             }
         }
         catch (MySqlException e)
         {
-            LogTo.Error(e.ToString());
+            LogTo.Info(e.ToString);
         }
         catch (Exception e)
         {
-            LogTo.Error(e.ToString());
+            LogTo.Info(e.ToString);
         }
         finally
         {
             DbUtils.CloseMySqlDbConnection();
         }
 
-        return subjects;
+        return category;
     }
-
-    public IEnumerable<Subject?> GetSubjectById(string id)
+    public IEnumerable<Category?> GetCategoryById(string id)
     {
-        var subjects= new List<Subject?>();
+        var categories = new List<Category?>();
 
         try
         {
@@ -75,95 +77,41 @@ public class SubjectDao : ISubjectDao
             connection.Open();
             var param1 = "@id";
 
-            var selectStatement = "Select Id, Code, Name, Description, Status, CreatedDate, UpdatedDate, CategoryId";
-            var fromStatement = "From Subject";
+            var selectStatement = "Select Id, Name, Description, CreatedDate, UpdatedDate, Type, Status";
+            var fromStatement = "From Category";
             var whereStatement = $"Where Id = {param1}";
-            var query = selectStatement + " " + fromStatement + " " + whereStatement; 
-                                  
+            var query = selectStatement + " " + fromStatement + " " + whereStatement;
+
             using var command = DbUtils.CreateMySqlCommand(query, connection);
             command.CommandText = query;
 
             command.Parameters.Add(param1, MySqlDbType.VarChar).Value = id;
             command.Prepare();
-            
+
             foreach (MySqlParameter commandParameter in command.Parameters)
             {
-                LogTo.Error($"Param {commandParameter}: {commandParameter.Value}");
+                LogTo.Info($"Param {commandParameter}: {commandParameter.Value}");
             }
 
             var reader = command.ExecuteReader();
 
             if (reader.Read())
             {
-                subjects.Add(new Subject
+                categories.Add(new Category
                 {
                     Id = DbUtils.SafeGetString(reader, "Id"),
-                    Code = DbUtils.SafeGetString(reader, "Code"),
                     Name = DbUtils.SafeGetString(reader, "Name"),
                     Description = DbUtils.SafeGetString(reader, "Description"),
-                    Status = DbUtils.SafeGetInt16(reader, "Status"),
                     CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
                     UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate"),
-                    CategoryId = DbUtils.SafeGetString(reader, "CategoryId")
+                    Type = DbUtils.SafeGetInt16(reader, "Type"),
+                    Status = DbUtils.SafeGetInt16(reader, "Status")
                 });
 
             }
         }
         catch (MySqlException e)
         {
-            LogTo.Error(e.ToString());
-        }
-        catch (Exception e)
-        {
-            LogTo.Error(e.ToString());
-        }
-        finally
-        {
-            DbUtils.CloseMySqlDbConnection();
-        }
-
-        return subjects;
-    }
-
-    public void CreateSubjects(IEnumerable<Subject> subjects)
-    {
-        try
-        {
-            using var connection = DbUtils.GetMySqlDbConnection();
-            connection.Open();
-            
-            using var command = MySqlUtils.CreateInsertStatement(subjects, connection);
-            
-            command.ExecuteNonQuery();
-            
-        }
-        catch (MySqlException e)
-        {
-            LogTo.Error(e.ToString());
-        }
-        catch (Exception e)
-        {
-            LogTo.Error(e.ToString());
-        }
-        finally
-        {
-            DbUtils.CloseMySqlDbConnection();
-        }
-
-    }
-
-    public void UpdateSubjects(Subject subject, string id)
-    {
-        try
-        {
-            using var connection = DbUtils.GetMySqlDbConnection();
-            connection.Open();
-
-            using var command = MySqlUtils.CreateUpdateStatement(subject, connection, $"id = {id}");
-            command.ExecuteNonQuery();
-        }
-        catch (MySqlException e)
-        {
             LogTo.Info(e.ToString);
         }
         catch (Exception e)
@@ -174,25 +122,84 @@ public class SubjectDao : ISubjectDao
         {
             DbUtils.CloseMySqlDbConnection();
         }
+
+        return categories;
     }
 
-    public int DeleteSubject(string id)
+
+    public void CreateCategories(IEnumerable<Category> categories)
     {
         try
         {
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
-            using var command = MySqlUtils.CreateUpdateStatusForDelete(typeof(Subject).Name, connection, id);
+            using var command = MySqlUtils.CreateInsertStatement(categories, connection);
+            command.ExecuteNonQuery();
+
+        }
+        catch (MySqlException e)
+        {
+            LogTo.Info(e.ToString);
+
+        }
+        catch (Exception e)
+        {
+            LogTo.Info(e.ToString);
+
+        }
+        finally
+        {
+            DbUtils.CloseMySqlDbConnection();
+        }
+
+    }
+
+    public void UpdateCategories(Category category, string id)
+    {
+        try
+        {
+            using var connection = DbUtils.GetMySqlDbConnection();
+            connection.Open();
+
+            using var command = MySqlUtils.CreateUpdateStatement(category, connection, $"id = {id}");
+            command.ExecuteNonQuery();
+
+        }
+        catch (MySqlException e)
+        {
+            LogTo.Info(e.ToString);
+
+        }
+        catch (Exception e)
+        {
+            LogTo.Info(e.ToString);
+
+        }
+        finally
+        {
+            DbUtils.CloseMySqlDbConnection();
+        }
+    }
+    public int DeleteCategory(string id)
+    {
+        try
+        {
+            using var connection = DbUtils.GetMySqlDbConnection();
+            connection.Open();
+
+            using var command = MySqlUtils.CreateUpdateStatusForDelete(typeof(Category).Name, connection, id);
             return command.ExecuteNonQuery();
         }
         catch (MySqlException e)
         {
             LogTo.Info(e.ToString);
+
         }
         catch (Exception e)
         {
             LogTo.Info(e.ToString);
+
         }
         finally
         {
@@ -201,4 +208,4 @@ public class SubjectDao : ISubjectDao
 
         return 0;
     }
-}
+    }

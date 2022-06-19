@@ -3,7 +3,8 @@
 public enum ResultCode
 {
     Success = 0,
-    Unknown = 1,
+    Unknown = 30,
+    InvalidParams = 92,
     TokenNotMatch = 93,
     RefreshTokenHasBeenRevoked = 94,
     RefreshTokenHasBeenUsed = 95,

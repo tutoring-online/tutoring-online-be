@@ -12,5 +12,6 @@ public interface ISubjectDao
 
     void CreateSubjects(IEnumerable<Subject> subjects);
 
-    void UpdateSubjects(Subject subject);
+    void UpdateSubjects(Subject subject, string id);
+    int DeleteSubject(string id);
 }

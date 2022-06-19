@@ -1,29 +1,42 @@
-﻿using DataAccess.Entities.Payment;
+﻿using Anotar.NLog;
+using DataAccess.Entities.Payment;
+using DataAccess.Models;
 using DataAccess.Models.Payment;
 using DataAccess.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using NLog.Fluent;
 using tutoring_online_be.Controllers.Utils;
 using tutoring_online_be.Security;
 using tutoring_online_be.Services;
+using tutoring_online_be.Utils;
+using static tutoring_online_be.Services.IPaymentService;
 
 namespace tutoring_online_be.Controllers.V1;
 
-[ApiController]
+[ValidateModel]
 [Route ("/api/v1/payments")]
-public class PaymentController
+public class PaymentController : Controller
 {
     private readonly IPaymentService paymentService;
 
-    public PaymentController(IPaymentService paymentService)
+    public PaymentController(ServiceResolver serviceResolver)
     {
-        this.paymentService = paymentService;
+        this.paymentService = serviceResolver("payment-v1");
     }
-
+    
     [HttpGet]
-    public IEnumerable<PaymentDto> GetPayments()
+    public IActionResult GetPayments([FromQuery]PageRequestModel model)
     {
-        return paymentService.GetPayments();
+        if (AppUtils.HaveQueryString(model))
+        {
+            var orderByParams = AppUtils.SortFieldParsing(model.Sort, typeof(Payment));
+            return Ok();
+        }
+
+        return Ok(paymentService.GetPayments());
     }
+    
 
     [HttpGet]
     [Route("{id}")]
