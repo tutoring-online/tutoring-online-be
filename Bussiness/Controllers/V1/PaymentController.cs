@@ -31,7 +31,10 @@ public class PaymentController : Controller
         if (AppUtils.HaveQueryString(model))
         {
             var orderByParams = AppUtils.SortFieldParsing(model.Sort, typeof(Payment));
-            return Ok();
+            
+            Page<PaymentDto> responseData = paymentService.GetPayments(model, orderByParams);
+            
+            return Ok(responseData);
         }
 
         return Ok(paymentService.GetPayments());

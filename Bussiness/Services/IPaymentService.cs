@@ -1,4 +1,5 @@
 ﻿using DataAccess.Entities.Payment;
+using DataAccess.Models;
 using DataAccess.Models.Payment;
 
 namespace tutoring_online_be.Services;
@@ -6,8 +7,6 @@ namespace tutoring_online_be.Services;
 public interface IPaymentService
 {
     IEnumerable<PaymentDto> GetPayments();
-
-    
     
     IEnumerable<PaymentDto> GetPaymentById(string id);
 
@@ -17,4 +16,6 @@ public interface IPaymentService
     int DeletePayment(string id);
     
     public delegate IPaymentService ServiceResolver(string key);
+
+    Page<PaymentDto> GetPayments(PageRequestModel model, List<Tuple<string, string>> orderByParams);
 }

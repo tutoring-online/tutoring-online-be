@@ -46,7 +46,7 @@ public class CommonUtils
         {
             result = DateTime.ParseExact(stringDateTime, DateTimeFormat, CultureInfo.InvariantCulture);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             LogTo.Info("Can not convert String to DateTime");
             LogTo.Error(e.ToString);
@@ -54,5 +54,5 @@ public class CommonUtils
 
         return result;
     }
-    
+
 }
