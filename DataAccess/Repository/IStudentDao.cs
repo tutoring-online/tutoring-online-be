@@ -19,4 +19,5 @@ public interface IStudentDao
 
     void UpdateStudent(Student asEntity, string id);
     int DeleteStudent(string id);
+    Dictionary<string, Student?> GetStudents(HashSet<string> ids);
 }

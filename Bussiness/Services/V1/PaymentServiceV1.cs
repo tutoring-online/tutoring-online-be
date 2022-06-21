@@ -46,38 +46,22 @@ public class PaymentServiceV1 : IPaymentService
         Page<Payment> result = new Page<Payment>();
         Page<PaymentDto> resultDto = new Page<PaymentDto>();
 
-        int? limit = 0;
-        int? offSet = 0;
-        var isNotPaging = false;
-        var page = model.Page is null ? 0 : model.Page;
-        var size = model.Size switch
-        {
-            null => 10,
-            > 0 => model.Size,
-            _ => 0
-        };
-
-        if (size == 0)
-            isNotPaging = true;
-
-        limit = size;
-        offSet = page * size;
-
-        result = paymentDao.GetPayments(limit, offSet, orderByParams, isNotPaging);
+        result = paymentDao.GetPayments(model.GetLimit(), model.GetOffSet(), orderByParams, model.IsNotPaging());
 
         resultDto.Data = result.Data.Select(p => p.AsDto()).ToList();
         resultDto.Pagination = result.Pagination;
-        resultDto.Pagination.Page = page;
-        resultDto.Pagination.Size = size;
+        resultDto.Pagination.Page = model.GetPage();
+        resultDto.Pagination.Size = model.GetSize();
+        if (model.IsNotPaging())
+        {
+            resultDto.Pagination.TotalPages = 1;
+            resultDto.Pagination.Size = resultDto.Pagination.TotalItems;
+        }
+        else
+        {
+            resultDto.Pagination.UpdateTotalPages();
+        }
         
-        int totalPage = (int)(resultDto.Pagination.TotalItems / resultDto.Pagination.Size);
-        if (totalPage < 1)
-            totalPage = 1;
-        else if (resultDto.Pagination.TotalItems % resultDto.Pagination.Size > 0)
-            totalPage += 1;
-        
-        resultDto.Pagination.TotalPages = totalPage;
-
         return resultDto;
     }
 }

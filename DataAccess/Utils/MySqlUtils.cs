@@ -150,4 +150,33 @@ public class MySqlUtils
         
         return command;
     }
+
+    public static string CreateOrderByStatement(List<Tuple<string, string>> orderByParams)
+    {
+        var orderByList = new List<string>();
+        foreach (var orderByParam in orderByParams)
+        {
+            switch (orderByParam.Item2)
+            {
+                case "+":
+                    orderByList.Add($"{orderByParam.Item1} ASC ");
+                    break;
+                case "-":
+                    orderByList.Add($"{orderByParam.Item1} DESC ");
+                    break;
+            }
+        }
+
+        return "Order by " + string.Join(",", orderByList);
+    }
+
+    public static string CreateInStatementValues(HashSet<string?> values)
+    {
+        return $"({string.Join(",", values)})";
+    }
+
+    public static string ConstructQueryByStatements(List<string> queries)
+    {
+        return string.Join(" ", queries);
+    }
 }

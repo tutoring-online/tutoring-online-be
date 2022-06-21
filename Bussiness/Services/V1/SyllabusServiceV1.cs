@@ -33,4 +33,9 @@ public class SyllabusServiceV1 : ISyllabusService
     {
         syllabusDao.UpdateSyllabus(asEntity, id);
     }
+
+    public Dictionary<string, SyllabusDto> GetSyllabuses(HashSet<string> ids)
+    {
+        return syllabusDao.GetSyllabuses(ids).ToDictionary(pair => pair.Key, pair => pair.Value.AsDto());
+    }
 }

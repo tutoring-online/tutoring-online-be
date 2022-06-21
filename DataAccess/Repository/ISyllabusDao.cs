@@ -15,4 +15,5 @@ public interface ISyllabusDao
 
     void CreateSyllabuses(IEnumerable<Syllabus> syllabuses);
     void UpdateSyllabus(Syllabus asEntity, string id);
+    Dictionary<string, Syllabus> GetSyllabuses(HashSet<string> ids);
 }

@@ -172,4 +172,58 @@ public class SyllabusDao: ISyllabusDao
             DbUtils.CloseMySqlDbConnection();
         }
     }
+
+    public Dictionary<string, Syllabus> GetSyllabuses(HashSet<string> ids)
+    {
+        var syllabuses = new Dictionary<string, Syllabus>();
+
+        try
+        {
+            using var connection = DbUtils.GetMySqlDbConnection();
+            connection.Open();
+
+            var selectStatement = "Select Id, SubjectId, TotalLessons, Description, Price, Name, Status, CreatedDate, UpdatedDate";
+            var fromStatement = "From Syllabus";
+            var whereStatement = $"Where id in {MySqlUtils.CreateInStatementValues(ids)}";
+            var query = MySqlUtils.ConstructQueryByStatements(new List<string> {
+                    selectStatement,
+                    fromStatement,
+                    whereStatement
+                });
+
+            using var command = DbUtils.CreateMySqlCommand(query, connection);
+
+            var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                syllabuses.Add(DbUtils.SafeGetString(reader, "Id"), new Syllabus
+                {
+                    Id = DbUtils.SafeGetString(reader, "Id"),
+                    SubjectId = DbUtils.SafeGetString(reader, "SubjectId"),
+                    Name = DbUtils.SafeGetString(reader, "Name"),
+                    Description = DbUtils.SafeGetString(reader, "Description"),
+                    Status = DbUtils.SafeGetInt16(reader, "Status"),
+                    CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
+                    UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate"),
+                    TotalLessons = DbUtils.SafeGetInt16(reader, "TotalLessons"),
+                    Price = DbUtils.SafeGetDouble(reader, "Price")
+                });
+            }
+        }
+        catch (MySqlException e)
+        {
+            LogTo.Error(e.ToString());
+        }
+        catch (Exception e)
+        {
+            LogTo.Error(e.ToString());
+        }
+        finally
+        {
+            DbUtils.CloseMySqlDbConnection();
+        }
+
+        return syllabuses;
+    }
 }

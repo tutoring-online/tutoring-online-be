@@ -17,5 +17,5 @@ public interface IPaymentDao
     void CreatePayments(IEnumerable<Payment> payment);
     void UpdatePayment(Payment asEntity, string id);
     int DeletePayment(string id);
-    Page<Payment?> GetPayments(int? page, int? size, List<Tuple<string, string>> orderByParams,bool isNotPaging);
+    Page<Payment?> GetPayments(int? limit, int? offSet, List<Tuple<string, string>> orderByParams,bool isNotPaging);
 }

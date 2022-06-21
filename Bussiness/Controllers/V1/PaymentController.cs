@@ -1,7 +1,10 @@
 ﻿using Anotar.NLog;
 using DataAccess.Entities.Payment;
+using DataAccess.Entities.Student;
 using DataAccess.Models;
 using DataAccess.Models.Payment;
+using DataAccess.Models.Student;
+using DataAccess.Models.Syllabus;
 using DataAccess.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -19,10 +22,18 @@ namespace tutoring_online_be.Controllers.V1;
 public class PaymentController : Controller
 {
     private readonly IPaymentService paymentService;
+    private readonly IStudentService studentService;
+    private readonly ISyllabusService syllabusService;
 
-    public PaymentController(ServiceResolver serviceResolver)
+    public PaymentController(
+        ServiceResolver serviceResolver,
+        IStudentService studentService,
+        ISyllabusService syllabusService
+        )
     {
         this.paymentService = serviceResolver("payment-v1");
+        this.studentService = studentService;
+        this.syllabusService = syllabusService;
     }
     
     [HttpGet]
@@ -33,6 +44,35 @@ public class PaymentController : Controller
             var orderByParams = AppUtils.SortFieldParsing(model.Sort, typeof(Payment));
             
             Page<PaymentDto> responseData = paymentService.GetPayments(model, orderByParams);
+
+            if (responseData.Data is not null || responseData.Data.Count > 0)
+            {
+                List<PaymentDto> paymentDtos = responseData.Data;
+                HashSet<string> studentIds = paymentDtos.Select(t => t.StudentId).NotEmpty().ToHashSet();
+                HashSet<string> syllabusIds = paymentDtos.Select(t => t.SyllabusId).NotEmpty().ToHashSet(); 
+
+                if (studentIds.Count > 0)
+                {
+                    Dictionary<string, StudentDto> studentDtos = studentService.GetStudents(studentIds);
+                    
+                    foreach (var paymentDto in paymentDtos.Where(paymentDto => studentDtos.ContainsKey(paymentDto.StudentId)))
+                    {
+                        paymentDto.Student = studentDtos[paymentDto.StudentId];
+                    }
+                }
+
+                if (syllabusIds.Count > 0)
+                {
+                    Dictionary<string, SyllabusDto> syllabusDtos = syllabusService.GetSyllabuses(syllabusIds);
+                
+                    foreach (var paymentDto in paymentDtos.Where(paymentDto => syllabusDtos.ContainsKey(paymentDto.SyllabusId)))
+                    {
+                        paymentDto.Syllabus = syllabusDtos[paymentDto.SyllabusId];
+                    }
+                }
+
+                
+            }
             
             return Ok(responseData);
         }

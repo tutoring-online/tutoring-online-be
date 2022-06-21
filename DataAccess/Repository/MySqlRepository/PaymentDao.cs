@@ -203,48 +203,27 @@ public class PaymentDao : IPaymentDao
             connection.Open();
             var param1 = "@id";
 
-            var selectStatement = "Select Id, SyllabusId, StudentId,CreatedDate, UpdatedDate, Status";
+            var selectStatement = "Select Id, SyllabusId, StudentId, CreatedDate, UpdatedDate, Status";
+            var selectCountStatement = "Select count(id) as TotalElement";
             var fromStatement = "From Payment";
             var whereStatement = $"";
-            var orderByStatement = $"Order by ";
+            var orderByStatement = MySqlUtils.CreateOrderByStatement(orderByParams);
             var limitStatement = $"Limit {limit} offSet {offSet}";
-
-            for (var index = 0; index < orderByParams.Count; index++)
-            {
-                var orderByParam = orderByParams[index];
-                if (orderByParam.Item2.Equals("+"))
-                {
-                    if (index == 0)
-                    {
-                        orderByStatement += $"{orderByParam.Item1} ASC ";
-                    }
-                    else
-                    {
-                        orderByStatement += $",{orderByParam.Item1} ASC ";
-                    }
-                }
-
-                else if (orderByParam.Item2.Equals("-"))
-                {
-                    if (index == 0)
-                    {
-                        orderByStatement += $"{orderByParam.Item1} DESC ";
-                    }
-                    else
-                    {
-                        orderByStatement += $",{orderByParam.Item1} DESC ";
-                    }
-                }
-                    
-            }
 
             if (!orderByParams.Any())
                 orderByStatement = "";
 
-            if (isNotPaging is true)
+            if (isNotPaging)
                 limitStatement = "";
-                
-            var query = selectStatement + " " + fromStatement + " " + whereStatement + " " + orderByStatement + " " + limitStatement;
+
+            var listStatement1 = new List<string>();
+            listStatement1.Add(selectStatement);
+            listStatement1.Add(fromStatement);
+            listStatement1.Add(whereStatement);
+            listStatement1.Add(orderByStatement);
+            listStatement1.Add(limitStatement);
+
+            var query = string.Join(" ", listStatement1);
 
             using var command = DbUtils.CreateMySqlCommand(query, connection);
 
@@ -270,24 +249,17 @@ public class PaymentDao : IPaymentDao
                 });
             }
             reader.Close();
-            
             page.Data = payments;
 
-            var selectCountStatement = "Select count(id) as TotalElement";
-            query = selectCountStatement + " " + fromStatement + " " + whereStatement + " " + orderByStatement + " " + limitStatement;
+            var listStatement2 = new List<string>();
+            listStatement2.Add(selectCountStatement);
+            listStatement2.Add(fromStatement);
+            listStatement2.Add(whereStatement);
 
+            query = string.Join(" ", listStatement2);
             command.CommandText = query;
-
             reader = command.ExecuteReader();
-
-            if (reader.Read())
-            {
-                page.Pagination.TotalItems = DbUtils.SafeGetInt16(reader, "TotalElement");
-            }
-            else
-            {
-                page.Pagination.TotalItems = 0;
-            }
+            page.Pagination.TotalItems = reader.Read() ? DbUtils.SafeGetInt16(reader, "TotalElement") : 0;
 
         }
         catch (MySqlException e)
