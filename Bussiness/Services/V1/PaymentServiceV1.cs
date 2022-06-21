@@ -1,7 +1,9 @@
 ﻿using DataAccess.Entities.Payment;
+using DataAccess.Models;
 using DataAccess.Models.Payment;
 using DataAccess.Repository;
 using DataAccess.Utils;
+using Org.BouncyCastle.Asn1.IsisMtt.X509;
 
 namespace tutoring_online_be.Services.V1;
 
@@ -37,5 +39,29 @@ public class PaymentServiceV1 : IPaymentService
     public int DeletePayment(string id)
     {
         return paymentDao.DeletePayment(id);
+    }
+
+    public Page<PaymentDto> GetPayments(PageRequestModel model, List<Tuple<string, string>> orderByParams)
+    {
+        Page<Payment> result = new Page<Payment>();
+        Page<PaymentDto> resultDto = new Page<PaymentDto>();
+
+        result = paymentDao.GetPayments(model.GetLimit(), model.GetOffSet(), orderByParams, model.IsNotPaging());
+
+        resultDto.Data = result.Data.Select(p => p.AsDto()).ToList();
+        resultDto.Pagination = result.Pagination;
+        resultDto.Pagination.Page = model.GetPage();
+        resultDto.Pagination.Size = model.GetSize();
+        if (model.IsNotPaging())
+        {
+            resultDto.Pagination.TotalPages = 1;
+            resultDto.Pagination.Size = resultDto.Pagination.TotalItems;
+        }
+        else
+        {
+            resultDto.Pagination.UpdateTotalPages();
+        }
+        
+        return resultDto;
     }
 }

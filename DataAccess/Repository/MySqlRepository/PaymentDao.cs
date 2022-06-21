@@ -1,5 +1,6 @@
 ﻿using Anotar.NLog;
 using DataAccess.Entities.Payment;
+using DataAccess.Models;
 using DataAccess.Utils;
 using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
@@ -187,5 +188,93 @@ public class PaymentDao : IPaymentDao
         };
 
         return 0;
+    }
+
+
+    public Page<Payment?> GetPayments(int? limit, int? offSet, List<Tuple<string, string>> orderByParams,bool isNotPaging)
+    {
+        var page = new Page<Payment>();
+        page.Pagination = new PageDetail();
+        var payments = new List<Payment?>();
+
+        try
+        {
+            using var connection = DbUtils.GetMySqlDbConnection();
+            connection.Open();
+            var param1 = "@id";
+
+            var selectStatement = "Select Id, SyllabusId, StudentId, CreatedDate, UpdatedDate, Status";
+            var selectCountStatement = "Select count(id) as TotalElement";
+            var fromStatement = "From Payment";
+            var whereStatement = $"";
+            var orderByStatement = MySqlUtils.CreateOrderByStatement(orderByParams);
+            var limitStatement = $"Limit {limit} offSet {offSet}";
+
+            if (!orderByParams.Any())
+                orderByStatement = "";
+
+            if (isNotPaging)
+                limitStatement = "";
+
+            var listStatement1 = new List<string>();
+            listStatement1.Add(selectStatement);
+            listStatement1.Add(fromStatement);
+            listStatement1.Add(whereStatement);
+            listStatement1.Add(orderByStatement);
+            listStatement1.Add(limitStatement);
+
+            var query = string.Join(" ", listStatement1);
+
+            using var command = DbUtils.CreateMySqlCommand(query, connection);
+
+            command.Prepare();
+
+            foreach (MySqlParameter commandParameter in command.Parameters)
+            {
+                LogTo.Info($"Param {commandParameter}: {commandParameter.Value}");
+            }
+
+            var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                payments.Add(new Payment
+                {
+                    Id = DbUtils.SafeGetString(reader, "Id"),
+                    SyllabusId = DbUtils.SafeGetString(reader, "SyllabusId"),
+                    StudentId = DbUtils.SafeGetString(reader, "StudentId"),
+                    Status = DbUtils.SafeGetInt16(reader, "Status"),
+                    CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
+                    UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate")
+                });
+            }
+            reader.Close();
+            page.Data = payments;
+
+            var listStatement2 = new List<string>();
+            listStatement2.Add(selectCountStatement);
+            listStatement2.Add(fromStatement);
+            listStatement2.Add(whereStatement);
+
+            query = string.Join(" ", listStatement2);
+            command.CommandText = query;
+            reader = command.ExecuteReader();
+            page.Pagination.TotalItems = reader.Read() ? DbUtils.SafeGetInt16(reader, "TotalElement") : 0;
+
+        }
+        catch (MySqlException e)
+        { 
+            LogTo.Info(e.ToString());
+        }
+        catch (Exception e)
+        {
+            LogTo.Info(e.ToString());
+        }
+        finally
+        {
+            DbUtils.CloseMySqlDbConnection();
+        }
+
+        return page;
     }
 }

@@ -16,7 +16,6 @@ using tutoring_online_be.Security;
 using tutoring_online_be.Security.Filter;
 using tutoring_online_be.Services;
 using tutoring_online_be.Services.V1;
-using tutoring_online_be.Services.V2;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -68,8 +67,6 @@ builder.Services.AddTransient<IPaymentService.ServiceResolver>(serviceProvider =
     {
         case "payment-v1":
             return serviceProvider.GetService<PaymentServiceV1>();
-        case "payment-v2":
-            return serviceProvider.GetService<PaymentServiceV2>();
         default:
             throw new KeyNotFoundException(); 
     }

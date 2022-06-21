@@ -279,4 +279,65 @@ public class StudentDao:IStudentDao
 
         return 0;
     }
+
+    public Dictionary<string, Student?> GetStudents(HashSet<string> ids)
+    {
+        var student = new Dictionary<string, Student?>();
+
+        try
+        {
+            using var connection = DbUtils.GetMySqlDbConnection();
+            connection.Open();
+
+            var selectStatement = "Select Id, Email, Name, Grade, Phone, Status, Gender, Birthday, Address, AvatarURL, CreatedDate, UpdatedDate";
+            var fromStatement = "From Student";
+            var whereSatement = $"Where id In {MySqlUtils.CreateInStatementValues(ids)}";
+            var query = MySqlUtils.ConstructQueryByStatements(new List<string>
+            {
+                selectStatement,
+                fromStatement,
+                whereSatement
+            });
+
+            using var command = DbUtils.CreateMySqlCommand(query, connection);
+
+            var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                student.Add(
+                    DbUtils.SafeGetString(reader, "Id"),
+                    new Student { 
+                            Id = DbUtils.SafeGetString(reader, "Id"),
+                            Email = DbUtils.SafeGetString(reader, "Email"),
+                            Name = DbUtils.SafeGetString(reader, "Name"),
+                            Grade = DbUtils.SafeGetInt16(reader, "Grade"),
+                            Status = DbUtils.SafeGetInt16(reader, "Status"),
+                            Phone = DbUtils.SafeGetString(reader, "Phone"),
+                            Gender = DbUtils.SafeGetInt16(reader, "Gender"),
+                            Address = DbUtils.SafeGetString(reader, "Address"),
+                            AvatarURL = DbUtils.SafeGetString(reader, "AvatarURL"),                   
+                            Birthday = DbUtils.SafeGetDateTime(reader, "Birthday"),
+                            CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
+                            UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate")
+                        }
+                    );
+
+            }
+        }
+        catch (MySqlException e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        catch (Exception e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        finally
+        {
+            DbUtils.CloseMySqlDbConnection();
+        }
+
+        return student;
+    }
 }

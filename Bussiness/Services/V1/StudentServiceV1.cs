@@ -25,6 +25,11 @@ public class StudentServiceV1:IStudentService
         return studentDao.GetStudentById(id).Select(student => student.AsDto());
     }
 
+    public Dictionary<string, StudentDto> GetStudents(HashSet<string> ids)
+    {
+        return studentDao.GetStudents(ids).ToDictionary(pair => pair.Key, pair => pair.Value.AsDto());
+    }
+
     public IEnumerable<StudentDto> GetStudentByFirebaseUid(string uid)
     {
         return studentDao.GetStudentByFirebaseUid(uid).Select(student => student.AsDto());

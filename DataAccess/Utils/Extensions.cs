@@ -21,6 +21,15 @@ namespace DataAccess.Utils;
 
 public static class Extensions
 {
+    public static IEnumerable<T> NotNull<T>(this IEnumerable<T?> enumerable) where T : class
+    {
+        return enumerable.Where(e => e != null).Select(e => e!);
+    }
+    
+    public static IEnumerable<T> NotEmpty<T>(this IEnumerable<T?> enumerable) where T : class
+    {
+        return enumerable.Where(e => e is not "").Select(e => e!);
+    }
     
     //Subject
     public static SubjectDto AsDto(this Subject subject)

@@ -1,4 +1,7 @@
-﻿namespace DataAccess.Models.Payment;
+﻿using DataAccess.Models.Student;
+using DataAccess.Models.Syllabus;
+
+namespace DataAccess.Models.Payment;
 
 public class PaymentDto
 {
@@ -13,4 +16,8 @@ public class PaymentDto
     public string? UpdatedDate { get; init; }
     
     public int? Status { get; init; }
+    
+    public StudentDto? Student { get; set; }
+    
+    public SyllabusDto? Syllabus { get; set; }
 }
