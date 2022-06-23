@@ -41,12 +41,13 @@ public class PaymentServiceV1 : IPaymentService
         return paymentDao.DeletePayment(id);
     }
 
-    public Page<PaymentDto> GetPayments(PageRequestModel model, List<Tuple<string, string>> orderByParams)
+    public Page<PaymentDto> GetPayments(PageRequestModel model, List<Tuple<string, string>> orderByParams,
+        SearchPaymentDto searchPaymentDto)
     {
         Page<Payment> result = new Page<Payment>();
         Page<PaymentDto> resultDto = new Page<PaymentDto>();
 
-        result = paymentDao.GetPayments(model.GetLimit(), model.GetOffSet(), orderByParams, model.IsNotPaging());
+        result = paymentDao.GetPayments(model.GetLimit(), model.GetOffSet(), orderByParams, searchPaymentDto,model.IsNotPaging());
 
         resultDto.Data = result.Data.Select(p => p.AsDto()).ToList();
         resultDto.Pagination = result.Pagination;

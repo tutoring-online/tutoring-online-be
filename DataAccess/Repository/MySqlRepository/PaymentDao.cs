@@ -1,6 +1,7 @@
 ﻿using Anotar.NLog;
 using DataAccess.Entities.Payment;
 using DataAccess.Models;
+using DataAccess.Models.Payment;
 using DataAccess.Utils;
 using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
@@ -191,7 +192,8 @@ public class PaymentDao : IPaymentDao
     }
 
 
-    public Page<Payment?> GetPayments(int? limit, int? offSet, List<Tuple<string, string>> orderByParams,bool isNotPaging)
+    public Page<Payment?> GetPayments(int? limit, int? offSet, List<Tuple<string, string>> orderByParams,
+        SearchPaymentDto searchPaymentDto, bool isNotPaging)
     {
         var page = new Page<Payment>();
         page.Pagination = new PageDetail();
@@ -206,7 +208,12 @@ public class PaymentDao : IPaymentDao
             var selectStatement = "Select Id, SyllabusId, StudentId, CreatedDate, UpdatedDate, Status";
             var selectCountStatement = "Select count(id) as TotalElement";
             var fromStatement = "From Payment";
-            var whereStatement = $"";
+            var whereStatement = $"Where (@SyllabusId is null or SyllabusId = @SyllabusId)" +
+                                 $"and (@StudentId is null or StudentId = @StudentId)" +
+                                 $"and (@FromCreatedDate is null or CreatedDate >= @FromCreatedDate)" +
+                                 $"and (@ToCreatedDate is null or CreatedDate <= @ToCreatedDate)" +
+                                 $"and (@FromUpdatedDate is null or UpdatedDate >= @FromUpdatedDate)" +
+                                 $"and (@ToUpdatedDate is null or UpdatedDate <= @ToUpdatedDate) ";
             var orderByStatement = MySqlUtils.CreateOrderByStatement(orderByParams);
             var limitStatement = $"Limit {limit} offSet {offSet}";
 
@@ -226,6 +233,14 @@ public class PaymentDao : IPaymentDao
             var query = string.Join(" ", listStatement1);
 
             using var command = DbUtils.CreateMySqlCommand(query, connection);
+
+            command.Parameters.Add("@StudentId", MySqlDbType.VarChar).Value = searchPaymentDto.StudentId;
+            command.Parameters.Add("@SyllabusId", MySqlDbType.VarChar).Value = searchPaymentDto.SyllabusId;
+            command.Parameters.Add("@FromCreatedDate", MySqlDbType.DateTime).Value = searchPaymentDto.FromCreatedDate;
+            command.Parameters.Add("@ToCreatedDate", MySqlDbType.DateTime).Value = searchPaymentDto.ToCreatedDate;
+            command.Parameters.Add("@FromUpdatedDate", MySqlDbType.DateTime).Value = searchPaymentDto.FromUpdatedDate;
+            command.Parameters.Add("@ToUpdatedDate", MySqlDbType.DateTime).Value = searchPaymentDto.ToUpdatedDate;
+            command.Parameters.Add("@Status", MySqlDbType.VarChar).Value = searchPaymentDto.Status;
 
             command.Prepare();
 

@@ -37,13 +37,13 @@ public class PaymentController : Controller
     }
     
     [HttpGet]
-    public IActionResult GetPayments([FromQuery]PageRequestModel model)
+    public IActionResult GetPayments([FromQuery]PageRequestModel model, [FromQuery]SearchPaymentDto searchPaymentDto)
     {
         if (AppUtils.HaveQueryString(model))
         {
             var orderByParams = AppUtils.SortFieldParsing(model.Sort, typeof(Payment));
             
-            Page<PaymentDto> responseData = paymentService.GetPayments(model, orderByParams);
+            Page<PaymentDto> responseData = paymentService.GetPayments(model, orderByParams, searchPaymentDto);
 
             if (responseData.Data is not null || responseData.Data.Count > 0)
             {

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccess.Models;
+using DataAccess.Models.Payment;
 
 namespace DataAccess.Repository;
 
@@ -17,5 +18,6 @@ public interface IPaymentDao
     void CreatePayments(IEnumerable<Payment> payment);
     void UpdatePayment(Payment asEntity, string id);
     int DeletePayment(string id);
-    Page<Payment?> GetPayments(int? limit, int? offSet, List<Tuple<string, string>> orderByParams,bool isNotPaging);
+    Page<Payment?> GetPayments(int? limit, int? offSet, List<Tuple<string, string>> orderByParams,
+        SearchPaymentDto searchPaymentDto, bool isNotPaging);
 }

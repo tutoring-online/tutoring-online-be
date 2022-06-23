@@ -39,17 +39,20 @@ public class CommonUtils
         return result;
     }
 
-    public static DateTime? ConvertStringToDateTime(string stringDateTime)
+    public static DateTime? ConvertStringToDateTime(string? stringDateTime)
     {
         DateTime? result = null;
-        try
+        if (stringDateTime is not null)
         {
-            result = DateTime.ParseExact(stringDateTime, DateTimeFormat, CultureInfo.InvariantCulture);
-        }
-        catch (Exception e)
-        {
-            LogTo.Info("Can not convert String to DateTime");
-            LogTo.Error(e.ToString);
+            try
+            {
+                result = DateTime.ParseExact(stringDateTime, DateTimeFormat, CultureInfo.InvariantCulture);
+            }
+            catch (Exception e)
+            {
+                LogTo.Info("Can not convert String to DateTime");
+                LogTo.Error(e.ToString);
+            }
         }
 
         return result;
