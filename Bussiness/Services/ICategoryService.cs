@@ -12,4 +12,5 @@ public interface ICategoryService
     void CreateCategories(IEnumerable<Category> categories);
     void UpdateCategories(Category category, string id);
     int DeleteCategory(string id);
+    Dictionary<string, CategoryDto> GetCategories(HashSet<string> categoryIds);
 }

@@ -208,4 +208,60 @@ public class CategoryDao:ICategoryDao
 
         return 0;
     }
+
+    public Dictionary<string, Category> GetCategories(HashSet<string> ids)
+    {
+        var categories = new Dictionary<string, Category?>();
+
+        try
+        {
+            using var connection = DbUtils.GetMySqlDbConnection();
+            connection.Open();
+
+            var selectStatement = "Select Id, Name, Description, CreatedDate, UpdatedDate, Type, Status";
+            var fromStatement = "From Category";
+            var whereSatement = $"Where id In ( {MySqlUtils.CreateInStatementValues(ids)})";
+            var query = MySqlUtils.ConstructQueryByStatements(new List<string>
+            {
+                selectStatement,
+                fromStatement,
+                whereSatement
+            });
+
+            using var command = DbUtils.CreateMySqlCommand(query, connection);
+
+            var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                categories.Add(
+                    DbUtils.SafeGetString(reader, "Id"),
+                    new Category { 
+                        Id = DbUtils.SafeGetString(reader, "Id"),
+                        Name = DbUtils.SafeGetString(reader, "Name"),
+                        Description = DbUtils.SafeGetString(reader, "Description"),
+                        CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
+                        UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate"),
+                        Type = DbUtils.SafeGetInt16(reader, "Type"),
+                        Status = DbUtils.SafeGetInt16(reader, "Status")
+                        }
+                    );
+
+            }
+        }
+        catch (MySqlException e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        catch (Exception e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        finally
+        {
+            DbUtils.CloseMySqlDbConnection();
+        }
+
+        return categories;
     }
+}

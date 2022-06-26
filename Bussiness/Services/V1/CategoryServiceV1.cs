@@ -38,4 +38,9 @@ public class CategoryServiceV1:ICategoryService
     {
         return categoryDao.DeleteCategory(id);
     }
+
+    public Dictionary<string, CategoryDto> GetCategories(HashSet<string> ids)
+    {
+        return categoryDao.GetCategories(ids).ToDictionary(pair => pair.Key, pair => pair.Value.AsDto());
+    }
 }

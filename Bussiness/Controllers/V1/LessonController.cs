@@ -79,6 +79,8 @@ public class LessonController : Controller
                         item.Tutor = tutorDtos[item.SyllabusId];
                     }
                 }
+
+                return Ok(responseData);
             }
             
         }

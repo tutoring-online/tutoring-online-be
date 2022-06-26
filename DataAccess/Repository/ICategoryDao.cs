@@ -11,4 +11,5 @@ public interface ICategoryDao
     void CreateCategories(IEnumerable<Category> categories);
     void UpdateCategories(Category category, string id);
     int DeleteCategory(string id);
+    Dictionary<string, Category> GetCategories(HashSet<string> ids);
 }
