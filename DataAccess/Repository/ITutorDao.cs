@@ -11,6 +11,8 @@ public interface ITutorDao
 {
     IEnumerable<Tutor?> GetTutors();
 
+    Dictionary<string, Tutor?> GetTutors(HashSet<string> tutorIds);
+
     IEnumerable<Tutor?> GetTutorById(string id);
 
     IEnumerable<Tutor?> GetTutorByFirebaseUid(string uid);

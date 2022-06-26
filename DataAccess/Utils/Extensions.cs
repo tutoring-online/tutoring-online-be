@@ -104,6 +104,22 @@ public static class Extensions
             SlotNumber = lesson.SlotNumber
         };
     }
+    
+    public static SearchLessonReponse AsSearchDto(this Lesson lesson)
+    {
+        return new SearchLessonReponse()
+        {
+            Id = lesson.Id,
+            SyllabusId = StringUtils.NullToEmpty(lesson.SyllabusId),
+            StudentId = StringUtils.NullToEmpty(lesson.StudentId),
+            TutorId = StringUtils.NullToEmpty(lesson.TutorId),
+            SlotNumber = lesson.SlotNumber,
+            Status = lesson.Status,
+            Date = lesson.Date,
+            UpdatedDate = CommonUtils.ConvertDateTimeToString(lesson.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertDateTimeToString(lesson.CreatedDate)
+        };
+    }
     public static Lesson AsEntity(this LessonDto lessonDto)
     {
         return new Lesson()

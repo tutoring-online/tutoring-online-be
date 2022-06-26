@@ -1,4 +1,5 @@
 ﻿using DataAccess.Entities.Lesson;
+using DataAccess.Models;
 using DataAccess.Models.Lesson;
 
 namespace tutoring_online_be.Services;
@@ -13,5 +14,6 @@ public interface ILessonService
         
         void UpdateLessons(Lesson lesson, string id);
         int DeleteLesson(string id);
+        Page<SearchLessonReponse> GetLessons(PageRequestModel model, List<Tuple<string, string>> orderByParams, SearchLessonRequest request);
 }
 

@@ -57,4 +57,9 @@ public class TutorServiceV1 : ITutorService
     {
         return tutorDao.DeleteTutor(id);
     }
+
+    public Dictionary<string, TutorDto> GetTutors(HashSet<string> ids)
+    {
+        return tutorDao.GetTutors(ids).ToDictionary(pair => pair.Key, pair => pair.Value.AsDto());
+    }
 }

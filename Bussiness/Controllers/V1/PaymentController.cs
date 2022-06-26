@@ -39,7 +39,7 @@ public class PaymentController : Controller
     [HttpGet]
     public IActionResult GetPayments([FromQuery]PageRequestModel model, [FromQuery]SearchPaymentDto searchPaymentDto)
     {
-        if (AppUtils.HaveQueryString(model))
+        if (AppUtils.HaveQueryString(model) ||  AppUtils.HaveQueryString(searchPaymentDto))
         {
             var orderByParams = AppUtils.SortFieldParsing(model.Sort, typeof(Payment));
             
@@ -73,7 +73,7 @@ public class PaymentController : Controller
 
                 
             }
-            
+
             return Ok(responseData);
         }
 

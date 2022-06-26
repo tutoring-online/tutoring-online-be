@@ -14,4 +14,5 @@ public interface ITutorService
 
     void UpdateTutor(Tutor asEntity, string id);
     int DeleteTutor(string id);
+    Dictionary<string, TutorDto> GetTutors(HashSet<string> tutorIds);
 }
