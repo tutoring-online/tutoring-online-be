@@ -221,6 +221,19 @@ public static class Extensions
             CreatedDate = CommonUtils.ConvertDateTimeToString(payment.CreatedDate)
         };
     }
+    
+    public static SearchPaymentDto AsSearchDto(this Payment payment)
+    {
+        return new SearchPaymentDto()
+        {
+            Id = payment.Id,
+            SyllabusId = StringUtils.NullToEmpty(payment.SyllabusId),
+            StudentId = StringUtils.NullToEmpty(payment.StudentId),
+            Status = payment.Status,
+            UpdatedDate = CommonUtils.ConvertDateTimeToString(payment.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertDateTimeToString(payment.CreatedDate)
+        };
+    }
 
     public static Payment AsEntity(this PaymentDto paymentDto)
     {

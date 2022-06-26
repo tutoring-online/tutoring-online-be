@@ -17,7 +17,5 @@ public class PaymentDto
     
     public int? Status { get; init; }
     
-    public StudentDto? Student { get; set; }
-    
-    public SyllabusDto? Syllabus { get; set; }
+
 }

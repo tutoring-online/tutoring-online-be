@@ -43,11 +43,11 @@ public class PaymentController : Controller
         {
             var orderByParams = AppUtils.SortFieldParsing(model.Sort, typeof(Payment));
             
-            Page<PaymentDto> responseData = paymentService.GetPayments(model, orderByParams, searchPaymentDto);
+            Page<SearchPaymentDto> responseData = paymentService.GetPayments(model, orderByParams, searchPaymentDto);
 
             if (responseData.Data is not null || responseData.Data.Count > 0)
             {
-                List<PaymentDto> paymentDtos = responseData.Data;
+                List<SearchPaymentDto> paymentDtos = responseData.Data;
                 HashSet<string> studentIds = paymentDtos.Select(t => t.StudentId).NotEmpty().ToHashSet();
                 HashSet<string> syllabusIds = paymentDtos.Select(t => t.SyllabusId).NotEmpty().ToHashSet(); 
 

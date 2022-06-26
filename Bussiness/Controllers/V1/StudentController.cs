@@ -1,4 +1,5 @@
-﻿using DataAccess.Models.Student;
+﻿using DataAccess.Models;
+using DataAccess.Models.Student;
 using DataAccess.Utils;
 using Microsoft.AspNetCore.Mvc;
 using tutoring_online_be.Services;
@@ -16,7 +17,7 @@ public class StudentController
     }
 
     [HttpGet]
-    public IEnumerable<StudentDto> GetStudents()
+    public IEnumerable<StudentDto> GetStudents(/*[FromQuery]PageRequestModel model, [FromQuery]SearchStudentDto searchPaymentDto*/)
     {
         return studentService.GetStudents();
     }
