@@ -230,7 +230,9 @@ public class LessonDao:ILessonDao
                                  $"and (@FromUpdatedDate is null or UpdatedDate >= @FromUpdatedDate)" +
                                  $"and (@ToUpdatedDate is null or UpdatedDate <= @ToUpdatedDate)" +
                                  $"and (@FromDate is null or Date >= @FromDate)" +
-                                 $"and (@ToDate is null or Date <= @ToDate) ";
+                                 $"and (@ToDate is null or Date <= @ToDate) " +
+                                 $"and (@Status is null or Status = @Status)" +
+                                 $"and (@SlotNumber is null or SlotNumber in (@SlotNumber))";
             var orderByStatement = MySqlUtils.CreateOrderByStatement(orderByParams);
             var limitStatement = $"Limit {limit} offSet {offSet}";
 
@@ -261,6 +263,10 @@ public class LessonDao:ILessonDao
             command.Parameters.Add("@Status", MySqlDbType.VarChar).Value = request.Status;
             command.Parameters.Add("@FromDate", MySqlDbType.DateTime).Value = request.FromDate;
             command.Parameters.Add("@ToDate", MySqlDbType.DateTime).Value = request.ToDate;
+            command.Parameters.Add("@SlotNumber", MySqlDbType.VarString).Value =
+                request.SlotNumber is null || !request.SlotNumber.Any() 
+                    ? null 
+                    : string.Join(",", request.SlotNumber);
 
             command.Prepare();
 

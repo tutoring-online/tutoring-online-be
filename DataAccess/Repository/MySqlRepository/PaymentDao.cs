@@ -213,7 +213,8 @@ public class PaymentDao : IPaymentDao
                                  $"and (@FromCreatedDate is null or CreatedDate >= @FromCreatedDate)" +
                                  $"and (@ToCreatedDate is null or CreatedDate <= @ToCreatedDate)" +
                                  $"and (@FromUpdatedDate is null or UpdatedDate >= @FromUpdatedDate)" +
-                                 $"and (@ToUpdatedDate is null or UpdatedDate <= @ToUpdatedDate) ";
+                                 $"and (@ToUpdatedDate is null or UpdatedDate <= @ToUpdatedDate)" +
+                                 $"and (@Status is null or Status = @Status) ";
             var orderByStatement = MySqlUtils.CreateOrderByStatement(orderByParams);
             var limitStatement = $"Limit {limit} offSet {offSet}";
 

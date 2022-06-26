@@ -85,7 +85,7 @@ public class TutorDao : ITutorDao
 
             var selectStatement = "Select Id, Email, Name, MeetingUrl, Phone, Status, Gender, Birthday, Address, AvatarURL, Description, uid,  CreatedDate, UpdatedDate";
             var fromStatement = "From Tutor";
-            var whereSatement = $"Where id In {MySqlUtils.CreateInStatementValues(ids)}";
+            var whereSatement = $"Where id In ({MySqlUtils.CreateInStatementValues(ids)})";
             var query = MySqlUtils.ConstructQueryByStatements(new List<string>
             {
                 selectStatement,

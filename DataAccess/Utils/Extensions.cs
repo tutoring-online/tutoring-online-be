@@ -47,6 +47,21 @@ public static class Extensions
         };
     }
     
+    public static SearchSubjectResponse AsSearchDto(this Subject subject)
+    {
+        return new SearchSubjectResponse()
+        {
+            Id = subject.Id,
+            Name = StringUtils.NullToEmpty(subject.Name),
+            Description = StringUtils.NullToEmpty(subject.Description),
+            Status = subject.Status,
+            CategoryId = StringUtils.NullToEmpty(subject.CategoryId),
+            Code = StringUtils.NullToEmpty(subject.Code),
+            UpdatedDate = CommonUtils.ConvertDateTimeToString(subject.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertDateTimeToString(subject.CreatedDate)
+        };
+    }
+    
     public static Subject AsEntity(this SubjectDto subjectDto)
     {
         return new Subject()

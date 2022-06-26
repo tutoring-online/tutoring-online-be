@@ -184,7 +184,7 @@ public class SyllabusDao: ISyllabusDao
 
             var selectStatement = "Select Id, SubjectId, TotalLessons, Description, Price, Name, Status, CreatedDate, UpdatedDate";
             var fromStatement = "From Syllabus";
-            var whereStatement = $"Where id in {MySqlUtils.CreateInStatementValues(ids)}";
+            var whereStatement = $"Where id in ({MySqlUtils.CreateInStatementValues(ids)})";
             var query = MySqlUtils.ConstructQueryByStatements(new List<string> {
                     selectStatement,
                     fromStatement,

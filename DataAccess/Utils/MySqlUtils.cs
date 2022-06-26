@@ -172,7 +172,7 @@ public class MySqlUtils
 
     public static string CreateInStatementValues(HashSet<string?> values)
     {
-        return $"({string.Join(",", values)})";
+        return $"{string.Join(",", values)}";
     }
 
     public static string ConstructQueryByStatements(List<string> queries)
