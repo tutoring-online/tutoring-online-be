@@ -1,14 +1,16 @@
 ﻿using DataAccess.Entities.Category;
+using DataAccess.Models;
 using DataAccess.Models.Category;
 using DataAccess.Utils;
 using Microsoft.AspNetCore.Mvc;
 using tutoring_online_be.Services;
+using tutoring_online_be.Utils;
 
 namespace tutoring_online_be.Controllers.V1;
 
 [ApiController]
 [Route("/api/v1/categories")]
-public class CategoryController
+public class CategoryController:Controller
 {
     private readonly ICategoryService categoryService;
 
@@ -17,11 +19,11 @@ public class CategoryController
         this.categoryService = categoryService;
     }
 
-    [HttpGet]
+    /*[HttpGet]
     public IEnumerable<CategoryDto> GetCategories()
     {
         return categoryService.GetCategories();
-    }
+    }*/
 
     [HttpGet]
     [Route("{id}")]
@@ -57,5 +59,19 @@ public class CategoryController
     public void DeleteCategory(string id)
     {
         categoryService.DeleteCategory(id);
+    }
+    [HttpGet]
+    public IActionResult GetCategories([FromQuery] PageRequestModel model, [FromQuery] SearchCategoryDto searchCategoryDto)
+    {
+        if (AppUtils.HaveQueryString(model) || AppUtils.HaveQueryString(searchCategoryDto))
+        {
+            var orderByParams = AppUtils.SortFieldParsing(model.Sort, typeof(Category));
+
+            Page<SearchCategoryDto> responseData = categoryService.GetCategories(model, orderByParams, searchCategoryDto);
+            
+            return Ok(responseData);
+        }
+
+        return Ok(categoryService.GetCategories());
     }
 }

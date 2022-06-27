@@ -1,4 +1,6 @@
 ﻿using DataAccess.Entities.Category;
+using DataAccess.Models;
+using DataAccess.Models.Category;
 
 namespace DataAccess.Repository;
 
@@ -12,4 +14,6 @@ public interface ICategoryDao
     void UpdateCategories(Category category, string id);
     int DeleteCategory(string id);
     Dictionary<string, Category> GetCategories(HashSet<string> ids);
+    Page<Category?> GetCategories(int? limit, int? offSet, List<Tuple<string, string>> orderByParams,
+        SearchCategoryDto searchCategoryDto, bool isNotPaging);
 }

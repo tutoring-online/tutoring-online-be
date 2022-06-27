@@ -594,5 +594,19 @@ public static class Extensions
             CreatedDate = DateTime.Now
         };
     }
+    public static SearchCategoryDto AsSearchDto(this Category category)
+    {
+        return new SearchCategoryDto()
+        {
+            Id = category.Id,
+            Description = StringUtils.NullToEmpty(category.Description),
+            Name = StringUtils.NullToEmpty(category.Name),
+            Type = category.Type,
+            Status = category.Status,
+            UpdatedDate = CommonUtils.ConvertDateTimeToString(category.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertDateTimeToString(category.CreatedDate)
+            
+        };
+    }
 
 }
