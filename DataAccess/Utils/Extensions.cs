@@ -7,6 +7,7 @@ using DataAccess.Entities.Subject;
 using DataAccess.Entities.Syllabus;
 using DataAccess.Entities.Token;
 using DataAccess.Entities.Tutor;
+using DataAccess.Entities.TutorSubject;
 using DataAccess.Models.Admin;
 using DataAccess.Models.Category;
 using DataAccess.Models.Lesson;
@@ -16,6 +17,7 @@ using DataAccess.Models.Subject;
 using DataAccess.Models.Syllabus;
 using DataAccess.Models.Token;
 using DataAccess.Models.Tutor;
+using DataAccess.Models.TutorSubject;
 
 namespace DataAccess.Utils;
 
@@ -448,7 +450,45 @@ public static class Extensions
             UpdatedDate = DateTime.Now,
         };
     }
+    //Tutor-Subject
+    public static TutorSubjectDto AsDto(this TutorSubject tutorSubject)
+    {
+        return new TutorSubjectDto()
+        {
+            Id = tutorSubject.Id,
+            TutorId = tutorSubject.TutorId,
+            SubjectId = tutorSubject.SubjectId,
+            UpdatedDate = CommonUtils.ConvertDateTimeToString(tutorSubject.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertDateTimeToString(tutorSubject.CreatedDate),
+            Status = tutorSubject.Status
+            
+        };
+    }
 
+    public static TutorSubject AsEntity(this TutorSubjectDto tutorSubjectDto)
+    {
+        return new TutorSubject()
+        {
+            Id = tutorSubjectDto.Id,
+            TutorId = tutorSubjectDto.TutorId,
+            SubjectId = tutorSubjectDto.SubjectId,
+            UpdatedDate = CommonUtils.ConvertStringToDateTime(tutorSubjectDto.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertStringToDateTime(tutorSubjectDto.CreatedDate),
+            Status = tutorSubjectDto.Status
+        };
+    }
+
+    public static TutorSubject AsEntity(this UpdateTutorSubjectDto tutorSubjectDto)
+    {
+        return new TutorSubject()
+        {
+            Id = tutorSubjectDto.Id,
+            TutorId = tutorSubjectDto.TutorId,
+            SubjectId = tutorSubjectDto.SubjectId,
+            UpdatedDate = DateTime.Now,
+            Status = tutorSubjectDto.Status
+        };
+    }
     //Admin
     public static AdminDto AsDto(this Admin admin)
     {
@@ -552,6 +592,20 @@ public static class Extensions
             Type = categoryDto.Type,
             Status = categoryDto.Status,
             CreatedDate = DateTime.Now
+        };
+    }
+    public static SearchCategoryDto AsSearchDto(this Category category)
+    {
+        return new SearchCategoryDto()
+        {
+            Id = category.Id,
+            Description = StringUtils.NullToEmpty(category.Description),
+            Name = StringUtils.NullToEmpty(category.Name),
+            Type = category.Type,
+            Status = category.Status,
+            UpdatedDate = CommonUtils.ConvertDateTimeToString(category.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertDateTimeToString(category.CreatedDate)
+            
         };
     }
 
