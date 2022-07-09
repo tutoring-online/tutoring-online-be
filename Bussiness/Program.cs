@@ -129,7 +129,7 @@ if (filename != null)
 }
 else
 {
-    json = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_STRING");
+    json = Environment.GetEnvironmentVariable("GOOGLE-APPLICATION-CREDENTIALS-STRING");
     if (json == null)
     {
         throw new Exception(
