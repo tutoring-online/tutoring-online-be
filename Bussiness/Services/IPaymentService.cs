@@ -17,5 +17,6 @@ public interface IPaymentService
     
     public delegate IPaymentService ServiceResolver(string key);
 
-    Page<PaymentDto> GetPayments(PageRequestModel model, List<Tuple<string, string>> orderByParams);
+    Page<SearchPaymentDto> GetPayments(PageRequestModel model, List<Tuple<string, string>> orderByParams,
+        SearchPaymentDto searchPaymentDto);
 }

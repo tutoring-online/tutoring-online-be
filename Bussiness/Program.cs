@@ -87,6 +87,10 @@ builder.Services.AddSingleton<IAdminDao, AdminDao>();
 builder.Services.AddSingleton<ITutorService, TutorServiceV1>();
 builder.Services.AddSingleton<ITutorDao, TutorDao>();
 
+//Tutor-Subject
+builder.Services.AddSingleton<ITutorSubjectService, TutorSubjectServiceV1>();
+builder.Services.AddSingleton<ITutorSubjectDao, TutorSubjectDao>();
+
 //Student
 builder.Services.AddSingleton<IStudentService, StudentServiceV1>();
 builder.Services.AddSingleton<IStudentDao, StudentDao>();

@@ -11,6 +11,8 @@ public interface ITutorDao
 {
     IEnumerable<Tutor?> GetTutors();
 
+    Dictionary<string, Tutor?> GetTutors(HashSet<string> tutorIds);
+
     IEnumerable<Tutor?> GetTutorById(string id);
 
     IEnumerable<Tutor?> GetTutorByFirebaseUid(string uid);
@@ -19,4 +21,5 @@ public interface ITutorDao
 
     void UpdateTutor(Tutor asEntity, string id);
     int DeleteTutor(string id);
+    Tutor? GetTutorByEmail(string email);
 }

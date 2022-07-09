@@ -41,14 +41,15 @@ public class PaymentServiceV1 : IPaymentService
         return paymentDao.DeletePayment(id);
     }
 
-    public Page<PaymentDto> GetPayments(PageRequestModel model, List<Tuple<string, string>> orderByParams)
+    public Page<SearchPaymentDto> GetPayments(PageRequestModel model, List<Tuple<string, string>> orderByParams,
+        SearchPaymentDto searchPaymentDto)
     {
         Page<Payment> result = new Page<Payment>();
-        Page<PaymentDto> resultDto = new Page<PaymentDto>();
+        Page<SearchPaymentDto> resultDto = new Page<SearchPaymentDto>();
 
-        result = paymentDao.GetPayments(model.GetLimit(), model.GetOffSet(), orderByParams, model.IsNotPaging());
+        result = paymentDao.GetPayments(model.GetLimit(), model.GetOffSet(), orderByParams, searchPaymentDto,model.IsNotPaging());
 
-        resultDto.Data = result.Data.Select(p => p.AsDto()).ToList();
+        resultDto.Data = result.Data.Select(p => p.AsSearchDto()).ToList();
         resultDto.Pagination = result.Pagination;
         resultDto.Pagination.Page = model.GetPage();
         resultDto.Pagination.Size = model.GetSize();
@@ -57,10 +58,11 @@ public class PaymentServiceV1 : IPaymentService
             resultDto.Pagination.TotalPages = 1;
             resultDto.Pagination.Size = resultDto.Pagination.TotalItems;
         }
+
+        if (!result.Data.Any())
+            resultDto.Pagination.TotalPages = 0;
         else
-        {
             resultDto.Pagination.UpdateTotalPages();
-        }
         
         return resultDto;
     }

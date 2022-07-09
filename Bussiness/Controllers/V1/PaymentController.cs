@@ -37,17 +37,17 @@ public class PaymentController : Controller
     }
     
     [HttpGet]
-    public IActionResult GetPayments([FromQuery]PageRequestModel model)
+    public IActionResult GetPayments([FromQuery]PageRequestModel model, [FromQuery]SearchPaymentDto searchPaymentDto)
     {
-        if (AppUtils.HaveQueryString(model))
+        if (AppUtils.HaveQueryString(model) ||  AppUtils.HaveQueryString(searchPaymentDto))
         {
             var orderByParams = AppUtils.SortFieldParsing(model.Sort, typeof(Payment));
             
-            Page<PaymentDto> responseData = paymentService.GetPayments(model, orderByParams);
+            Page<SearchPaymentDto> responseData = paymentService.GetPayments(model, orderByParams, searchPaymentDto);
 
             if (responseData.Data is not null || responseData.Data.Count > 0)
             {
-                List<PaymentDto> paymentDtos = responseData.Data;
+                List<SearchPaymentDto> paymentDtos = responseData.Data;
                 HashSet<string> studentIds = paymentDtos.Select(t => t.StudentId).NotEmpty().ToHashSet();
                 HashSet<string> syllabusIds = paymentDtos.Select(t => t.SyllabusId).NotEmpty().ToHashSet(); 
 
@@ -73,7 +73,7 @@ public class PaymentController : Controller
 
                 
             }
-            
+
             return Ok(responseData);
         }
 

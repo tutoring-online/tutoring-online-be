@@ -1,4 +1,5 @@
 ﻿using DataAccess.Entities.Lesson;
+using DataAccess.Models;
 using DataAccess.Models.Lesson;
 using DataAccess.Repository;
 using DataAccess.Utils;
@@ -37,6 +38,31 @@ public class LessonServiceV1: ILessonService
     public int DeleteLesson(string id)
     {
         return lessonDao.DeleteLesson(id);
+    }
+
+    public Page<SearchLessonReponse> GetLessons(PageRequestModel model, List<Tuple<string, string>> orderByParams, SearchLessonRequest request)
+    {
+        Page<Lesson> result = new Page<Lesson>();
+        Page<SearchLessonReponse> resultDto = new Page<SearchLessonReponse>();
+
+        result = lessonDao.GetLessons(model.GetLimit(), model.GetOffSet(), orderByParams, request, model.IsNotPaging());
+
+        resultDto.Data = result.Data.Select(p => p.AsSearchDto()).ToList();
+        resultDto.Pagination = result.Pagination;
+        resultDto.Pagination.Page = model.GetPage();
+        resultDto.Pagination.Size = model.GetSize();
+        if (model.IsNotPaging())
+        {
+            resultDto.Pagination.TotalPages = 1;
+            resultDto.Pagination.Size = resultDto.Pagination.TotalItems;
+        }
+
+        if (!result.Data.Any())
+            resultDto.Pagination.TotalPages = 0;
+        else
+            resultDto.Pagination.UpdateTotalPages();
+        
+        return resultDto;
     }
 }
 

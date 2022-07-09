@@ -1,5 +1,6 @@
 ﻿
 using DataAccess.Entities.Subject;
+using DataAccess.Models;
 using DataAccess.Models.Subject;
 using DataAccess.Repository;
 using DataAccess.Utils;
@@ -38,5 +39,30 @@ public class SubjectServiceV1 : ISubjectService
     public int DeleteSubject(string id)
     {
         return subjectDao.DeleteSubject(id);
+    }
+
+    public Page<SearchSubjectResponse> GetSubjects(PageRequestModel model, List<Tuple<string, string>> orderByParams, SearchSubjectRequest request)
+    {
+        Page<Subject> result = new Page<Subject>();
+        Page<SearchSubjectResponse> resultDto = new Page<SearchSubjectResponse>();
+
+        result = subjectDao.GetSubjects(model.GetLimit(), model.GetOffSet(), orderByParams, request, model.IsNotPaging());
+
+        resultDto.Data = result.Data.Select(p => p.AsSearchDto()).ToList();
+        resultDto.Pagination = result.Pagination;
+        resultDto.Pagination.Page = model.GetPage();
+        resultDto.Pagination.Size = model.GetSize();
+        if (model.IsNotPaging())
+        {
+            resultDto.Pagination.TotalPages = 1;
+            resultDto.Pagination.Size = resultDto.Pagination.TotalItems;
+        }
+
+        if (!result.Data.Any())
+            resultDto.Pagination.TotalPages = 0;
+        else
+            resultDto.Pagination.UpdateTotalPages();
+        
+        return resultDto;
     }
 }

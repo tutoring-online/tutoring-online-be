@@ -36,7 +36,7 @@ public class TutorServiceV1 : ITutorService
 
         var tutor = new Tutor()
         {
-            uid = userRecord.Uid,
+            Uid = userRecord.Uid,
             Email = userRecord.Email,
             Name = userRecord.DisplayName,
             Phone = userRecord.PhoneNumber,
@@ -56,5 +56,16 @@ public class TutorServiceV1 : ITutorService
     public int DeleteTutor(string id)
     {
         return tutorDao.DeleteTutor(id);
+    }
+
+    public Dictionary<string, TutorDto> GetTutors(HashSet<string> ids)
+    {
+        return tutorDao.GetTutors(ids).ToDictionary(pair => pair.Key, pair => pair.Value.AsDto());
+    }
+
+    public TutorDto? GetTutorByEmail(string email)
+    {
+        Tutor? tutor = tutorDao.GetTutorByEmail(email);
+        return tutor is null ? null : tutor.AsDto();
     }
 }

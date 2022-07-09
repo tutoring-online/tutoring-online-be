@@ -1,29 +1,62 @@
 ﻿using System.Collections;
 using Anotar.NLog;
 using DataAccess.Entities.Subject;
+using DataAccess.Models;
+using DataAccess.Models.Category;
 using DataAccess.Models.Subject;
 using DataAccess.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using tutoring_online_be.Services;
+using tutoring_online_be.Utils;
 
 namespace tutoring_online_be.Controllers.V1;
 
 [ApiController]
 [Route("/api/v1/subjects")]
-public class SubjectController
+public class SubjectController : Controller
 {
     private readonly ISubjectService subjectService;
+    private readonly ICategoryService categoryService;
     
-    public SubjectController(ISubjectService subjectService)
+    public SubjectController(
+        ISubjectService subjectService,
+        ICategoryService categoryService
+        )
     {
         this.subjectService = subjectService;
+        this.categoryService = categoryService;
     }
 
     [HttpGet]
-    public IEnumerable<SubjectDto> GetSubjects()
+    public IActionResult GetSubjects([FromQuery]PageRequestModel model, [FromQuery]SearchSubjectRequest request)
     {
-        return subjectService.GetSubjects();
+        if (AppUtils.HaveQueryString(model) || AppUtils.HaveQueryString(request))
+        {
+            var orderByParams = AppUtils.SortFieldParsing(model.Sort, typeof(Subject));
+            Page<SearchSubjectResponse> responseData = subjectService.GetSubjects(model, orderByParams, request);
+
+            if (responseData.Data is not null || responseData.Data.Count > 0)
+            {
+                List<SearchSubjectResponse> data = responseData.Data;
+                HashSet<string> categoryIds = data.Select(t => t.CategoryId).NotEmpty().ToHashSet();
+
+                
+                if (categoryIds.Count > 0)
+                {
+                    Dictionary<string, CategoryDto> categoryDtos = categoryService.GetCategories(categoryIds);
+                    
+                    foreach (var item in data.Where(item => categoryDtos.ContainsKey(item.CategoryId)))
+                    {
+                        item.Category = categoryDtos[item.CategoryId];
+                    }
+                }
+
+                return Ok(responseData);
+            }
+        }
+        
+        return Ok(subjectService.GetSubjects());
     }
 
     [HttpGet]

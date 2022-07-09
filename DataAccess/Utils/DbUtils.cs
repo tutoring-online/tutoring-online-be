@@ -9,10 +9,9 @@ namespace DataAccess.Utils;
 
 public static class DbUtils
 {
-    private const string ConnectionString = "server=tutoring-online.mysql.database.azure.com;user=dbadmin;database=OTA;password=tutor@1369";
-    private const string MysqlServer = "tutoring-online.mysql.database.azure.com";
-    private const string MysqlUser = "dbadmin";
-    private const string MysqlPassword = "tutor@1369";
+    private const string MysqlServer = "35.198.220.120";
+    private const string MysqlUser = "admin";
+    private const string MysqlPassword = "123456";
     private const string Database = "OTA";
 
     public static MySqlConnection GetMySqlDbConnection()

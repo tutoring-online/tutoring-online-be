@@ -19,5 +19,5 @@ public class Admin
     public string? AvatarURL { get; init; }
     public DateTime? CreatedDate { get; init; }
     public DateTime? UpdatedDate { get; init; }
-    public string? uid { get; set; }
+    public string? Uid { get; set; }
 }

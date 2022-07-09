@@ -3,15 +3,19 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Anotar.NLog;
+using DataAccess.Entities.Student;
 using DataAccess.Entities.Token;
 using DataAccess.Models.Admin;
 using DataAccess.Models.Authentication;
+using DataAccess.Models.Student;
+using DataAccess.Models.Tutor;
 using DataAccess.Utils;
 using FirebaseAdmin.Auth;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using NLog.Fluent;
 using tutoring_online_be.Controllers.Utils;
 using tutoring_online_be.Security.Attribute;
 using tutoring_online_be.Services;
@@ -44,46 +48,251 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost]
+    [Route("login")]
     [AllowAnonymous]
-    public IActionResult GetAuthentication(AuthenticationRequestModel model)
+    public IActionResult Login(AuthenticationRequestModel model)
     {
-        //TODO Handle expired token case 
         try
         {
             LogTo.Info($"\nReceived request with token : {model.Token}");
-
             LogTo.Info("\nCall Firebase to verify token");
-            var decodedToken = FirebaseAuth.DefaultInstance
-                .VerifyIdTokenAsync(model.Token).Result;
+
+            var decodedToken = FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(model.Token).Result;
             var uid = decodedToken.Uid;
+
             LogTo.Info($"\nReceived response with token id: {uid}");
 
-            var role = "student"; //default role
-            var isSignUp = false;
             var currentUtcDate = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+
             if (decodedToken.ExpirationTimeSeconds < currentUtcDate)
             {
                 LogTo.Info($"\nAccess Token: {model.Token} is expired");
-                return Ok(new AuthenticationResponseModel()
+                return Unauthorized(new AuthenticationResponseModel()
                 {
                     ResultCode = (int?)ResultCode.AccessTokenExpired,
                     ResultMessage = ResultCode.AccessTokenExpired.ToString()
                 });
             }
 
-            //fetch user from db by uid
-            var admins = adminService.GetAdminByFirebaseUid(uid);
-            var tutors = tutorService.GetTutorByFirebaseUid(uid);
-            var students = studentService.GetStudentByFirebaseUid(uid);
+            var userRecord = FirebaseAuth.DefaultInstance.GetUserAsync(uid).Result;
+            var email = userRecord.Email;
+            var name = userRecord.DisplayName;
+            var phoneNumber = userRecord.PhoneNumber;
+            var avatarUrl = userRecord.PhotoUrl;
+            var claims = userRecord.CustomClaims;
+            LogTo.Info($"\nUser email : {email}" +
+                       $"\nnName : {name}" +
+                       $"\nPhoneNumber : {phoneNumber}" +
+                       $"\nAvatarUrl : {avatarUrl}" +
+                       $"\nUuid: {uid}");
 
-            if (
-                (admins.Any() && tutors.Any() && students.Any())
-                || (admins.Any() && tutors.Any())
-                || (admins.Any() && students.Any())
-                || (tutors.Any() && students.Any())
-            )
+            if (!claims.Any() || !claims.ContainsKey(Constants.role.ToString()))
             {
-                LogTo.Error($"\nTwo or more table contain user account : {uid} ");
+                //Case role not found
+                LogTo.Info("User role not found - do find user in Admin or Tutor and update user role");
+                AdminDto? adminDto = adminService.GetAdminByEmail(email);
+                TutorDto? tutorDto = tutorService.GetTutorByEmail(email);
+
+                if ((adminDto is null && tutorDto is null)
+                    || (adminDto is not null && tutorDto is not null))
+                {
+                    return Unauthorized(
+                        new AuthenticationResponseModel()
+                        {
+                            ResultCode = (int)ResultCode.InvalidUser,
+                            ResultMessage = ResultCode.InvalidUser.ToString()
+                        }
+                    );
+                }
+
+                if (adminDto is not null)
+                {
+                    var newClaims = claims.ToDictionary(pair => pair.Key, pair => pair.Value);
+                    newClaims.Add("role", Role.Admin.ToString().ToLower());
+                    FirebaseAuth.DefaultInstance.SetCustomUserClaimsAsync(uid, newClaims);
+                    AdminDto adminTmp = new AdminDto
+                    {
+                        Name = name,
+                        Uid = uid,
+                        AvatarURL = avatarUrl,
+                        Phone = phoneNumber
+                    };
+                    adminService.UpdateAdmin(adminTmp.AsEntity(), adminDto.Id);
+                    adminDto = adminService.GetAdminByEmail(email);
+
+                    return Ok(
+                        new AuthenticationResponseModel()
+                        {
+                            ResultCode = (int)ResultCode.Success,
+                            ResultMessage = ResultCode.Success.ToString(),
+                            Data = adminDto,
+                            Role = Role.Admin.ToString().ToLower()
+                        }
+                    );
+                }
+
+                if (tutorDto is not null)
+                {
+                    var newClaims = claims.ToDictionary(pair => pair.Key, pair => pair.Value);
+                    newClaims.Add("role", Role.Tutor.ToString().ToLower());
+                    FirebaseAuth.DefaultInstance.SetCustomUserClaimsAsync(uid, newClaims);
+                    TutorDto tutorTmp = new TutorDto
+                    {
+                        Name = name,
+                        Uid = uid,
+                        AvatarURL = avatarUrl,
+                        Phone = phoneNumber
+                    };
+                    tutorService.UpdateTutor(tutorTmp.AsEntity(), tutorDto.Id);
+                    tutorDto = tutorService.GetTutorByEmail(email);
+                    
+                    return Ok(
+                        new AuthenticationResponseModel()
+                        {
+                            ResultCode = (int)ResultCode.Success,
+                            ResultMessage = ResultCode.Success.ToString(),
+                            Data = tutorDto,
+                            Role = Role.Tutor.ToString().ToLower()
+                        }
+                    );
+                }
+
+            }
+            else if (claims.Any() && claims.ContainsKey(Constants.role.ToString()))
+            {
+                //case have role -> return information
+                var role = claims.GetValueOrDefault(Constants.role.ToString(), "").ToString();
+                object? userData = null;
+                switch (role)
+                {
+                    case "student":
+                    {
+                        var students = studentService.GetStudentByFirebaseUid(uid);
+                        if (students.Any())
+                        {
+                            userData = students.ElementAt(0);
+                        }
+                        break;
+                    }
+                    case "tutor":
+                    {
+                        var tutors = tutorService.GetTutorByFirebaseUid(uid);
+                        if (tutors.Any())
+                        {
+                            userData = tutors.ElementAt(0);
+                        }
+                        break;
+                    }
+                    case "admin":
+                    {
+                        var admins = adminService.GetAdminByFirebaseUid(uid);
+                        if (admins.Any())
+                        {
+                            userData = admins.ElementAt(0);
+                        }
+                        break;
+                    }
+                }
+
+                if (userData is null)
+                {
+                    return Unauthorized(
+                        new AuthenticationResponseModel()
+                        {
+                            ResultCode = (int)ResultCode.UserRoleNotFound,
+                            ResultMessage = ResultCode.UserRoleNotFound.ToString()
+                        }
+                    );
+                }
+
+                return Ok(
+                    new AuthenticationResponseModel()
+                    {
+                        ResultCode = (int)ResultCode.Success,
+                        ResultMessage = ResultCode.Success.ToString(),
+                        Data = userData,
+                        Role = role
+                    }
+                );
+            }
+        }
+        catch (AggregateException e)
+        {
+            LogTo.Info(e.ToString);
+            return Unauthorized(new AuthenticationResponseModel
+            {
+                ResultCode = (int?)ResultCode.InvalidToken,
+                ResultMessage = ResultCode.InvalidToken.ToString(),
+            });
+        }
+        
+        return Unauthorized(
+            new AuthenticationResponseModel()
+            {
+                ResultCode = (int)ResultCode.InvalidUser,
+                ResultMessage = ResultCode.InvalidUser.ToString()
+            }
+        );    
+    }
+
+    [HttpPost]
+    [Route("signup")]
+    [AllowAnonymous]
+    public IActionResult SignUp(AuthenticationRequestModel model)
+    {
+        try
+        {
+            LogTo.Info($"\nReceived request with token : {model.Token}");
+
+            LogTo.Info("\nCall Firebase to verify token");
+            var decodedToken = FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(model.Token).Result;
+            var uid = decodedToken.Uid;
+            LogTo.Info($"\nReceived response with token id: {uid}");
+
+            var userRecord = FirebaseAuth.DefaultInstance.GetUserAsync(uid).Result;
+            var email = userRecord.Email;
+            var name = userRecord.DisplayName;
+            var phoneNumber = userRecord.PhoneNumber;
+            var avatarUrl = userRecord.PhotoUrl;
+            var claims = userRecord.CustomClaims;
+            LogTo.Info($"\nUser email : {email}" +
+                       $"\nnName : {name}" +
+                       $"\nPhoneNumber : {phoneNumber}" +
+                       $"\nAvatarUrl : {avatarUrl}" +
+                       $"\nUuid: {uid}");
+
+            var students = studentService.GetStudentByFirebaseUid(uid);
+            var tutors = tutorService.GetTutorByFirebaseUid(uid);
+            var admins = adminService.GetAdminByFirebaseUid(uid);
+
+            if (students.Any() || admins.Any() || tutors.Any())
+            {
+                return BadRequest(
+                    new AuthenticationResponseModel
+                    {
+                        ResultCode = (int) ResultCode.UserAlreadySignup,
+                        ResultMessage = ResultCode.UserAlreadySignup.ToString()
+                    }
+                );
+            }
+
+            var role = "student"; //default role
+
+            int result = studentService.CreateStudentByFirebaseToken(decodedToken);
+            StudentDto studentDto;
+            if (result > 0)
+            {
+                var claimsTmp = new Dictionary<string, object>()
+                {
+                    { Constants.role.ToString(), Role.Student.ToString().ToLower() },
+                };
+                FirebaseAuth.DefaultInstance.SetCustomUserClaimsAsync(uid, claimsTmp);
+                
+                studentDto = studentService.GetStudentByFirebaseUid(uid).ElementAt(0);
+            }
+            else
+            {
+                LogTo.Error("Student signup error");
                 return Ok(new AuthenticationResponseModel
                 {
                     ResultCode = (int?)ResultCode.SystemError,
@@ -91,150 +300,227 @@ public class AuthenticationController : ControllerBase
                 });
             }
 
-            object user = null;
-            string type = AuthenticationType.login.ToString();
-            var result = 0;
-            if (!admins.Any() && !tutors.Any() && !students.Any())
-            {
-                LogTo.Info($"\nAccount not found : {uid} ");
-
-
-                if (model.role is not null)
+            return Ok(
+                new AuthenticationResponseModel()
                 {
-                    role = model.role.ToLower();
-                }
-                LogTo.Info($"\nCreate new account with role {role}");
+                    ResultCode = (int)ResultCode.Success,
+                    ResultMessage = ResultCode.Success.ToString(),
+                    Data = studentDto,
+                    Role = role
+                });
 
-                switch (role)
-                {
-                    case "student":
-                    {
-                        result = studentService.CreateStudentByFirebaseToken(decodedToken);
-                        if (result > 0)
-                        {
-                            var claims = new Dictionary<string, object>()
-                            {
-                                { Constants.role.ToString(), Role.Student.ToString().ToLower() },
-                            };
-                            FirebaseAuth.DefaultInstance.SetCustomUserClaimsAsync(uid, claims);
-                            
-                            user = studentService.GetStudentByFirebaseUid(uid);
-                            type = AuthenticationType.signup.ToString();
-                        }
-                        else
-                        {
-                            LogTo.Error("Student signup error");
-                            return Ok(new AuthenticationResponseModel
-                            {
-                                ResultCode = (int?)ResultCode.SystemError,
-                                ResultMessage = ResultCode.SystemError.ToString(),
-                            });
-                        }
-                        break;
-                    }
-                    case "tutor":
-                    {
-                        result = tutorService.CreateTutorByFirebaseToken(decodedToken);
-                        if (result > 0)
-                        {
-                            var claims = new Dictionary<string, object>()
-                            {
-                                { Constants.role.ToString(), Role.Tutor.ToString().ToLower() },
-                            };
-                            FirebaseAuth.DefaultInstance.SetCustomUserClaimsAsync(uid, claims);
-                            
-                            user = tutorService.GetTutorByFirebaseUid(uid);
-                            type = AuthenticationType.signup.ToString();
-                        }
-                        else
-                        {
-                            LogTo.Error("Tutor signup error");
-                            return Ok(new AuthenticationResponseModel
-                            {
-                                ResultCode = (int?)ResultCode.SystemError,
-                                ResultMessage = ResultCode.SystemError.ToString(),
-                            });
-                        }
-
-                        break;
-                    }
-                    case "admin":
-                    {
-
-                        result = adminService.CreateAdminByFirebaseToken(decodedToken);
-                        if (result > 0)
-                        {
-                            var claims = new Dictionary<string, object>()
-                            {
-                                { Constants.role.ToString(), Role.Admin.ToString().ToLower() },
-                            };
-                            FirebaseAuth.DefaultInstance.SetCustomUserClaimsAsync(uid, claims);
-                            
-                            user = adminService.GetAdminByFirebaseUid(uid);
-                            type = AuthenticationType.signup.ToString();
-                        }
-                        else
-                        {
-                            LogTo.Error("Admin signup error");
-                            return Ok(new AuthenticationResponseModel
-                            {
-                                ResultCode = (int?)ResultCode.SystemError,
-                                ResultMessage = ResultCode.SystemError.ToString(),
-                            });
-                        }
-                        break;
-                    }
-                    default:
-                    {
-                        LogTo.Error($"\nUser Role not found : {uid} ");
-                        return Ok(new AuthenticationResponseModel
-                        {
-                            ResultCode = (int?)ResultCode.UserRoleNotFound,
-                            ResultMessage = ResultCode.UserRoleNotFound.ToString(),
-                        });
-                    }
-                }
-            }
-            else
-            {
-                object value;
-                decodedToken.Claims.TryGetValue("role", out value);
-
-                role = (string) value;
-                switch (role)
-                {
-                    case "admin":
-                        user = adminService.GetAdminByFirebaseUid(uid);
-                        break;
-                    case "tutor":
-                        user = tutorService.GetTutorByFirebaseUid(uid);
-                        break;
-                    case "student":
-                        user = studentService.GetStudentByFirebaseUid(uid);
-                        break;
-                }
-            }
-            
-
-            return Ok(new AuthenticationResponseModel
-            {
-                ResultCode = (int?)ResultCode.Success,
-                ResultMessage = ResultCode.Success.ToString(),
-                Data = user,
-                Type = type,
-                Role = role
-            });
         }
         catch (AggregateException e)
         {
             LogTo.Info(e.ToString);
-            return Ok(new AuthenticationResponseModel
+            return Unauthorized(new AuthenticationResponseModel
             {
                 ResultCode = (int?)ResultCode.InvalidToken,
                 ResultMessage = ResultCode.InvalidToken.ToString(),
             });
         }
+        
+        return Unauthorized(
+            new AuthenticationResponseModel()
+            {
+                ResultCode = (int)ResultCode.InvalidUser,
+                ResultMessage = ResultCode.InvalidUser.ToString()
+            }
+        );    
     }
+    
+
+    // [HttpPost]
+    // [AllowAnonymous]
+    // public IActionResult GetAuthentication(AuthenticationRequestModel model)
+    // {
+    // 
+    //     try
+    //     {
+    //         LogTo.Info($"\nReceived request with token : {model.Token}");
+    //
+    //         LogTo.Info("\nCall Firebase to verify token");
+    //         var decodedToken = FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(model.Token).Result;
+    //         var uid = decodedToken.Uid;
+    //         LogTo.Info($"\nReceived response with token id: {uid}");
+    //         
+    //         var role = "student"; //default role
+    //         var isSignUp = false;
+    //         var currentUtcDate = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+    //         if (decodedToken.ExpirationTimeSeconds < currentUtcDate)
+    //         {
+    //             LogTo.Info($"\nAccess Token: {model.Token} is expired");
+    //             return Ok(new AuthenticationResponseModel()
+    //             {
+    //                 ResultCode = (int?)ResultCode.AccessTokenExpired,
+    //                 ResultMessage = ResultCode.AccessTokenExpired.ToString()
+    //             });
+    //         }
+    //
+    //         //fetch user from db by uid
+    //         var admins = adminService.GetAdminByFirebaseUid(uid);
+    //         var tutors = tutorService.GetTutorByFirebaseUid(uid);
+    //         var students = studentService.GetStudentByFirebaseUid(uid);
+    //
+    //         if (
+    //             (admins.Any() && tutors.Any() && students.Any())
+    //             || (admins.Any() && tutors.Any())
+    //             || (admins.Any() && students.Any())
+    //             || (tutors.Any() && students.Any())
+    //         )
+    //         {
+    //             LogTo.Error($"\nTwo or more table contain user account : {uid} ");
+    //             return Ok(new AuthenticationResponseModel
+    //             {
+    //                 ResultCode = (int?)ResultCode.SystemError,
+    //                 ResultMessage = ResultCode.SystemError.ToString(),
+    //             });
+    //         }
+    //
+    //         object user = null;
+    //         string type = AuthenticationType.login.ToString();
+    //         var result = 0;
+    //         if (!admins.Any() && !tutors.Any() && !students.Any())
+    //         {
+    //             LogTo.Info($"\nAccount not found : {uid} ");
+    //
+    //
+    //             if (model.role is not null)
+    //             {
+    //                 role = model.role.ToLower();
+    //             }
+    //             LogTo.Info($"\nCreate new account with role {role}");
+    //
+    //             switch (role)
+    //             {
+    //                 case "student":
+    //                 {
+    //                     result = studentService.CreateStudentByFirebaseToken(decodedToken);
+    //                     if (result > 0)
+    //                     {
+    //                         var claims = new Dictionary<string, object>()
+    //                         {
+    //                             { Constants.role.ToString(), Role.Student.ToString().ToLower() },
+    //                         };
+    //                         FirebaseAuth.DefaultInstance.SetCustomUserClaimsAsync(uid, claims);
+    //                         
+    //                         user = studentService.GetStudentByFirebaseUid(uid);
+    //                         type = AuthenticationType.signup.ToString();
+    //                     }
+    //                     else
+    //                     {
+    //                         LogTo.Error("Student signup error");
+    //                         return Ok(new AuthenticationResponseModel
+    //                         {
+    //                             ResultCode = (int?)ResultCode.SystemError,
+    //                             ResultMessage = ResultCode.SystemError.ToString(),
+    //                         });
+    //                     }
+    //                     break;
+    //                 }
+    //                 case "tutor":
+    //                 {
+    //                     result = tutorService.CreateTutorByFirebaseToken(decodedToken);
+    //                     if (result > 0)
+    //                     {
+    //                         var claims = new Dictionary<string, object>()
+    //                         {
+    //                             { Constants.role.ToString(), Role.Tutor.ToString().ToLower() },
+    //                         };
+    //                         FirebaseAuth.DefaultInstance.SetCustomUserClaimsAsync(uid, claims);
+    //                         
+    //                         user = tutorService.GetTutorByFirebaseUid(uid);
+    //                         type = AuthenticationType.signup.ToString();
+    //                     }
+    //                     else
+    //                     {
+    //                         LogTo.Error("Tutor signup error");
+    //                         return Ok(new AuthenticationResponseModel
+    //                         {
+    //                             ResultCode = (int?)ResultCode.SystemError,
+    //                             ResultMessage = ResultCode.SystemError.ToString(),
+    //                         });
+    //                     }
+    //
+    //                     break;
+    //                 }
+    //                 case "admin":
+    //                 {
+    //
+    //                     result = adminService.CreateAdminByFirebaseToken(decodedToken);
+    //                     if (result > 0)
+    //                     {
+    //                         var claims = new Dictionary<string, object>()
+    //                         {
+    //                             { Constants.role.ToString(), Role.Admin.ToString().ToLower() },
+    //                         };
+    //                         FirebaseAuth.DefaultInstance.SetCustomUserClaimsAsync(uid, claims);
+    //                         
+    //                         user = adminService.GetAdminByFirebaseUid(uid);
+    //                         type = AuthenticationType.signup.ToString();
+    //                     }
+    //                     else
+    //                     {
+    //                         LogTo.Error("Admin signup error");
+    //                         return Ok(new AuthenticationResponseModel
+    //                         {
+    //                             ResultCode = (int?)ResultCode.SystemError,
+    //                             ResultMessage = ResultCode.SystemError.ToString(),
+    //                         });
+    //                     }
+    //                     break;
+    //                 }
+    //                 default:
+    //                 {
+    //                     LogTo.Error($"\nUser Role not found : {uid} ");
+    //                     return Ok(new AuthenticationResponseModel
+    //                     {
+    //                         ResultCode = (int?)ResultCode.UserRoleNotFound,
+    //                         ResultMessage = ResultCode.UserRoleNotFound.ToString(),
+    //                     });
+    //                 }
+    //             }
+    //         }
+    //         else
+    //         {
+    //             object value;
+    //             decodedToken.Claims.TryGetValue("role", out value);
+    //
+    //             role = (string) value;
+    //             switch (role)
+    //             {
+    //                 case "admin":
+    //                     user = adminService.GetAdminByFirebaseUid(uid);
+    //                     break;
+    //                 case "tutor":
+    //                     user = tutorService.GetTutorByFirebaseUid(uid);
+    //                     break;
+    //                 case "student":
+    //                     user = studentService.GetStudentByFirebaseUid(uid);
+    //                     break;
+    //             }
+    //         }
+    //         
+    //
+    //         return Ok(new AuthenticationResponseModel
+    //         {
+    //             ResultCode = (int?)ResultCode.Success,
+    //             ResultMessage = ResultCode.Success.ToString(),
+    //             Data = user,
+    //             Type = type,
+    //             Role = role
+    //         });
+    //     }
+    //     catch (AggregateException e)
+    //     {
+    //         LogTo.Info(e.ToString);
+    //         return Ok(new AuthenticationResponseModel
+    //         {
+    //             ResultCode = (int?)ResultCode.InvalidToken,
+    //             ResultMessage = ResultCode.InvalidToken.ToString(),
+    //         });
+    //     }
+    // }
 
     // [HttpPost]
     // [Route("renew-token")]

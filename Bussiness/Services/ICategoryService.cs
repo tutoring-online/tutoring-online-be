@@ -1,4 +1,5 @@
 ﻿using DataAccess.Entities.Category;
+using DataAccess.Models;
 using DataAccess.Models.Category;
 
 namespace tutoring_online_be.Services;
@@ -12,4 +13,7 @@ public interface ICategoryService
     void CreateCategories(IEnumerable<Category> categories);
     void UpdateCategories(Category category, string id);
     int DeleteCategory(string id);
+    Dictionary<string, CategoryDto> GetCategories(HashSet<string> categoryIds);
+    Page<SearchCategoryDto> GetCategories(PageRequestModel model, List<Tuple<string, string>> orderByParams,
+       SearchCategoryDto searchCategoryDto);
 }
