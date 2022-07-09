@@ -1,8 +1,7 @@
 name: Build and deploy .NET Core application to Web App Bussiness20220629074615 with API Management Service TutoringOnline-tutoring-online
 on:
   push:
-    branches:
-    - develop
+    branches: [main]
 env:
   AZURE_WEBAPP_NAME: Bussiness20220629074615
   AZURE_WEBAPP_PACKAGE_PATH: Bussiness\publish
