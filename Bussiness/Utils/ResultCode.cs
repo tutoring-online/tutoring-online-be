@@ -3,6 +3,7 @@
 public enum ResultCode
 {
     Success = 0,
+    UserAlreadySignup = 20,
     Unknown = 30,
     InvalidParams = 92,
     TokenNotMatch = 93,

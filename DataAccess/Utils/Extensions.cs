@@ -373,7 +373,8 @@ public static class Extensions
             Address = tutorDto.Address,
             Birthday = CommonUtils.ConvertStringToDateTime(tutorDto.Birthday),
             UpdatedDate = CommonUtils.ConvertStringToDateTime(tutorDto.UpdatedDate),
-            CreatedDate = CommonUtils.ConvertStringToDateTime(tutorDto.CreatedDate)
+            CreatedDate = CommonUtils.ConvertStringToDateTime(tutorDto.CreatedDate),
+            Uid = tutorDto.Uid
         };
     }
     
@@ -522,7 +523,8 @@ public static class Extensions
             Address = adminDto.Address,
             Birthday = CommonUtils.ConvertStringToDateTime(adminDto.Birthday),
             UpdatedDate = CommonUtils.ConvertStringToDateTime(adminDto.UpdatedDate),
-            CreatedDate = CommonUtils.ConvertStringToDateTime(adminDto.CreatedDate)
+            CreatedDate = CommonUtils.ConvertStringToDateTime(adminDto.CreatedDate),
+            Uid = adminDto.Uid
         };
     }
     

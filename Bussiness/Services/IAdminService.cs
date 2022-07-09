@@ -15,4 +15,5 @@ public interface IAdminService
     int CreateAdminByFirebaseToken(FirebaseToken token);
     void UpdateAdmin(Admin asEntity, string id);
     int DeleteAdmin(string id);
+    AdminDto? GetAdminByEmail(string email);
 }

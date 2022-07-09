@@ -36,7 +36,7 @@ public class AdminServiceV1:IAdminService
         
         var admin = new Admin()
         {
-            uid = userRecord.Uid,
+            Uid = userRecord.Uid,
             Email = userRecord.Email,
             Name = userRecord.DisplayName,
             Phone = userRecord.PhoneNumber,
@@ -56,5 +56,11 @@ public class AdminServiceV1:IAdminService
     public int DeleteAdmin(string id)
     {
         return adminDao.DeleteAdmin(id);
+    }
+
+    public AdminDto? GetAdminByEmail(string email)
+    {
+        var admin =  adminDao.getAdminByEmail(email);
+        return admin is null ? null : admin.AsDto();
     }
 }

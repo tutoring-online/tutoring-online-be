@@ -184,14 +184,6 @@ public class StudentDao:IStudentDao
 
             }
         }
-        catch (MySqlException e)
-        {
-            LogTo.Info(e.ToString);
-        }
-        catch (Exception e)
-        {
-            LogTo.Info(e.ToString);
-        }
         finally
         {
             DbUtils.CloseMySqlDbConnection();

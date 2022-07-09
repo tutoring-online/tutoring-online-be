@@ -19,4 +19,6 @@ public class AdminDto
     public string? AvatarURL { get; init; }
     public string? CreatedDate { get; init; }
     public string? UpdatedDate { get; init; }
+    
+    public string? Uid { get; init; }
 }

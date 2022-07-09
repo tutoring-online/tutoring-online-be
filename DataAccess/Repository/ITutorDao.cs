@@ -21,4 +21,5 @@ public interface ITutorDao
 
     void UpdateTutor(Tutor asEntity, string id);
     int DeleteTutor(string id);
+    Tutor? GetTutorByEmail(string email);
 }

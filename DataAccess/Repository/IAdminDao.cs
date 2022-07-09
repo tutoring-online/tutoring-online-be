@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataAccess.Models.Admin;
 
 namespace DataAccess.Repository;
 
@@ -18,4 +19,5 @@ public interface IAdminDao
     int CreateAdmin(Admin admin);
     void UpdateAdmin(Admin admin, string id);
     int DeleteAdmin(string id);
+    Admin? getAdminByEmail(string email);
 }
