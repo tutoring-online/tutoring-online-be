@@ -7,4 +7,12 @@ public class UpdatePaymentDto
     public string? StudentId { get; init; }
     
     public int? Status { get; init; }
+    
+    public int? Combo { get; init; }
+    
+    public int? DateSession { get; init; }
+    
+    public DateTime? StartDate { get; init; }
+    
+    public DateTime? EndDate { get; init; }
 }

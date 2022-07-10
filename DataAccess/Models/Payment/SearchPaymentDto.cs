@@ -35,5 +35,13 @@ public class SearchPaymentDto
     public StudentDto? Student { get; set; }
     
     public SyllabusDto? Syllabus { get; set; }
+    
+    public int? Combo { get; init; }
+    
+    public int? DateSession { get; init; }
+    
+    public DateTime? StartDate { get; init; }
+    
+    public DateTime? EndDate { get; init; }
 
 }

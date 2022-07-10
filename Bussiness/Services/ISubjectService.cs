@@ -16,4 +16,5 @@ public interface ISubjectService
     int DeleteSubject(string id);
 
     Page<SearchSubjectResponse> GetSubjects(PageRequestModel model, List<Tuple<string, string>> orderByParams, SearchSubjectRequest request);
+    Dictionary<string, SubjectDto> GetSubjects(HashSet<string> subjectIds);
 }

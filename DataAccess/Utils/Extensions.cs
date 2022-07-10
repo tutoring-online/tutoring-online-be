@@ -197,6 +197,22 @@ public static class Extensions
             Price = syllabus.Price
         };
     }
+    
+    public static SearchSyllabusResponse AsSearchDto(this Syllabus syllabus)
+    {
+        return new SearchSyllabusResponse()
+        {
+            Id = syllabus.Id,
+            SubjectId = StringUtils.NullToEmpty(syllabus.SubjectId),
+            TotalLessons = syllabus.TotalLessons,
+            Description = StringUtils.NullToEmpty(syllabus.Description),
+            Name = StringUtils.NullToEmpty(syllabus.Name),
+            Status = syllabus.Status,
+            UpdatedDate = CommonUtils.ConvertDateTimeToString(syllabus.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertDateTimeToString(syllabus.CreatedDate),
+            Price = syllabus.Price
+        };
+    }
     public static Syllabus AsEntity(this SyllabusDto syllabusDto)
     {
         return new Syllabus()
