@@ -16,4 +16,5 @@ public interface ISubjectDao
     void UpdateSubjects(Subject subject, string id);
     int DeleteSubject(string id);
     Page<Subject> GetSubjects(int? getLimit, int? getOffSet, List<Tuple<string, string>> orderByParams, SearchSubjectRequest request, bool isNotPaging);
+    Dictionary<string, Subject?> GetSubjects(HashSet<string> subjectIds);
 }

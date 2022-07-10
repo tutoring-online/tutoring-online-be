@@ -214,7 +214,7 @@ public class SubjectDao : ISubjectDao
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
-            var selectStatement = "Select Id, Code, Name, Description,CreatedDate, UpdatedDate, Status";
+            var selectStatement = "Select Id, Code, Name, Description,CreatedDate, UpdatedDate, Status, CategoryId";
             var selectCountStatement = "Select count(id) as TotalElement";
             var fromStatement = "From Subject";
             var whereStatement = "Where (@FromCreatedDate is null or CreatedDate >= @FromCreatedDate)" +
@@ -307,5 +307,66 @@ public class SubjectDao : ISubjectDao
         }
 
         return page;
+    }
+
+    public Dictionary<string, Subject?> GetSubjects(HashSet<string> subjectIds)
+    {
+        var subjects= new Dictionary<string, Subject?>();
+
+        try
+        {
+            using var connection = DbUtils.GetMySqlDbConnection();
+            connection.Open();
+
+            var selectStatement = "Select Id, Code, Name, Description, Status, CreatedDate, UpdatedDate, CategoryId";
+            var fromStatement = "From Subject";
+            var whereStatement = $"Where Id in ( {MySqlUtils.CreateInStatementValues(subjectIds)} )";
+            var query = selectStatement + " " + fromStatement + " " + whereStatement; 
+                                  
+            using var command = DbUtils.CreateMySqlCommand(query, connection);
+            command.CommandText = query;
+
+            command.Prepare();
+            
+            foreach (MySqlParameter commandParameter in command.Parameters)
+            {
+                LogTo.Error($"Param {commandParameter}: {commandParameter.Value}");
+            }
+
+            var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                subjects.Add(
+                    DbUtils.SafeGetString(reader, "Id"),
+                    new Subject
+                    {
+                        Id = DbUtils.SafeGetString(reader, "Id"),
+                        Code = DbUtils.SafeGetString(reader, "Code"),
+                        Name = DbUtils.SafeGetString(reader, "Name"),
+                        Description = DbUtils.SafeGetString(reader, "Description"),
+                        Status = DbUtils.SafeGetInt16(reader, "Status"),
+                        CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
+                        UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate"),
+                        CategoryId = DbUtils.SafeGetString(reader, "CategoryId")
+                    }
+                    );
+
+            }
+        }
+        catch (MySqlException e)
+        {
+            LogTo.Error(e.ToString());
+        }
+        catch (Exception e)
+        {
+            LogTo.Error(e.ToString());
+        }
+        finally
+        {
+            DbUtils.CloseMySqlDbConnection();
+        }
+
+        return subjects;
     }
 }

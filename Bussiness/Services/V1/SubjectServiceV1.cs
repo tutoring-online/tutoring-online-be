@@ -65,4 +65,9 @@ public class SubjectServiceV1 : ISubjectService
         
         return resultDto;
     }
+
+    public Dictionary<string, SubjectDto> GetSubjects(HashSet<string> subjectIds)
+    {
+        return subjectDao.GetSubjects(subjectIds).ToDictionary(pair => pair.Key, pair => pair.Value.AsDto());
+    }
 }

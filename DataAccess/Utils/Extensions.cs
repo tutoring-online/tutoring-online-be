@@ -197,6 +197,22 @@ public static class Extensions
             Price = syllabus.Price
         };
     }
+    
+    public static SearchSyllabusResponse AsSearchDto(this Syllabus syllabus)
+    {
+        return new SearchSyllabusResponse()
+        {
+            Id = syllabus.Id,
+            SubjectId = StringUtils.NullToEmpty(syllabus.SubjectId),
+            TotalLessons = syllabus.TotalLessons,
+            Description = StringUtils.NullToEmpty(syllabus.Description),
+            Name = StringUtils.NullToEmpty(syllabus.Name),
+            Status = syllabus.Status,
+            UpdatedDate = CommonUtils.ConvertDateTimeToString(syllabus.UpdatedDate),
+            CreatedDate = CommonUtils.ConvertDateTimeToString(syllabus.CreatedDate),
+            Price = syllabus.Price
+        };
+    }
     public static Syllabus AsEntity(this SyllabusDto syllabusDto)
     {
         return new Syllabus()
@@ -384,7 +400,6 @@ public static class Extensions
         {
             Name = tutorDto.Name,
             Description = tutorDto.Description,
-            Email = tutorDto.Email,
             Status = tutorDto.Status,
             MeetingUrl = tutorDto.MeetingUrl,
             Phone = tutorDto.Phone,
@@ -440,7 +455,6 @@ public static class Extensions
         return new Student()
         {
             Name = studentDto.Name,         
-            Email = studentDto.Email,
             Status = studentDto.Status,
             Grade = studentDto.Grade,
             Phone = studentDto.Phone,
@@ -532,13 +546,12 @@ public static class Extensions
     {
         return new Admin()
         {
-            Name = StringUtils.NullToEmpty(adminDto.Name),
-            Email = StringUtils.NullToEmpty(adminDto.Email),
+            Name = adminDto.Name,
             Status = adminDto.Status,
-            Phone = StringUtils.NullToEmpty(adminDto.Phone),
+            Phone = adminDto.Phone,
             Gender = adminDto.Gender,
-            AvatarURL = StringUtils.NullToEmpty(adminDto.AvatarURL),
-            Address = StringUtils.NullToEmpty(adminDto.Address),
+            AvatarURL = adminDto.AvatarURL,
+            Address = adminDto.Address,
             Birthday = CommonUtils.ConvertStringToDateTime(adminDto.Birthday),
             UpdatedDate = DateTime.Now,
         };

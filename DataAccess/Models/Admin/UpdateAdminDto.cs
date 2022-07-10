@@ -2,7 +2,6 @@
 
 public class UpdateAdminDto
 {
-    public string? Email { get; init; }
     public string? Name { get; init; }
     public string? Phone { get; init; }
     public int? Status { get; init; }
