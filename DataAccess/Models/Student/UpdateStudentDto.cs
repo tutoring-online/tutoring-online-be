@@ -2,7 +2,6 @@
 
 public class UpdateStudentDto
 {
-    public string? Email { get; init; }
     public string? Name { get; init; }
     public int? Grade { get; init; }
     public string? Phone { get; init; }
