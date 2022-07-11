@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DataAccess.Models.TutorSubject;
 
 namespace DataAccess.Models.Tutor;
 
-public class TutorDto
+public class CreateTutorResponse
 {
     public string? Id { get; init; }
     public string? Email { get; init; }

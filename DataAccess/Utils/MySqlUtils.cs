@@ -138,9 +138,9 @@ public class MySqlUtils
         return command;
     }
 
-    public static MySqlCommand CreateUpdateStatusForDelete(string tableName, MySqlConnection connection, string id)
+    public static MySqlCommand CreateUpdateStatusForDelete(string tableName, MySqlConnection connection, string id, int status)
     {
-        var updateStatement = $"Update {tableName} Set Status = 0 where Id = {id}";
+        var updateStatement = $"Update {tableName} Set Status = {status} where Id = {id}";
         
         var command = DbUtils.CreateMySqlCommand(updateStatement, connection);
         command.CommandText = updateStatement;

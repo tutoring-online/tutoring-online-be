@@ -1,6 +1,7 @@
 ﻿using Anotar.NLog;
 using DataAccess.Models;
 using DataAccess.Models.Authentication;
+using DataAccess.Utils;
 using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

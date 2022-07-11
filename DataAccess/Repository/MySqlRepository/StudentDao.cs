@@ -253,7 +253,7 @@ public class StudentDao:IStudentDao
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
-            using var command = MySqlUtils.CreateUpdateStatusForDelete(typeof(Student).Name, connection, id);
+            using var command = MySqlUtils.CreateUpdateStatusForDelete(typeof(Student).Name, connection, id, (int)StudentStatus.Banned);
             return command.ExecuteNonQuery();
         }
         catch (MySqlException e)

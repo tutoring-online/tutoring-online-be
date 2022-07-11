@@ -10,4 +10,7 @@ public interface ITutorSubjectDao
     int CreateTutorSubject(TutorSubject tutorSubject);
     void UpdateTutorSubject(TutorSubject asEntity, string id);
     int DeleteTutorSubject(string id);
+    void CreateTutorSubject(IEnumerable<TutorSubject> tutorSubjects);
+    IEnumerable<TutorSubject> GetTutorSubjectsByTutorId(string? tutorDtoId);
+    int DeleteTutorSubjectsByTutorId(string id);
 }

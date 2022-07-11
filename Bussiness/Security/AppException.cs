@@ -22,4 +22,24 @@ public class AppException
         {
         }
     }
+
+    public class OtherErrorException : Exception
+    {
+        public OtherErrorException()
+        {
+        }
+
+        protected OtherErrorException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+
+        public OtherErrorException(string? message) : base(message)
+        {
+        }
+
+        public OtherErrorException(string? message, Exception? innerException) : base(message, innerException)
+        {
+        }
+    }
+    
 }

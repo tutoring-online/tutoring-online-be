@@ -190,7 +190,7 @@ public class CategoryDao:ICategoryDao
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
-            using var command = MySqlUtils.CreateUpdateStatusForDelete(typeof(Category).Name, connection, id);
+            using var command = MySqlUtils.CreateUpdateStatusForDelete(typeof(Category).Name, connection, id, (int)CategoryStatus.Deleted);
             return command.ExecuteNonQuery();
         }
         catch (MySqlException e)

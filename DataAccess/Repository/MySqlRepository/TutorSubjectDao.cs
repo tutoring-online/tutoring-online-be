@@ -236,7 +236,7 @@ public class TutorSubjectDao:ITutorSubjectDao
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
-            using var command = MySqlUtils.CreateUpdateStatusForDelete(typeof(TutorSubject).Name, connection, id);
+            using var command = MySqlUtils.CreateUpdateStatusForDelete(typeof(TutorSubject).Name, connection, id, (int)TutorSubjectStatus.Deleted);
             return command.ExecuteNonQuery();
         }
         catch (MySqlException e)
@@ -253,5 +253,114 @@ public class TutorSubjectDao:ITutorSubjectDao
         }
 
         return 0;
+    }
+
+    public void CreateTutorSubject(IEnumerable<TutorSubject> tutorSubjects)
+    {
+        try
+        {
+            using var connection = DbUtils.GetMySqlDbConnection();
+            connection.Open();
+
+            using var command = MySqlUtils.CreateInsertStatement(tutorSubjects, connection);
+            command.ExecuteNonQuery();
+        }
+        catch (MySqlException e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        catch (Exception e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        finally
+        {
+            DbUtils.CloseMySqlDbConnection();
+        }
+    }
+
+    public IEnumerable<TutorSubject> GetTutorSubjectsByTutorId(string? tutorDtoId)
+    {
+        var tutorSubjects = new List<TutorSubject?>();
+
+        try
+        {
+            using var connection = DbUtils.GetMySqlDbConnection();
+            connection.Open();
+            var param1 = "@id";
+
+            var selectStatement = "Select Id, TutorId, SubjectId, CreatedDate, UpdatedDate, Status";
+            var fromStatement = "From TutorSubject";
+            var whereStatement = $"Where TutorId = {param1} And Status = {(int)TutorSubjectStatus.Active}";
+            var query = selectStatement + " " + fromStatement + " " + whereStatement;
+
+            using var command = DbUtils.CreateMySqlCommand(query, connection);
+            command.CommandText = query;
+
+            command.Parameters.Add(param1, MySqlDbType.VarChar).Value = tutorDtoId;
+            command.Prepare();
+
+            foreach (MySqlParameter commandParameter in command.Parameters)
+            {
+                LogTo.Info($"Param {commandParameter}: {commandParameter.Value}");
+            }
+
+            var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                tutorSubjects.Add(new TutorSubject
+                {
+                    Id = DbUtils.SafeGetString(reader, "Id"),
+                    TutorId = DbUtils.SafeGetString(reader, "TutorId"),
+                    SubjectId = DbUtils.SafeGetString(reader, "SubjectId"),
+                    CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
+                    UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate"),
+                    Status = DbUtils.SafeGetInt16(reader, "Status")
+                });
+
+            }
+        }
+        catch (MySqlException e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        catch (Exception e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        finally
+        {
+            DbUtils.CloseMySqlDbConnection();
+        }
+
+        return tutorSubjects;
+    }
+
+    public int DeleteTutorSubjectsByTutorId(string id)
+    {
+        try
+        {
+            using var connection = DbUtils.GetMySqlDbConnection();
+            connection.Open();
+            string query = $"Update TutorSubject Set Status = {(int)TutorSubjectStatus.Deleted} where TutorId = {id}";
+            using var command = DbUtils.CreateMySqlCommand(query, connection);
+            command.CommandText = query;
+            return command.ExecuteNonQuery();
+        }
+        catch (MySqlException e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        catch (Exception e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        finally
+        {
+            DbUtils.CloseMySqlDbConnection();
+        }
+
+        return -1;
     }
 }

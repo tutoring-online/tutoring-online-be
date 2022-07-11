@@ -11,4 +11,6 @@ public class UpdateTutorDto
     public string? Address { get; init; }
     public string? AvatarURL { get; init; }
     public string? Description { get; init; }
+    
+    public int[]? Subjects { get; init; }
 }

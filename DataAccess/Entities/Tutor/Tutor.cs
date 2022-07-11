@@ -13,7 +13,7 @@ public class Tutor
     public string? Name { get; init; }
     public string? MeetingUrl { get; init; }
     public string? Phone { get; init; }
-    public int? Status { get; init; }
+    public int? Status { get; set; }
     public int? Gender { get; init; }
     public DateTime? Birthday { get; init; }
     public string? Address { get; init; }

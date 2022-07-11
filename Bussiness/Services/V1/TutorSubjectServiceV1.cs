@@ -1,4 +1,5 @@
 ﻿using DataAccess.Entities.TutorSubject;
+using DataAccess.Models.Subject;
 using DataAccess.Models.TutorSubject;
 using DataAccess.Repository;
 using DataAccess.Utils;
@@ -39,5 +40,20 @@ public class TutorSubjectServiceV1:ITutorSubjectService
     public Dictionary<string, TutorSubjectDto> GetTutorSubjects(HashSet<string> ids)
     {
         return tutorSubjectDao.GetTutorSubjects(ids).ToDictionary(pair => pair.Key, pair => pair.Value.AsDto());
+    }
+
+    public void CreateTutorSubjects(IEnumerable<TutorSubject> tutorSubjects)
+    {
+        tutorSubjectDao.CreateTutorSubject(tutorSubjects);
+    }
+
+    public IEnumerable<TutorSubjectDto> GetTutorSubjectsByTutorId(string? tutorDtoId)
+    {
+        return tutorSubjectDao.GetTutorSubjectsByTutorId(tutorDtoId).Select(t => t.AsDto());
+    }
+
+    public int DeleteTutorSubjectsByTutorId(string id)
+    {
+        return tutorSubjectDao.DeleteTutorSubjectsByTutorId(id);
     }
 }
