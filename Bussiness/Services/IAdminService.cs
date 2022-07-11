@@ -16,4 +16,5 @@ public interface IAdminService
     void UpdateAdmin(Admin asEntity, string id);
     int DeleteAdmin(string id);
     AdminDto? GetAdminByEmail(string email);
+    void CreateAdmin(Admin asEntity);
 }

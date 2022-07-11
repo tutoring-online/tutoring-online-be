@@ -529,7 +529,8 @@ public static class Extensions
             Address = StringUtils.NullToEmpty(admin.Address),
             Birthday = CommonUtils.ConvertDateTimeToString(admin.Birthday),
             UpdatedDate = CommonUtils.ConvertDateTimeToString(admin.UpdatedDate),
-            CreatedDate = CommonUtils.ConvertDateTimeToString(admin.CreatedDate)
+            CreatedDate = CommonUtils.ConvertDateTimeToString(admin.CreatedDate),
+            Uid = StringUtils.NullToEmpty(admin.Uid)
         };
     }
 

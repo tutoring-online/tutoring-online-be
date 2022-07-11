@@ -63,4 +63,9 @@ public class AdminServiceV1:IAdminService
         var admin =  adminDao.getAdminByEmail(email);
         return admin is null ? null : admin.AsDto();
     }
+
+    public void CreateAdmin(Admin asEntity)
+    {
+        adminDao.CreateAdmin(asEntity);
+    }
 }
