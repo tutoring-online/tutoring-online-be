@@ -184,7 +184,7 @@ public class SubjectDao : ISubjectDao
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
-            using var command = MySqlUtils.CreateUpdateStatusForDelete(typeof(Subject).Name, connection, id);
+            using var command = MySqlUtils.CreateUpdateStatusForDelete(typeof(Subject).Name, connection, id, (int)SubjectStatus.Deleted);
             return command.ExecuteNonQuery();
         }
         catch (MySqlException e)

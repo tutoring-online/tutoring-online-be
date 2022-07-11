@@ -1,4 +1,5 @@
 ﻿using DataAccess.Entities.TutorSubject;
+using DataAccess.Models.Subject;
 using DataAccess.Models.TutorSubject;
 
 namespace tutoring_online_be.Services;
@@ -13,4 +14,6 @@ public interface ITutorSubjectService
     Dictionary<string, TutorSubjectDto> GetTutorSubjects(HashSet<string> ids);
 
 
+    void CreateTutorSubjects(IEnumerable<TutorSubject> tutorSubjects);
+    IEnumerable<TutorSubjectDto> GetTutorSubjectsByTutorId(string? tutorDtoId);
 }

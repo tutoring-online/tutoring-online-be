@@ -186,7 +186,7 @@ public class LessonDao:ILessonDao
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
-            using var command = MySqlUtils.CreateUpdateStatusForDelete(typeof(Lesson).Name, connection, id);
+            using var command = MySqlUtils.CreateUpdateStatusForDelete(typeof(Lesson).Name, connection, id, (int)LessonStatus.Cancel);
             return command.ExecuteNonQuery();
         }
         catch (MySqlException e)

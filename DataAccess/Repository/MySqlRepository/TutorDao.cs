@@ -272,6 +272,7 @@ public class TutorDao : ITutorDao
         {
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
+            tutor.Status = (int)TutorStatus.Active;
             IEnumerable<Tutor> tutors = new[]
             {
                 tutor
@@ -327,7 +328,7 @@ public class TutorDao : ITutorDao
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
-            using var command = MySqlUtils.CreateUpdateStatusForDelete(typeof(Tutor).Name, connection, id);
+            using var command = MySqlUtils.CreateUpdateStatusForDelete(typeof(Tutor).Name, connection, id, (int)TutorStatus.Banned);
             return command.ExecuteNonQuery();
         }
         catch (MySqlException e)

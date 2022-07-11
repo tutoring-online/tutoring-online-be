@@ -259,7 +259,7 @@ public class AdminDao: IAdminDao
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
-            using var command = MySqlUtils.CreateUpdateStatusForDelete(typeof(Admin).Name, connection, id);
+            using var command = MySqlUtils.CreateUpdateStatusForDelete(typeof(Admin).Name, connection, id, (int)AdminStatus.Deleted);
             return command.ExecuteNonQuery();
         }catch (MySqlException e)
         {

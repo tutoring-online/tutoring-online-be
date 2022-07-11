@@ -1,4 +1,4 @@
-﻿namespace tutoring_online_be.Utils;
+﻿namespace DataAccess.Utils;
 
 public enum StudentStatus
 {

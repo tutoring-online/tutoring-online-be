@@ -172,7 +172,7 @@ public class PaymentDao : IPaymentDao
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
-            using var command = MySqlUtils.CreateUpdateStatusForDelete(typeof(Payment).Name, connection, id);
+            using var command = MySqlUtils.CreateUpdateStatusForDelete(typeof(Payment).Name, connection, id, (int) PaymentStatus.Canceled);
             return command.ExecuteNonQuery();
         }
         catch (MySqlException e)

@@ -68,4 +68,9 @@ public class TutorServiceV1 : ITutorService
         Tutor? tutor = tutorDao.GetTutorByEmail(email);
         return tutor is null ? null : tutor.AsDto();
     }
+
+    public void CreateTutor(CreateTutorDto dto)
+    {
+        tutorDao.CreateTutor(dto.AsEntity());
+    }
 }

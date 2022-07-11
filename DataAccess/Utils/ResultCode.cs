@@ -1,4 +1,4 @@
-﻿namespace tutoring_online_be.Controllers.Utils;
+﻿namespace DataAccess.Utils;
 
 public enum ResultCode
 {
@@ -14,6 +14,7 @@ public enum ResultCode
     InvalidToken = 98,
     SystemError = 99,
     InvalidUser = 100,
-    Unauthorized = 401
+    Unauthorized = 401,
+    UserAlreadyCreated = 909
 
 }

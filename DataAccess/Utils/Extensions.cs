@@ -369,7 +369,8 @@ public static class Extensions
             Address = StringUtils.NullToEmpty(tutor.Address),
             Birthday = CommonUtils.ConvertDateTimeToString(tutor.Birthday),
             UpdatedDate = CommonUtils.ConvertDateTimeToString(tutor.UpdatedDate),
-            CreatedDate = CommonUtils.ConvertDateTimeToString(tutor.CreatedDate)
+            CreatedDate = CommonUtils.ConvertDateTimeToString(tutor.CreatedDate),
+            Uid = StringUtils.NullToEmpty(tutor.Uid)
         };
     }
 
@@ -391,6 +392,15 @@ public static class Extensions
             UpdatedDate = CommonUtils.ConvertStringToDateTime(tutorDto.UpdatedDate),
             CreatedDate = CommonUtils.ConvertStringToDateTime(tutorDto.CreatedDate),
             Uid = tutorDto.Uid
+        };
+    }
+    
+    public static Tutor AsEntity(this CreateTutorDto tutorDto)
+    {
+        return new Tutor()
+        {
+            Email = tutorDto.Email,
+            CreatedDate = DateTime.Now,
         };
     }
     

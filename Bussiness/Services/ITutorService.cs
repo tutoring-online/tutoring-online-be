@@ -16,4 +16,5 @@ public interface ITutorService
     int DeleteTutor(string id);
     Dictionary<string, TutorDto> GetTutors(HashSet<string> tutorIds);
     TutorDto? GetTutorByEmail(string email);
+    void CreateTutor(CreateTutorDto dto);
 }
