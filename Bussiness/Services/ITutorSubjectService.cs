@@ -16,4 +16,5 @@ public interface ITutorSubjectService
 
     void CreateTutorSubjects(IEnumerable<TutorSubject> tutorSubjects);
     IEnumerable<TutorSubjectDto> GetTutorSubjectsByTutorId(string? tutorDtoId);
+    int DeleteTutorSubjectsByTutorId(string id);
 }

@@ -51,4 +51,9 @@ public class TutorSubjectServiceV1:ITutorSubjectService
     {
         return tutorSubjectDao.GetTutorSubjectsByTutorId(tutorDtoId).Select(t => t.AsDto());
     }
+
+    public int DeleteTutorSubjectsByTutorId(string id)
+    {
+        return tutorSubjectDao.DeleteTutorSubjectsByTutorId(id);
+    }
 }

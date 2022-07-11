@@ -45,7 +45,7 @@ public class TutorController : Controller
             string tutorId = tutor.Id;
             IEnumerable<TutorSubjectDto> subjectDtos = tutorSubjectService.GetTutorSubjectsByTutorId(tutorId);
 
-            tutor.Subjects = subjectDtos.Select(t => int.Parse(t.SubjectId)).ToArray();
+            tutor.Subjects = subjectDtos.Select(t => int.Parse(t.SubjectId)).ToHashSet().ToArray();
 
             return new List<TutorDto>
             {
@@ -86,7 +86,7 @@ public class TutorController : Controller
                 TutorDto tutor = tutorService.GetTutorByEmail(dto.Email);
                 IEnumerable<TutorSubjectDto> subjectDtos = tutorSubjectService.GetTutorSubjectsByTutorId(tutorDto.Id);
 
-                tutor.Subjects = subjectDtos.Select(t => int.Parse(t.SubjectId)).ToArray();
+                tutor.Subjects = subjectDtos.Select(t => int.Parse(t.SubjectId)).ToHashSet().ToArray();
 
                 return Created(new Uri($"api/v1/tutors/{tutorDto.Id}", UriKind.Relative), tutor);
             }
@@ -102,12 +102,37 @@ public class TutorController : Controller
     
     [HttpPatch]
     [Route("{id}")]
-    public void GetTutor(string id, UpdateTutorDto updateTutorDto)
+    public void UpdateTutor(string id, UpdateTutorDto updateTutorDto)
     {
         var tutors = tutorService.GetTutorById(id);
         if (tutors.Any())
         {
             tutorService.UpdateTutor(updateTutorDto.AsEntity(), id);
+
+            if (updateTutorDto.Subjects is not null && updateTutorDto.Subjects.Any())
+            {
+                LogTo.Info($"\nDo Update Tutor Subjects with ids : {string.Join(",", updateTutorDto.Subjects)}");
+                LogTo.Info($"\nDo Remove all tutor subject with tutor id : {id}");
+                
+                int result = tutorSubjectService.DeleteTutorSubjectsByTutorId(id);
+                if (result != -1)
+                {
+                    LogTo.Info($"\nDo Create Tutor Subjects");
+                    List<TutorSubjectDto> tutorSubjectDtos = new List<TutorSubjectDto>();
+                    HashSet<int> subjectIds = updateTutorDto.Subjects.ToHashSet();
+            
+                    foreach (int subjectId in subjectIds)
+                    {
+                        tutorSubjectDtos.Add(new TutorSubjectDto()
+                        {
+                            SubjectId = subjectId.ToString(),
+                            TutorId = tutors.ElementAt(0).Id,
+                            Status = (int)TutorSubjectStatus.Active
+                        });
+                    }
+                    tutorSubjectService.CreateTutorSubjects(tutorSubjectDtos.Select(t => t.AsEntity()));
+                }
+            }
         }
 
     }

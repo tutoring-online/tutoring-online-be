@@ -291,7 +291,7 @@ public class TutorSubjectDao:ITutorSubjectDao
 
             var selectStatement = "Select Id, TutorId, SubjectId, CreatedDate, UpdatedDate, Status";
             var fromStatement = "From TutorSubject";
-            var whereStatement = $"Where TutorId = {param1}";
+            var whereStatement = $"Where TutorId = {param1} And Status = {(int)TutorSubjectStatus.Active}";
             var query = selectStatement + " " + fromStatement + " " + whereStatement;
 
             using var command = DbUtils.CreateMySqlCommand(query, connection);
@@ -335,5 +335,32 @@ public class TutorSubjectDao:ITutorSubjectDao
         }
 
         return tutorSubjects;
+    }
+
+    public int DeleteTutorSubjectsByTutorId(string id)
+    {
+        try
+        {
+            using var connection = DbUtils.GetMySqlDbConnection();
+            connection.Open();
+            string query = $"Update TutorSubject Set Status = {(int)TutorSubjectStatus.Deleted} where TutorId = {id}";
+            using var command = DbUtils.CreateMySqlCommand(query, connection);
+            command.CommandText = query;
+            return command.ExecuteNonQuery();
+        }
+        catch (MySqlException e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        catch (Exception e)
+        {
+            LogTo.Info(e.ToString);
+        }
+        finally
+        {
+            DbUtils.CloseMySqlDbConnection();
+        }
+
+        return -1;
     }
 }
