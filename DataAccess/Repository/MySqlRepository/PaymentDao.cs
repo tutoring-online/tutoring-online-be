@@ -19,7 +19,7 @@ public class PaymentDao : IPaymentDao
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
-            var selectStatement = "Select Id, SyllabusId, StudentId,CreatedDate, UpdatedDate, Status";
+            var selectStatement = "Select Id, SyllabusId, StudentId,CreatedDate, UpdatedDate, Status, TutorId, Combo, DateSession";
             var fromStatement = "From Payment";
             var query = selectStatement + " " + fromStatement;
 
@@ -36,7 +36,10 @@ public class PaymentDao : IPaymentDao
                     StudentId = DbUtils.SafeGetString(reader, "StudentId"),
                     Status = DbUtils.SafeGetInt16(reader, "Status"),              
                     CreatedDate =DbUtils.SafeGetDateTime(reader, "CreatedDate"),
-                    UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate")
+                    UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate"),
+                    TutorId = DbUtils.SafeGetString(reader, "TutorId"),
+                    Combo = DbUtils.SafeGetInt16(reader, "Combo"),
+                    DateSession = DbUtils.SafeGetInt16(reader, "DateSession")
                 });
 
             }
@@ -66,7 +69,7 @@ public class PaymentDao : IPaymentDao
             connection.Open();
             var param1 = "@id";
 
-            var selectStatement = "Select Id, SyllabusId, StudentId,CreatedDate, UpdatedDate, Status";
+            var selectStatement = "Select Id, SyllabusId, StudentId,CreatedDate, UpdatedDate, Status, TutorId, Combo, DateSession";
             var fromStatement = "From Payment";
             var whereStatement = $"Where Id = {param1}";
             var query = selectStatement + " " + fromStatement + " " + whereStatement;
@@ -93,7 +96,10 @@ public class PaymentDao : IPaymentDao
                     StudentId = DbUtils.SafeGetString(reader, "StudentId"),
                     Status = DbUtils.SafeGetInt16(reader, "Status"),
                     CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
-                    UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate")
+                    UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate"),
+                    TutorId = DbUtils.SafeGetString(reader, "TutorId"),
+                    Combo = DbUtils.SafeGetInt16(reader, "Combo"),
+                    DateSession = DbUtils.SafeGetInt16(reader, "DateSession")
                 });
 
             }
@@ -141,14 +147,14 @@ public class PaymentDao : IPaymentDao
 
     }
 
-    public void UpdatePayment(Payment asEntity, string id)
+    public void UpdatePayment(Payment payment, string id)
     {
         try
         {
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
-            using var command = MySqlUtils.CreateUpdateStatement(asEntity, connection, $"id = {id}");
+            using var command = MySqlUtils.CreateUpdateStatement(payment, connection, $"id = {id}");
             command.ExecuteNonQuery();
         }
         catch (MySqlException e)
@@ -205,7 +211,7 @@ public class PaymentDao : IPaymentDao
             connection.Open();
             var param1 = "@id";
 
-            var selectStatement = "Select Id, SyllabusId, StudentId, CreatedDate, UpdatedDate, Status";
+            var selectStatement = "Select Id, SyllabusId, StudentId, CreatedDate, UpdatedDate, Status, TutorId, Combo, DateSession";
             var selectCountStatement = "Select count(id) as TotalElement";
             var fromStatement = "From Payment";
             var whereStatement = $"Where (@SyllabusId is null or SyllabusId = @SyllabusId)" +
@@ -261,7 +267,10 @@ public class PaymentDao : IPaymentDao
                     StudentId = DbUtils.SafeGetString(reader, "StudentId"),
                     Status = DbUtils.SafeGetInt16(reader, "Status"),
                     CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
-                    UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate")
+                    UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate"),
+                    TutorId = DbUtils.SafeGetString(reader, "TutorId"),
+                    Combo = DbUtils.SafeGetInt16(reader, "Combo"),
+                    DateSession = DbUtils.SafeGetInt16(reader, "DateSession")
                 });
             }
             reader.Close();

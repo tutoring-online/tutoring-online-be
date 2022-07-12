@@ -9,9 +9,8 @@ namespace DataAccess.Models.Lesson;
 public class LessonDto
 {
     public string? Id { get; init; }
-    public string? SyllabusId { get; init; }
-    public string? TutorId { get; init; }
-    public string? StudentId { get; init; }
+    
+    public string? PaymentId { get; init; }
     public int? SlotNumber { get; init; }
     public string? Date { get; init; }
     public string? CreatedDate { get; init; }

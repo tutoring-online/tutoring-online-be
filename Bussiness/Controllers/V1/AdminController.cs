@@ -61,7 +61,7 @@ public class AdminController : Controller
     
     [HttpPatch]
     [Route("{id}")]
-    public void UpdateAdmin(string id, UpdateAdminDto updateAdminDto)
+    public void UpdateAdmin(string id, [FromBody]UpdateAdminDto updateAdminDto)
     {
         var admins = adminService.GetAdminById(id);
         if (admins.Any())

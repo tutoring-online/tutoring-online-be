@@ -77,7 +77,7 @@ public class SyllabusController : Controller
     
     [HttpPatch]
     [Route("{id}")]
-    public void UpdateSyllabus(string id, UpdateSyllabusDto updateSyllabusDto)
+    public void UpdateSyllabus(string id, [FromBody]UpdateSyllabusDto updateSyllabusDto)
     {
         var syllabuses = syllabusService.GetSyllabusById(id);
         if (syllabuses.Any())

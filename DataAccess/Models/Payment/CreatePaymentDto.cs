@@ -7,4 +7,5 @@ public class CreatePaymentDto
     public string? StudentId { get; init; }
     
     public int? Status { get; init; }
+    
 }

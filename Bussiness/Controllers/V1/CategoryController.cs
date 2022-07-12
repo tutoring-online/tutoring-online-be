@@ -44,7 +44,7 @@ public class CategoryController:Controller
 
     [HttpPatch]
     [Route("{id}")]
-    public void UpdateCategory(string id, UpdateCategoryDto categoryDto)
+    public void UpdateCategory(string id, [FromBody]UpdateCategoryDto categoryDto)
     {
         var categories = categoryService.GetCategoryById(id);
         if (categories.Any())

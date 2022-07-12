@@ -4,11 +4,6 @@ namespace DataAccess.Models.Lesson;
 
 public class SearchLessonRequest
 {
-    public string? SyllabusId { get; init; }
-    
-    public string? StudentId { get; init; }
-    
-    public string? TutorId { get; init; }
     
     public int?[]? SlotNumber { get; init; }
     
@@ -25,5 +20,7 @@ public class SearchLessonRequest
     public DateTime? ToUpdatedDate { get; init; }
     
     public int? Status { get; init; }
+    
+    public string? PaymentId { get; init; }
     
 }

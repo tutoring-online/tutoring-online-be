@@ -102,7 +102,7 @@ public class TutorController : Controller
     
     [HttpPatch]
     [Route("{id}")]
-    public void UpdateTutor(string id, UpdateTutorDto updateTutorDto)
+    public void UpdateTutor(string id, [FromBody]UpdateTutorDto updateTutorDto)
     {
         var tutors = tutorService.GetTutorById(id);
         if (tutors.Any())

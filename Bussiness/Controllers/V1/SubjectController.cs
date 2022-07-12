@@ -77,7 +77,7 @@ public class SubjectController : Controller
     }
     [HttpPatch]
     [Route("{id}")]
-    public void UpdateSubject(string id, UpdateSubjectDto updateSubjectDto)
+    public void UpdateSubject(string id, [FromBody]UpdateSubjectDto updateSubjectDto)
     {
         var subjects = subjectService.GetSubjectById(id);
         if (subjects.Any())

@@ -111,14 +111,12 @@ public static class Extensions
         return new LessonDto()
         {
             Id = lesson.Id,
-            SyllabusId = lesson.SyllabusId,
-            TutorId = lesson.TutorId,
-            StudentId = lesson.StudentId,
             Status = lesson.Status,
             Date = CommonUtils.ConvertDateTimeToString(lesson.Date),
             UpdatedDate = CommonUtils.ConvertDateTimeToString(lesson.UpdatedDate),
             CreatedDate = CommonUtils.ConvertDateTimeToString(lesson.CreatedDate),
-            SlotNumber = lesson.SlotNumber
+            SlotNumber = lesson.SlotNumber,
+            PaymentId = lesson.PaymentId
         };
     }
     
@@ -127,10 +125,7 @@ public static class Extensions
         return new SearchLessonReponse()
         {
             Id = lesson.Id,
-            SyllabusId = StringUtils.NullToEmpty(lesson.SyllabusId),
-            StudentId = StringUtils.NullToEmpty(lesson.StudentId),
-            TutorId = StringUtils.NullToEmpty(lesson.TutorId),
-            SlotNumber = lesson.SlotNumber,
+            PaymentId = lesson.PaymentId,
             Status = lesson.Status,
             Date = lesson.Date,
             UpdatedDate = CommonUtils.ConvertDateTimeToString(lesson.UpdatedDate),
@@ -142,14 +137,12 @@ public static class Extensions
         return new Lesson()
         {
             Id = lessonDto.Id,
-            SyllabusId = lessonDto.SyllabusId,
-            TutorId = lessonDto.TutorId,
-            StudentId = lessonDto.StudentId,
             Status = lessonDto.Status,
             Date = CommonUtils.ConvertStringToDateTime(lessonDto.Date),
             UpdatedDate = CommonUtils.ConvertStringToDateTime(lessonDto.UpdatedDate),
             CreatedDate = CommonUtils.ConvertStringToDateTime(lessonDto.CreatedDate),
-            SlotNumber = lessonDto.SlotNumber
+            SlotNumber = lessonDto.SlotNumber,
+            PaymentId = lessonDto.PaymentId
         };
     }
     
@@ -157,9 +150,7 @@ public static class Extensions
     {
         return new Lesson()
         {
-            SyllabusId = lessonDto.SyllabusId,
-            TutorId = lessonDto.TutorId,
-            StudentId = lessonDto.StudentId,
+            PaymentId = lessonDto.PaymentId,
             Status = lessonDto.Status,
             SlotNumber = lessonDto.SlotNumber,
             Date = CommonUtils.ConvertStringToDateTime(lessonDto.Date),
@@ -171,9 +162,7 @@ public static class Extensions
     {
         return new Lesson()
         {
-            SyllabusId = lessonDto.SyllabusId,
-            TutorId = lessonDto.TutorId,
-            StudentId = lessonDto.StudentId,
+            
             Status = lessonDto.Status,
             SlotNumber = lessonDto.SlotNumber,
             Date = CommonUtils.ConvertStringToDateTime(lessonDto.Date),
@@ -267,7 +256,12 @@ public static class Extensions
             StudentId = StringUtils.NullToEmpty(payment.StudentId),
             Status = payment.Status,
             UpdatedDate = CommonUtils.ConvertDateTimeToString(payment.UpdatedDate),
-            CreatedDate = CommonUtils.ConvertDateTimeToString(payment.CreatedDate)
+            CreatedDate = CommonUtils.ConvertDateTimeToString(payment.CreatedDate),
+            DateSession = payment.DateSession,
+            StartDate = CommonUtils.ConvertDateTimeToString(payment.StartDate),
+            EndDate = CommonUtils.ConvertDateTimeToString(payment.EndDate),
+            Combo = payment.Combo,
+            TutorId = StringUtils.NullToEmpty(payment.TutorId)
         };
     }
     
@@ -280,7 +274,12 @@ public static class Extensions
             StudentId = StringUtils.NullToEmpty(payment.StudentId),
             Status = payment.Status,
             UpdatedDate = CommonUtils.ConvertDateTimeToString(payment.UpdatedDate),
-            CreatedDate = CommonUtils.ConvertDateTimeToString(payment.CreatedDate)
+            CreatedDate = CommonUtils.ConvertDateTimeToString(payment.CreatedDate),
+            DateSession = payment.DateSession,
+            StartDate = CommonUtils.ConvertDateTimeToString(payment.StartDate),
+            EndDate = CommonUtils.ConvertDateTimeToString(payment.EndDate),
+            Combo = payment.Combo,
+            TutorId = StringUtils.NullToEmpty(payment.TutorId)
         };
     }
 
@@ -293,7 +292,12 @@ public static class Extensions
             StudentId = paymentDto.StudentId,
             Status = paymentDto.Status,
             UpdatedDate = CommonUtils.ConvertStringToDateTime(paymentDto.CreatedDate),
-            CreatedDate = CommonUtils.ConvertStringToDateTime(paymentDto.UpdatedDate)
+            CreatedDate = CommonUtils.ConvertStringToDateTime(paymentDto.UpdatedDate),
+            DateSession = paymentDto.DateSession,
+            StartDate = CommonUtils.ConvertStringToDateTime(paymentDto.StartDate),
+            EndDate = CommonUtils.ConvertStringToDateTime(paymentDto.EndDate),
+            Combo = paymentDto.Combo,
+            TutorId = StringUtils.NullToEmpty(paymentDto.TutorId)
         };
     }
     
@@ -304,7 +308,12 @@ public static class Extensions
             SyllabusId = paymentDto.SyllabusId,
             StudentId = paymentDto.StudentId,
             Status = paymentDto.Status,
-            UpdatedDate = DateTime.Now
+            UpdatedDate = DateTime.Now,
+            Combo = paymentDto.Combo,
+            DateSession = paymentDto.DateSession,
+            TutorId = paymentDto.TutorId,
+            StartDate = paymentDto.StartDate,
+            EndDate = paymentDto.EndDate
         };
     }
     

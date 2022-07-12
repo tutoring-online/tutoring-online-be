@@ -33,7 +33,7 @@ public class StudentController
     
     [HttpPatch]
     [Route("{id}")]
-    public void UpdateStudent(string id, UpdateStudentDto updateStudentDto)
+    public void UpdateStudent(string id, [FromBody]UpdateStudentDto updateStudentDto)
     {
         var students = studentService.GetStudentById(id);
 

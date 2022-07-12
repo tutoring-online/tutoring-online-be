@@ -33,7 +33,7 @@ public class TutorSubjectController
 
     [HttpPatch]
     [Route("{id}")]
-    public void GetTutorSubject(string id, UpdateTutorSubjectDto updateTutorSubjectDto)
+    public void GetTutorSubject(string id, [FromBody]UpdateTutorSubjectDto updateTutorSubjectDto)
     {
         var tutorSubjects = tutorSubjectService.GetTutorSubjectById(id);
         if (tutorSubjects.Any())
