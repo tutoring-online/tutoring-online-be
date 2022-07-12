@@ -265,7 +265,18 @@ public class PaymentController : Controller
                         } while (++count < numberOfWeek);
                     }
                     LogTo.Info("\n Do create lessons");
+                    DateTime? endDay = lessonDtos.ElementAt(lessonDtos.Count - 1).Date;
                     lessonService.CreateLessons(lessonDtos);
+                    
+                    LogTo.Info("\n Do update Payment");
+                    UpdatePaymentDto dto = new UpdatePaymentDto
+                    {
+                        StartDate = startDay,
+                        EndDate = endDay
+                    };
+
+                    paymentService.UpdatePayment(dto.AsEntity(), paymentId);
+                    
                     return Ok();
                 }
             }
