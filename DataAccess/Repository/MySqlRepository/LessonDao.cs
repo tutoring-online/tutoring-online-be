@@ -23,7 +23,7 @@ public class LessonDao:ILessonDao
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
-            var selectStatement = "Select Id, SyllabusId, TutorId, StudentId, SlotNumber, Date, CreatedDate, UpdatedDate, Status";
+            var selectStatement = "Select Id, PaymentId, SlotNumber, Date, CreatedDate, UpdatedDate, Status";
             var fromStatement = "From Lesson";
             var query = selectStatement + " " + fromStatement;
 
@@ -36,14 +36,12 @@ public class LessonDao:ILessonDao
                 lessons.Add(new Lesson
                 {
                     Id = DbUtils.SafeGetString(reader, "Id"),
-                    SyllabusId = DbUtils.SafeGetString(reader, "SyllabusId"),
-                    TutorId = DbUtils.SafeGetString(reader, "TutorId"),
-                    StudentId = DbUtils.SafeGetString(reader, "StudentId"),
                     Status = DbUtils.SafeGetInt16(reader, "Status"),
                     SlotNumber = DbUtils.SafeGetInt16(reader, "SlotNumber"),
                     Date = DbUtils.SafeGetDateTime(reader, "Date"),
                     CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
-                    UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate")
+                    UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate"),
+                    PaymentId = DbUtils.SafeGetString(reader, "PaymentId")
                 });
 
             }
@@ -73,7 +71,7 @@ public class LessonDao:ILessonDao
             connection.Open();
             var param1 = "@id";
 
-            var selectStatement = "Select Id, SyllabusId, TutorId, StudentId, SlotNumber, Date, CreatedDate, UpdatedDate, Status";
+            var selectStatement = "Select Id, PaymentId, SlotNumber, Date, CreatedDate, UpdatedDate, Status";
             var fromStatement = "From Lesson";
             var whereStatement = $"Where Id = {param1}";
             var query = selectStatement + " " + fromStatement + " " + whereStatement;
@@ -96,14 +94,12 @@ public class LessonDao:ILessonDao
                 lessons.Add(new Lesson
                 {
                     Id = DbUtils.SafeGetString(reader, "Id"),
-                    SyllabusId = DbUtils.SafeGetString(reader, "SyllabusId"),
-                    TutorId = DbUtils.SafeGetString(reader, "TutorId"),
-                    StudentId = DbUtils.SafeGetString(reader, "StudentId"),
                     Status = DbUtils.SafeGetInt16(reader, "Status"),
                     SlotNumber = DbUtils.SafeGetInt16(reader, "SlotNumber"),
                     Date = DbUtils.SafeGetDateTime(reader, "Date"),
                     CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
-                    UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate")
+                    UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate"),
+                    PaymentId = DbUtils.SafeGetString(reader, "PaymentId")
                 });
 
             }
@@ -219,19 +215,18 @@ public class LessonDao:ILessonDao
             connection.Open();
             var param1 = "@id";
 
-            var selectStatement = "Select Id, SyllabusId, StudentId, TutorId, Date, SlotNumber,CreatedDate, UpdatedDate, Status";
-            var selectCountStatement = "Select count(id) as TotalElement";
+            var selectStatement = "Select Id, PaymentId, Date, SlotNumber,CreatedDate, UpdatedDate, Status";
+            var selectCountStatement = "Select count(*) as TotalElement";
             var fromStatement = "From Lesson";
-            var whereStatement = $"Where (@SyllabusId is null or SyllabusId = @SyllabusId)" +
-                                 $"and (@StudentId is null or StudentId = @StudentId)" +
-                                 $"and (@TutorId is null or TutorId = @TutorId)" +
-                                 $"and (@FromCreatedDate is null or CreatedDate >= @FromCreatedDate)" +
+            var whereStatement = 
+                                 $"Where (@FromCreatedDate is null or CreatedDate >= @FromCreatedDate)" +
                                  $"and (@ToCreatedDate is null or CreatedDate <= @ToCreatedDate)" +
                                  $"and (@FromUpdatedDate is null or UpdatedDate >= @FromUpdatedDate)" +
                                  $"and (@ToUpdatedDate is null or UpdatedDate <= @ToUpdatedDate)" +
                                  $"and (@FromDate is null or Date >= @FromDate)" +
                                  $"and (@ToDate is null or Date <= @ToDate) " +
                                  $"and (@Status is null or Status = @Status)" +
+                                 $"and (@PaymentId is null or PaymentId = @PaymentId)" +
                                  $"and (@SlotNumber is null or SlotNumber in (@SlotNumber))";
             var orderByStatement = MySqlUtils.CreateOrderByStatement(orderByParams);
             var limitStatement = $"Limit {limit} offSet {offSet}";
@@ -253,9 +248,7 @@ public class LessonDao:ILessonDao
 
             using var command = DbUtils.CreateMySqlCommand(query, connection);
 
-            command.Parameters.Add("@StudentId", MySqlDbType.VarChar).Value = request.StudentId;
-            command.Parameters.Add("@TutorId", MySqlDbType.VarChar).Value = request.TutorId;
-            command.Parameters.Add("@SyllabusId", MySqlDbType.VarChar).Value = request.SyllabusId;
+            command.Parameters.Add("@PaymentId", MySqlDbType.VarChar).Value = request.PaymentId;
             command.Parameters.Add("@FromCreatedDate", MySqlDbType.DateTime).Value = request.FromCreatedDate;
             command.Parameters.Add("@ToCreatedDate", MySqlDbType.DateTime).Value = request.ToCreatedDate;
             command.Parameters.Add("@FromUpdatedDate", MySqlDbType.DateTime).Value = request.FromUpdatedDate;
@@ -282,13 +275,11 @@ public class LessonDao:ILessonDao
                 lessons.Add(new Lesson()
                 {
                     Id = DbUtils.SafeGetString(reader, "Id"),
-                    SyllabusId = DbUtils.SafeGetString(reader, "SyllabusId"),
-                    StudentId = DbUtils.SafeGetString(reader, "StudentId"),
-                    TutorId = DbUtils.SafeGetString(reader, "TutorId"),
                     Status = DbUtils.SafeGetInt16(reader, "Status"),
                     CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
                     UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate"),
-                    Date = DbUtils.SafeGetDateTime(reader, "Date")
+                    Date = DbUtils.SafeGetDateTime(reader, "Date"),
+                    PaymentId = DbUtils.SafeGetString(reader, "PaymentId")
                 });
             }
             reader.Close();

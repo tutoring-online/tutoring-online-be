@@ -21,9 +21,11 @@ public class PaymentDto
     
     public int? DateSession { get; init; }
     
-    public DateTime? StartDate { get; init; }
+    public string? StartDate { get; init; }
     
-    public DateTime? EndDate { get; init; }
+    public string? EndDate { get; init; }
+    
+    public string? TutorId { get; init; }
     
 
 }

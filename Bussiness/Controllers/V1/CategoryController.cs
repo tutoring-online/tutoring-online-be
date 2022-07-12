@@ -34,17 +34,17 @@ public class CategoryController:Controller
         return categories;
     }
     [HttpPost]
-    public void CreateCategories(IEnumerable<CreateCategoryDto> categoryDto)
+    public IActionResult CreateCategories([FromBody]IEnumerable<CreateCategoryDto> categoryDto)
     {
         IEnumerable<Category> categories = categoryDto.Select(categoryDto => categoryDto.AsEntity());
 
         categoryService.CreateCategories(categories);
-
+        return Created("", "");
     }
 
     [HttpPatch]
     [Route("{id}")]
-    public void UpdateCategory(string id, UpdateCategoryDto categoryDto)
+    public void UpdateCategory(string id, [FromBody]UpdateCategoryDto categoryDto)
     {
         var categories = categoryService.GetCategoryById(id);
         if (categories.Any())

@@ -68,16 +68,16 @@ public class SubjectController : Controller
     }
     
     [HttpPost]
-    public void CreateSubjects(IEnumerable<CreateSubjectDto> subjectDto)
+    public IActionResult CreateSubjects([FromBody]IEnumerable<CreateSubjectDto> subjectDto)
     {
         IEnumerable<Subject> subjects = subjectDto.Select(subjectDto => subjectDto.AsEntity());
         
         subjectService.CreateSubjects(subjects);
-      
+        return Created("", "");
     }
     [HttpPatch]
     [Route("{id}")]
-    public void UpdateSubject(string id, UpdateSubjectDto updateSubjectDto)
+    public void UpdateSubject(string id, [FromBody]UpdateSubjectDto updateSubjectDto)
     {
         var subjects = subjectService.GetSubjectById(id);
         if (subjects.Any())

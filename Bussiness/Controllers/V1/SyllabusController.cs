@@ -67,17 +67,17 @@ public class SyllabusController : Controller
     }
     
     [HttpPost]
-    public void CreateSyllabuses(IEnumerable<CreateSyllabusDto> syllabusDto)
+    public IActionResult CreateSyllabuses([FromBody]IEnumerable<CreateSyllabusDto> syllabusDto)
     {
         IEnumerable<Syllabus> syllabuses = syllabusDto.Select(syllabusDto => syllabusDto.AsEntity());
 
         syllabusService.CreateSyllabuses(syllabuses);
-
+        return Created("", "");
     }
     
     [HttpPatch]
     [Route("{id}")]
-    public void UpdateSyllabus(string id, UpdateSyllabusDto updateSyllabusDto)
+    public void UpdateSyllabus(string id, [FromBody]UpdateSyllabusDto updateSyllabusDto)
     {
         var syllabuses = syllabusService.GetSyllabusById(id);
         if (syllabuses.Any())

@@ -57,7 +57,7 @@ public class TutorController : Controller
     }
 
     [HttpPost]
-    public IActionResult CreateTutor(CreateTutorDto dto)
+    public IActionResult CreateTutor([FromBody]CreateTutorDto dto)
     {
         TutorDto tmp = tutorService.GetTutorByEmail(dto.Email);
         if (tmp is null)
@@ -102,7 +102,7 @@ public class TutorController : Controller
     
     [HttpPatch]
     [Route("{id}")]
-    public void UpdateTutor(string id, UpdateTutorDto updateTutorDto)
+    public void UpdateTutor(string id, [FromBody]UpdateTutorDto updateTutorDto)
     {
         var tutors = tutorService.GetTutorById(id);
         if (tutors.Any())

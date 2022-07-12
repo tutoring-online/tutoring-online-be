@@ -42,46 +42,7 @@ public class LessonController : Controller
 
             Page<SearchLessonReponse> responseData = lessonService.GetLessons(model, orderByParams, request);
 
-            if (responseData.Data is not null || responseData.Data.Count > 0)
-            {
-                List<SearchLessonReponse> data = responseData.Data;
-                HashSet<string> studentIds = data.Select(t => t.StudentId).NotEmpty().ToHashSet();
-                HashSet<string> syllabusIds = data.Select(t => t.SyllabusId).NotEmpty().ToHashSet();
-                HashSet<string> tutorIds = data.Select(t => t.TutorId).NotEmpty().ToHashSet();
-
-                
-                if (studentIds.Count > 0)
-                {
-                    Dictionary<string, StudentDto> studentDtos = studentService.GetStudents(studentIds);
-                    
-                    foreach (var item in data.Where(item => studentDtos.ContainsKey(item.StudentId)))
-                    {
-                        item.Student = studentDtos[item.StudentId];
-                    }
-                }
-
-                if (syllabusIds.Count > 0)
-                {
-                    Dictionary<string, SyllabusDto> syllabusDtos = syllabusService.GetSyllabuses(syllabusIds);
-                
-                    foreach (var item in data.Where(item => syllabusDtos.ContainsKey(item.SyllabusId)))
-                    {
-                        item.Syllabus = syllabusDtos[item.SyllabusId];
-                    }
-                }
-
-                if (tutorIds.Count() > 0)
-                {
-                    Dictionary<string, TutorDto> tutorDtos = tutorService.GetTutors(tutorIds);
-                    
-                    foreach (var item in data.Where(item => tutorDtos.ContainsKey(item.SyllabusId)))
-                    {
-                        item.Tutor = tutorDtos[item.SyllabusId];
-                    }
-                }
-
-                return Ok(responseData);
-            }
+            return Ok(responseData);
             
         }
         
@@ -97,17 +58,17 @@ public class LessonController : Controller
         return lessons;
     }
     [HttpPost]
-    public void CreateLessons(IEnumerable<CreateLessonDto> lessonDto)
+    public IActionResult CreateLessons([FromBody]IEnumerable<CreateLessonDto> lessonDto)
     {
         IEnumerable<Lesson> lessons = lessonDto.Select(lessonDto => lessonDto.AsEntity());
 
         lessonService.CreateLessons(lessons);
-
+        return Created("", "");
     }
     
     [HttpPatch]
     [Route("{id}")]
-    public void UpdateLesson(string id, UpdateLessonDto lessonDto)
+    public void UpdateLesson(string id, [FromBody]UpdateLessonDto lessonDto)
     {
         var lessons = lessonService.GetLessonById(id);
         if (lessons.Any())

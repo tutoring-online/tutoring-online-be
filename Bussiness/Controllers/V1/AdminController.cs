@@ -33,7 +33,7 @@ public class AdminController : Controller
     }
 
     [HttpPost]
-    public IActionResult CreateAdmin(CreateAdminRequest dto)
+    public IActionResult CreateAdmin([FromBody]CreateAdminRequest dto)
     {
         AdminDto? adminDto = adminService.GetAdminByEmail(dto.Email);
 
@@ -61,7 +61,7 @@ public class AdminController : Controller
     
     [HttpPatch]
     [Route("{id}")]
-    public void UpdateAdmin(string id, UpdateAdminDto updateAdminDto)
+    public void UpdateAdmin(string id, [FromBody]UpdateAdminDto updateAdminDto)
     {
         var admins = adminService.GetAdminById(id);
         if (admins.Any())
