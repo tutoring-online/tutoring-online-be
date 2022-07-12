@@ -67,12 +67,12 @@ public class SyllabusController : Controller
     }
     
     [HttpPost]
-    public void CreateSyllabuses(IEnumerable<CreateSyllabusDto> syllabusDto)
+    public IActionResult CreateSyllabuses([FromBody]IEnumerable<CreateSyllabusDto> syllabusDto)
     {
         IEnumerable<Syllabus> syllabuses = syllabusDto.Select(syllabusDto => syllabusDto.AsEntity());
 
         syllabusService.CreateSyllabuses(syllabuses);
-
+        return Created("", "");
     }
     
     [HttpPatch]

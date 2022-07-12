@@ -97,11 +97,12 @@ public class PaymentController : Controller
     }
     
     [HttpPost]
-    public void CreatePayments(IEnumerable<CreatePaymentDto> paymentDto)
+    public IActionResult CreatePayments([FromBody]IEnumerable<CreatePaymentDto> paymentDto)
     {
         IEnumerable<Payment> payments = paymentDto.Select(paymentDto => paymentDto.AsEntity());
 
         paymentService.CreatePayments(payments);
+        return Created("", "");
     }
     
     [HttpPatch]

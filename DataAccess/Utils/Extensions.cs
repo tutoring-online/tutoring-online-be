@@ -324,6 +324,8 @@ public static class Extensions
             SyllabusId = paymentDto.SyllabusId,
             StudentId = paymentDto.StudentId,
             Status = paymentDto.Status,
+            Combo = paymentDto.Combo,
+            DateSession = paymentDto.DateSession,
             CreatedDate = DateTime.Now
         };
     }
@@ -508,6 +510,17 @@ public static class Extensions
             SubjectId = tutorSubjectDto.SubjectId,
             UpdatedDate = CommonUtils.ConvertStringToDateTime(tutorSubjectDto.UpdatedDate),
             CreatedDate = CommonUtils.ConvertStringToDateTime(tutorSubjectDto.CreatedDate),
+            Status = tutorSubjectDto.Status
+        };
+    }
+    
+    public static TutorSubject AsEntity(this CreateTutorSubjectDto tutorSubjectDto)
+    {
+        return new TutorSubject()
+        {
+            TutorId = tutorSubjectDto.TutorId,
+            SubjectId = tutorSubjectDto.SubjectId,
+            CreatedDate = DateTime.Now,
             Status = tutorSubjectDto.Status
         };
     }

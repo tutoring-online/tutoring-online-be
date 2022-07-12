@@ -50,7 +50,7 @@ public class AuthenticationController : ControllerBase
     [HttpPost]
     [Route("login")]
     [AllowAnonymous]
-    public IActionResult Login(AuthenticationRequestModel model)
+    public IActionResult Login([FromBody]AuthenticationRequestModel model)
     {
         try
         {
@@ -238,7 +238,7 @@ public class AuthenticationController : ControllerBase
     [HttpPost]
     [Route("signup")]
     [AllowAnonymous]
-    public IActionResult SignUp(AuthenticationRequestModel model)
+    public IActionResult SignUp([FromBody]AuthenticationRequestModel model)
     {
         try
         {

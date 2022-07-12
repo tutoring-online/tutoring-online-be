@@ -8,4 +8,8 @@ public class CreatePaymentDto
     
     public int? Status { get; init; }
     
+    public int? Combo { get; init; }
+    
+    public int? DateSession { get; init; }
+    
 }

@@ -57,7 +57,7 @@ public class TutorController : Controller
     }
 
     [HttpPost]
-    public IActionResult CreateTutor(CreateTutorDto dto)
+    public IActionResult CreateTutor([FromBody]CreateTutorDto dto)
     {
         TutorDto tmp = tutorService.GetTutorByEmail(dto.Email);
         if (tmp is null)

@@ -33,7 +33,7 @@ public class AdminController : Controller
     }
 
     [HttpPost]
-    public IActionResult CreateAdmin(CreateAdminRequest dto)
+    public IActionResult CreateAdmin([FromBody]CreateAdminRequest dto)
     {
         AdminDto? adminDto = adminService.GetAdminByEmail(dto.Email);
 

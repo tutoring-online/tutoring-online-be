@@ -34,12 +34,12 @@ public class CategoryController:Controller
         return categories;
     }
     [HttpPost]
-    public void CreateCategories(IEnumerable<CreateCategoryDto> categoryDto)
+    public IActionResult CreateCategories([FromBody]IEnumerable<CreateCategoryDto> categoryDto)
     {
         IEnumerable<Category> categories = categoryDto.Select(categoryDto => categoryDto.AsEntity());
 
         categoryService.CreateCategories(categories);
-
+        return Created("", "");
     }
 
     [HttpPatch]

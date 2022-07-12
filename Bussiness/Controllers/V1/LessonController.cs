@@ -58,12 +58,12 @@ public class LessonController : Controller
         return lessons;
     }
     [HttpPost]
-    public void CreateLessons(IEnumerable<CreateLessonDto> lessonDto)
+    public IActionResult CreateLessons([FromBody]IEnumerable<CreateLessonDto> lessonDto)
     {
         IEnumerable<Lesson> lessons = lessonDto.Select(lessonDto => lessonDto.AsEntity());
 
         lessonService.CreateLessons(lessons);
-
+        return Created("", "");
     }
     
     [HttpPatch]

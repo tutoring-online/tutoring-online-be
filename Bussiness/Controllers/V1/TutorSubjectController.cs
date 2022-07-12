@@ -7,7 +7,7 @@ namespace tutoring_online_be.Controllers.V1;
 
 [ApiController]
 [Route("/api/v1/tutor-subjects")]
-public class TutorSubjectController
+public class TutorSubjectController : Controller
 {
     private readonly ITutorSubjectService tutorSubjectService;
 
@@ -33,7 +33,7 @@ public class TutorSubjectController
 
     [HttpPatch]
     [Route("{id}")]
-    public void GetTutorSubject(string id, [FromBody]UpdateTutorSubjectDto updateTutorSubjectDto)
+    public void UpdateTutorSubject(string id, [FromBody]UpdateTutorSubjectDto updateTutorSubjectDto)
     {
         var tutorSubjects = tutorSubjectService.GetTutorSubjectById(id);
         if (tutorSubjects.Any())
@@ -41,6 +41,13 @@ public class TutorSubjectController
             tutorSubjectService.UpdateTutorSubjects(updateTutorSubjectDto.AsEntity(), id);
         }
 
+    }
+
+    [HttpPost]
+    public IActionResult CreateTutorSubject([FromBody] IEnumerable<CreateTutorSubjectDto> dto)
+    {
+        tutorSubjectService.CreateTutorSubjects(dto.Select(t => t.AsEntity()));
+        return Created("", "");
     }
 
     [HttpDelete]
