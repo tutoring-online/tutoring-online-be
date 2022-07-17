@@ -113,11 +113,11 @@ public class PaymentController : Controller
         if (payments.Any())
         {
             LogTo.Info("\nDo update Payment");
-            if (payments.ElementAt(0).Status == (int)PaymentStatus.Paid && !string.IsNullOrEmpty(payments.ElementAt(0).TutorId))
-            {
-                LogTo.Info($"\nThis payment already completed! Id : {payments.ElementAt(0).Id}");
-                return BadRequest();
-            }
+            // if (payments.ElementAt(0).Status == (int)PaymentStatus.Paid && !string.IsNullOrEmpty(payments.ElementAt(0).TutorId))
+            // {
+            //     LogTo.Info($"\nThis payment already completed! Id : {payments.ElementAt(0).Id}");
+            //     return BadRequest();
+            // }
             
             paymentService.UpdatePayment(updatePaymentDto.AsEntity(), id);
             
