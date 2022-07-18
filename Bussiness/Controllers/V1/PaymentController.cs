@@ -113,12 +113,11 @@ public class PaymentController : Controller
         if (payments.Any())
         {
             LogTo.Info("\nDo update Payment");
-            if (payments.ElementAt(0).Status == (int)PaymentStatus.Paid && payments.ElementAt(0).TutorId is not null)
-            {
-                LogTo.Info($"\nThis payment already completed! Id : {payments.ElementAt(0).Id}");
-                return BadRequest();
-            }
-
+            // if (payments.ElementAt(0).Status == (int)PaymentStatus.Paid && !string.IsNullOrEmpty(payments.ElementAt(0).TutorId))
+            // {
+            //     LogTo.Info($"\nThis payment already completed! Id : {payments.ElementAt(0).Id}");
+            //     return BadRequest();
+            // }
             
             paymentService.UpdatePayment(updatePaymentDto.AsEntity(), id);
             
@@ -265,7 +264,18 @@ public class PaymentController : Controller
                         } while (++count < numberOfWeek);
                     }
                     LogTo.Info("\n Do create lessons");
+                    DateTime? endDay = lessonDtos.ElementAt(lessonDtos.Count - 1).Date;
                     lessonService.CreateLessons(lessonDtos);
+                    
+                    LogTo.Info("\n Do update Payment");
+                    UpdatePaymentDto dto = new UpdatePaymentDto
+                    {
+                        StartDate = startDay,
+                        EndDate = endDay
+                    };
+
+                    paymentService.UpdatePayment(dto.AsEntity(), paymentId);
+                    
                     return Ok();
                 }
             }
