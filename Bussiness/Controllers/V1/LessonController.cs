@@ -72,7 +72,7 @@ public class LessonController : Controller
             DistributedCacheEntryOptions options = new DistributedCacheEntryOptions();
             options.SetAbsoluteExpiration(new TimeSpan(0, 0, 30));
             cache.SetString("lessons", serializer, options);
-            return Ok(JsonConvert.DeserializeObject<IEnumerable<LessonDto>>(cacheLessons));
+            return Ok(JsonConvert.DeserializeObject<IEnumerable<LessonDto>>(cache.GetString("lessons")));
         }
         
         return Ok(JsonConvert.DeserializeObject<IEnumerable<LessonDto>>(cacheLessons));
