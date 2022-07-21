@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Text;
 using System.Text.Json.Serialization;
+using CorePush.Google;
 using DataAccess.Entities.Student;
 using DataAccess.Repository;
 using DataAccess.Repository.MySqlRepository;
@@ -113,6 +114,21 @@ System.Globalization.CultureInfo.CurrentCulture.ClearCachedData();
 builder.Services.AddTransient<RequestResponseHandlerMiddleware>();
 builder.Services.AddTransient<ExceptionMiddleware>();
 builder.Services.AddTransient<OptionsMiddleware>();
+
+//Notification
+builder.Services.AddHttpClient<FcmSender>();
+FcmSettings settings = new FcmSettings();
+settings.SenderId = "17449877817";
+settings.ServerKey =
+    "AAAABBAYATk:APA91bGlW9qpWWrNAbXdGbUFId3LLcdm_PBJAK4Tid092h4vvdOFH_tGdF_" +
+    "OFoC0z2JqIT2MQqtR7ACFDktUEjlL0Xq3JJpBLC7ZJDOTJNabd8-UaOdXZpTAZ7fpFVhXeS67lHzbXDL0";
+builder.Services.AddSingleton(settings);
+
+//Redis
+builder.Services.AddDistributedRedisCache(
+    t => t.Configuration =
+        "tuon.redis.cache.windows.net:6380,password=W0yrfjyC4P4ogCJi8yzmDlxj991a8TYcrAzCaJ9rHNs=,ssl=True,abortConnect=False"
+);
 
 
 //Add filter

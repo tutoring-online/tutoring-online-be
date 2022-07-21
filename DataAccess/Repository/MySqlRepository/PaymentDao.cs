@@ -220,6 +220,7 @@ public class PaymentDao : IPaymentDao
             var fromStatement = "From Payment";
             var whereStatement = $"Where (@SyllabusId is null or SyllabusId = @SyllabusId)" +
                                  $"and (@StudentId is null or StudentId = @StudentId)" +
+                                 $"and (@Id is null or Id = @Id)" +
                                  $"and (@FromCreatedDate is null or CreatedDate >= @FromCreatedDate)" +
                                  $"and (@ToCreatedDate is null or CreatedDate <= @ToCreatedDate)" +
                                  $"and (@FromUpdatedDate is null or UpdatedDate >= @FromUpdatedDate)" +
@@ -246,6 +247,7 @@ public class PaymentDao : IPaymentDao
             using var command = DbUtils.CreateMySqlCommand(query, connection);
 
             command.Parameters.Add("@StudentId", MySqlDbType.VarChar).Value = searchPaymentDto.StudentId;
+            command.Parameters.Add("@Id", MySqlDbType.VarChar).Value = searchPaymentDto.Id;
             command.Parameters.Add("@SyllabusId", MySqlDbType.VarChar).Value = searchPaymentDto.SyllabusId;
             command.Parameters.Add("@FromCreatedDate", MySqlDbType.DateTime).Value = searchPaymentDto.FromCreatedDate;
             command.Parameters.Add("@ToCreatedDate", MySqlDbType.DateTime).Value = searchPaymentDto.ToCreatedDate;
