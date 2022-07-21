@@ -4,10 +4,13 @@ using Azure.Storage.Blobs;
 using DataAccess.Entities.Subject;
 using DataAccess.Entities.Syllabus;
 using DataAccess.Models;
+using DataAccess.Models.Category;
 using DataAccess.Models.Subject;
 using DataAccess.Models.Syllabus;
 using DataAccess.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 using tutoring_online_be.Services;
 using tutoring_online_be.Utils;
 
@@ -20,6 +23,7 @@ public class SyllabusController : Controller
 {
     private readonly ISyllabusService syllabusService;
     private readonly ISubjectService subjectService;
+    private readonly IDistributedCache cache;
 
     private static readonly string BlobConnectionString =
         "DefaultEndpointsProtocol=https;AccountName=cs110032000821a5f14;AccountKey=4Z26K/ZrXugmA1OUcRf5bO4K4BSSBpaHN2iLLMovh5sizlp4e5g+UEhcjZaUP8AAE3IFmKzG7Swj+AStrwp2aQ==;EndpointSuffix=core.windows.net";
@@ -28,11 +32,13 @@ public class SyllabusController : Controller
 
     public SyllabusController(
         ISyllabusService syllabusService,
-        ISubjectService subjectService
+        ISubjectService subjectService,
+        IDistributedCache cache
         )
     {
         this.syllabusService = syllabusService;
         this.subjectService = subjectService;
+        this.cache = cache;
     }
 
     [HttpGet]
@@ -61,8 +67,21 @@ public class SyllabusController : Controller
 
             return Ok(responseData);
         }
+        
+        var sysllabusCache = cache.GetString("syllabuses");
+
+        if (string.IsNullOrEmpty(sysllabusCache))
+        {
+            IEnumerable<SyllabusDto> syllabuses = syllabusService.GetSyllabuses();
+            var serializer = JsonConvert.SerializeObject(syllabuses);
+            DistributedCacheEntryOptions options = new DistributedCacheEntryOptions();
+            options.SetAbsoluteExpiration(new TimeSpan(0, 3, 0));
+            cache.SetString("syllabuses", serializer, options);
             
-        return Ok(syllabusService.GetSyllabuses());
+            return Ok(JsonConvert.DeserializeObject<IEnumerable<SyllabusDto>>(cache.GetString("syllabuses")));
+        }
+            
+        return Ok(JsonConvert.DeserializeObject<IEnumerable<SyllabusDto>>(sysllabusCache));
     }
     
 
@@ -70,8 +89,21 @@ public class SyllabusController : Controller
     [Route("{id}")]
     public IEnumerable<SyllabusDto> GetSyllabus(string id)
     {
-        var syllabuses = syllabusService.GetSyllabusById(id);
-        return syllabuses;
+        var sysllabusCache = cache.GetString("syllabuses");
+        
+        if (string.IsNullOrEmpty(sysllabusCache))
+        {
+            IEnumerable<SyllabusDto> syllabuses = syllabusService.GetSyllabuses();
+            var serializer = JsonConvert.SerializeObject(syllabuses);
+            DistributedCacheEntryOptions options = new DistributedCacheEntryOptions();
+            options.SetAbsoluteExpiration(new TimeSpan(0, 3, 0));
+            cache.SetString("categories", serializer, options);
+        }
+
+        IEnumerable<SyllabusDto> list =
+            JsonConvert.DeserializeObject<IEnumerable<SyllabusDto>>(cache.GetString("syllabuses"));
+        
+        return list.Where(t => t.Id.Equals(id));
     }
     
     [HttpPost]

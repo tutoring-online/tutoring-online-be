@@ -3,6 +3,8 @@ using DataAccess.Models;
 using DataAccess.Models.Category;
 using DataAccess.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 using tutoring_online_be.Services;
 using tutoring_online_be.Utils;
 
@@ -13,25 +15,35 @@ namespace tutoring_online_be.Controllers.V1;
 public class CategoryController:Controller
 {
     private readonly ICategoryService categoryService;
+    private readonly IDistributedCache cache;
 
-    public CategoryController(ICategoryService categoryService)
+    public CategoryController(
+        ICategoryService categoryService,
+        IDistributedCache cache
+        )
     {
         this.categoryService = categoryService;
+        this.cache = cache;
     }
-
-    /*[HttpGet]
-    public IEnumerable<CategoryDto> GetCategories()
-    {
-        return categoryService.GetCategories();
-    }*/
 
     [HttpGet]
     [Route("{id}")]
     public IEnumerable<CategoryDto> GetCategory(string id)
     {
-        var categories = categoryService.GetCategoryById(id);
+        var cacheCategory = cache.GetString("categories");
 
-        return categories;
+        if (string.IsNullOrEmpty(cacheCategory))
+        {
+            IEnumerable<CategoryDto> categories = categoryService.GetCategories();
+            var serializer = JsonConvert.SerializeObject(categories);
+            DistributedCacheEntryOptions options = new DistributedCacheEntryOptions();
+            options.SetAbsoluteExpiration(new TimeSpan(0, 3, 0));
+            cache.SetString("categories", serializer, options);
+        }
+
+        IEnumerable<CategoryDto> list = JsonConvert.DeserializeObject<IEnumerable<CategoryDto>>(cache.GetString("categories"));
+
+        return list.Where(t => t.Id.Equals(id));
     }
     [HttpPost]
     public IActionResult CreateCategories([FromBody]IEnumerable<CreateCategoryDto> categoryDto)
@@ -71,7 +83,20 @@ public class CategoryController:Controller
             
             return Ok(responseData);
         }
+        
+        var cacheCategory = cache.GetString("categories");
 
-        return Ok(categoryService.GetCategories());
+        if (string.IsNullOrEmpty(cacheCategory))
+        {
+            IEnumerable<CategoryDto> lessonDtos = categoryService.GetCategories();
+            var serializer = JsonConvert.SerializeObject(lessonDtos);
+            DistributedCacheEntryOptions options = new DistributedCacheEntryOptions();
+            options.SetAbsoluteExpiration(new TimeSpan(0, 3, 0));
+            cache.SetString("categories", serializer, options);
+            
+            return Ok(JsonConvert.DeserializeObject<IEnumerable<CategoryDto>>(cache.GetString("categories")));
+        }
+
+        return Ok(JsonConvert.DeserializeObject<IEnumerable<CategoryDto>>(cacheCategory));
     }
 }
