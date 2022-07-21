@@ -17,4 +17,8 @@ public class SyllabusDto
     public double? Price { get; init; }
     public int? Status { get; init; }
     public string? Name { get; init; }
+    
+    public string? ImageUrl { get; init; }
+    
+    public string? VideoUrl { get; init; }
 }

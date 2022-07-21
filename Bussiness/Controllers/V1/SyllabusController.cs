@@ -1,4 +1,7 @@
-﻿using DataAccess.Entities.Subject;
+﻿using System.Net.Mime;
+using Anotar.NLog;
+using Azure.Storage.Blobs;
+using DataAccess.Entities.Subject;
 using DataAccess.Entities.Syllabus;
 using DataAccess.Models;
 using DataAccess.Models.Subject;
@@ -17,6 +20,11 @@ public class SyllabusController : Controller
 {
     private readonly ISyllabusService syllabusService;
     private readonly ISubjectService subjectService;
+
+    private static readonly string BlobConnectionString =
+        "DefaultEndpointsProtocol=https;AccountName=cs110032000821a5f14;AccountKey=4Z26K/ZrXugmA1OUcRf5bO4K4BSSBpaHN2iLLMovh5sizlp4e5g+UEhcjZaUP8AAE3IFmKzG7Swj+AStrwp2aQ==;EndpointSuffix=core.windows.net";
+
+    private static readonly string BlobContainerName = "file";
 
     public SyllabusController(
         ISyllabusService syllabusService,
@@ -82,6 +90,36 @@ public class SyllabusController : Controller
         var syllabuses = syllabusService.GetSyllabusById(id);
         if (syllabuses.Any())
         {
+            if (updateSyllabusDto.Image is not null)
+            {
+                try
+                {
+                    LogTo.Info("\n Do upload image to Azure Blob Storage");
+
+                    var bytes = Convert.FromBase64String(updateSyllabusDto.Image);
+                    var imageName = DateTimeOffset.Now.ToUnixTimeSeconds() + ".jpg";
+
+                    var container = new BlobContainerClient(BlobConnectionString, BlobContainerName);
+                    var blob = container.GetBlobClient(imageName);
+                    
+                    using (var stream = new MemoryStream(bytes))
+                    {
+                        blob.Upload(stream, true);
+                    }
+
+                    var blobUrl = blob.Uri.AbsoluteUri;
+
+                    updateSyllabusDto.Image = blobUrl;
+                    
+                    LogTo.Info("\n Complete upload image to Azure Blob Storage : " + blobUrl);
+                }
+                catch (Exception e)
+                {
+                    LogTo.Info("Upload file error : " + e);
+                    updateSyllabusDto.Image = null;
+                }
+            }
+
             syllabusService.UpdateSyllabus(updateSyllabusDto.AsEntity(), id);
         }
     }

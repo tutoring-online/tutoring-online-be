@@ -8,4 +8,8 @@ public class UpdateSyllabusDto
     public double? Price { get; init; }
     public int? Status { get; init; }
     public string? Name { get; init; }
+    
+    public string? Image { get; set; }
+    
+    public string? VideoUrl { get; init; }
 }

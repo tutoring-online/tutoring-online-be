@@ -183,7 +183,9 @@ public static class Extensions
             Status = syllabus.Status,
             UpdatedDate = CommonUtils.ConvertDateTimeToString(syllabus.UpdatedDate),
             CreatedDate = CommonUtils.ConvertDateTimeToString(syllabus.CreatedDate),
-            Price = syllabus.Price
+            Price = syllabus.Price,
+            ImageUrl = StringUtils.NullToEmpty(syllabus.ImageUrl),
+            VideoUrl = StringUtils.NullToEmpty(syllabus.VideoUrl)
         };
     }
     
@@ -228,7 +230,9 @@ public static class Extensions
             Name = syllabusDto.Name,
             Status = syllabusDto.Status,
             UpdatedDate = DateTime.Now,
-            Price = syllabusDto.Price
+            Price = syllabusDto.Price,
+            VideoUrl = syllabusDto.VideoUrl,
+            ImageUrl = syllabusDto.Image
         };
     }
     
