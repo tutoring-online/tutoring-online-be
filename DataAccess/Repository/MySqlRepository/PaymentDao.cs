@@ -221,6 +221,10 @@ public class PaymentDao : IPaymentDao
             var whereStatement = $"Where (@SyllabusId is null or SyllabusId = @SyllabusId)" +
                                  $"and (@StudentId is null or StudentId = @StudentId)" +
                                  $"and (@Id is null or Id = @Id)" +
+                                 $"and (@DateSession is null or DateSession = @DateSession)" +
+                                 $"and (@TutorId is null or TutorId = @TutorId)" +
+                                 $"and (@Combo is null or Combo = @Combo)" +
+                                 $"and (@Id is null or Id = @Id)" +
                                  $"and (@FromCreatedDate is null or CreatedDate >= @FromCreatedDate)" +
                                  $"and (@ToCreatedDate is null or CreatedDate <= @ToCreatedDate)" +
                                  $"and (@FromUpdatedDate is null or UpdatedDate >= @FromUpdatedDate)" +
@@ -248,6 +252,9 @@ public class PaymentDao : IPaymentDao
 
             command.Parameters.Add("@StudentId", MySqlDbType.VarChar).Value = searchPaymentDto.StudentId;
             command.Parameters.Add("@Id", MySqlDbType.VarChar).Value = searchPaymentDto.Id;
+            command.Parameters.Add("@TutorId", MySqlDbType.VarChar).Value = searchPaymentDto.TutorId;
+            command.Parameters.Add("@DateSession", MySqlDbType.Int16).Value = searchPaymentDto.DateSession;
+            command.Parameters.Add("@Combo", MySqlDbType.Int16).Value = searchPaymentDto.Combo;
             command.Parameters.Add("@SyllabusId", MySqlDbType.VarChar).Value = searchPaymentDto.SyllabusId;
             command.Parameters.Add("@FromCreatedDate", MySqlDbType.DateTime).Value = searchPaymentDto.FromCreatedDate;
             command.Parameters.Add("@ToCreatedDate", MySqlDbType.DateTime).Value = searchPaymentDto.ToCreatedDate;
