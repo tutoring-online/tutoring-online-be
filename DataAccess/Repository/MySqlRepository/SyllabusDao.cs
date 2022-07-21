@@ -24,7 +24,7 @@ public class SyllabusDao: ISyllabusDao
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
-            var selectStatement = "Select Id, SubjectId, TotalLessons, Description, Price, Name, Status, CreatedDate, UpdatedDate";
+            var selectStatement = "Select Id, SubjectId, TotalLessons, Description, Price, Name, Status, CreatedDate, UpdatedDate, ImageUrl, VideoUrl";
             var fromStatement = "From Syllabus";
             var query = selectStatement + " " + fromStatement;
 
@@ -38,6 +38,8 @@ public class SyllabusDao: ISyllabusDao
                 {
                     Id = DbUtils.SafeGetString(reader, "Id"),
                     SubjectId = DbUtils.SafeGetString(reader, "SubjectId"),
+                    ImageUrl = DbUtils.SafeGetString(reader, "ImageUrl"),
+                    VideoUrl = DbUtils.SafeGetString(reader, "VideoUrl"),
                     Name = DbUtils.SafeGetString(reader, "Name"),
                     Description = DbUtils.SafeGetString(reader, "Description"),
                     Status = DbUtils.SafeGetInt16(reader, "Status"),
@@ -74,7 +76,7 @@ public class SyllabusDao: ISyllabusDao
             connection.Open();
             var param1 = "@id";
 
-            var selectStatement = "Select Id, SubjectId, TotalLessons, Description, Price, Name, Status, CreatedDate, UpdatedDate";
+            var selectStatement = "Select Id, SubjectId, TotalLessons, Description, Price, Name, Status, CreatedDate, UpdatedDate, ImageUrl, VideoUrl";
             var fromStatement = "From Syllabus";
             var whereStatement = $"Where Id = {param1}";
             var query = selectStatement + " " + fromStatement + " " + whereStatement;
@@ -104,7 +106,9 @@ public class SyllabusDao: ISyllabusDao
                     CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
                     UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate"),
                     TotalLessons = DbUtils.SafeGetInt16(reader, "TotalLessons"),
-                    Price = DbUtils.SafeGetDouble(reader, "Price")
+                    Price = DbUtils.SafeGetDouble(reader, "Price"),
+                    ImageUrl = DbUtils.SafeGetString(reader, "ImageUrl"),
+                    VideoUrl = DbUtils.SafeGetString(reader, "VideoUrl"),
                 });
 
             }
@@ -184,7 +188,7 @@ public class SyllabusDao: ISyllabusDao
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
-            var selectStatement = "Select Id, SubjectId, TotalLessons, Description, Price, Name, Status, CreatedDate, UpdatedDate";
+            var selectStatement = "Select Id, SubjectId, TotalLessons, Description, Price, Name, Status, CreatedDate, UpdatedDate, ImageUrl, VideoUrl";
             var fromStatement = "From Syllabus";
             var whereStatement = $"Where id in ({MySqlUtils.CreateInStatementValues(ids)})";
             var query = MySqlUtils.ConstructQueryByStatements(new List<string> {
@@ -209,7 +213,9 @@ public class SyllabusDao: ISyllabusDao
                     CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
                     UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate"),
                     TotalLessons = DbUtils.SafeGetInt16(reader, "TotalLessons"),
-                    Price = DbUtils.SafeGetDouble(reader, "Price")
+                    Price = DbUtils.SafeGetDouble(reader, "Price"),
+                    ImageUrl = DbUtils.SafeGetString(reader, "ImageUrl"),
+                    VideoUrl = DbUtils.SafeGetString(reader, "VideoUrl"),
                 });
             }
         }
@@ -240,7 +246,7 @@ public class SyllabusDao: ISyllabusDao
             using var connection = DbUtils.GetMySqlDbConnection();
             connection.Open();
 
-            var selectStatement = "Select Id, SubjectId, TotalLessons, Description, Price, Name, Status, CreatedDate, UpdatedDate";
+            var selectStatement = "Select Id, SubjectId, TotalLessons, Description, Price, Name, Status, CreatedDate, UpdatedDate, ImageUrl, VideoUrl";
             var selectCountStatement = "Select count(id) as TotalElement";
             var fromStatement = "From Syllabus";
             var whereStatement = $"Where (@SubjectId is null or SubjectId in (@SubjectId))" +
@@ -309,7 +315,9 @@ public class SyllabusDao: ISyllabusDao
                     CreatedDate = DbUtils.SafeGetDateTime(reader, "CreatedDate"),
                     UpdatedDate = DbUtils.SafeGetDateTime(reader, "UpdatedDate"),
                     TotalLessons = DbUtils.SafeGetInt16(reader, "TotalLessons"),
-                    Price = DbUtils.SafeGetDouble(reader, "Price")
+                    Price = DbUtils.SafeGetDouble(reader, "Price"),
+                    ImageUrl = DbUtils.SafeGetString(reader, "ImageUrl"),
+                    VideoUrl = DbUtils.SafeGetString(reader, "VideoUrl"),
                 });
             }
             reader.Close();
