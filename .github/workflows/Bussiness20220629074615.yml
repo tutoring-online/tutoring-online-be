@@ -1,4 +1,4 @@
-name: Build and deploy .NET Core application to Web App Bussiness20220629074615 with API Management Service TutoringOnline-tutoring-online
+name: Build and deploy .NET Core
 on:
   push:
     branches: [main]
@@ -20,7 +20,7 @@ env:
   WORKING_DIRECTORY: Bussiness
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
@@ -48,7 +48,7 @@ jobs:
         name: webapp
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
   deploy:
-    runs-on: windows-latest
+    runs-on: self-hosted
     needs: build
     steps:
     - name: Download artifact from build job
